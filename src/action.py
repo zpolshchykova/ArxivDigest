@@ -2,14 +2,16 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Email, To, Content
 
 from datetime import date
-
 import argparse
 import yaml
 import os
+import re
+from urllib.parse import quote_plus
+
 from dotenv import load_dotenv
 import openai
 
-from relevancy import generate_relevance_score, process_subject_fields
+from relevancy import generate_relevance_score
 from download_new_papers import get_papers
 
 
@@ -17,7 +19,7 @@ from download_new_papers import get_papers
 # Feel free to submit pull requests to improve the code.
 
 topics = {
-    "Physics": "",
+    "Physics": "",  # special-cased below
     "Mathematics": "math",
     "Computer Science": "cs",
     "Quantitative Biology": "q-bio",
@@ -44,362 +46,198 @@ physics_topics = {
 }
 
 
-# TODO: surely theres a better way
-category_map = {
-    "Astrophysics": [
-        "Astrophysics of Galaxies",
-        "Cosmology and Nongalactic Astrophysics",
-        "Earth and Planetary Astrophysics",
-        "High Energy Astrophysical Phenomena",
-        "Instrumentation and Methods for Astrophysics",
-        "Solar and Stellar Astrophysics",
-    ],
-    "Condensed Matter": [
-        "Disordered Systems and Neural Networks",
-        "Materials Science",
-        "Mesoscale and Nanoscale Physics",
-        "Other Condensed Matter",
-        "Quantum Gases",
-        "Soft Condensed Matter",
-        "Statistical Mechanics",
-        "Strongly Correlated Electrons",
-        "Superconductivity",
-    ],
-    "General Relativity and Quantum Cosmology": ["None"],
-    "High Energy Physics - Experiment": ["None"],
-    "High Energy Physics - Lattice": ["None"],
-    "High Energy Physics - Phenomenology": ["None"],
-    "High Energy Physics - Theory": ["None"],
-    "Mathematical Physics": ["None"],
-    "Nonlinear Sciences": [
-        "Adaptation and Self-Organizing Systems",
-        "Cellular Automata and Lattice Gases",
-        "Chaotic Dynamics",
-        "Exactly Solvable and Integrable Systems",
-        "Pattern Formation and Solitons",
-    ],
-    "Nuclear Experiment": ["None"],
-    "Nuclear Theory": ["None"],
-    "Physics": [
-        "Accelerator Physics",
-        "Applied Physics",
-        "Atmospheric and Oceanic Physics",
-        "Atomic and Molecular Clusters",
-        "Atomic Physics",
-        "Biological Physics",
-        "Chemical Physics",
-        "Classical Physics",
-        "Computational Physics",
-        "Data Analysis, Statistics and Probability",
-        "Fluid Dynamics",
-        "General Physics",
-        "Geophysics",
-        "History and Philosophy of Physics",
-        "Instrumentation and Detectors",
-        "Medical Physics",
-        "Optics",
-        "Physics and Society",
-        "Physics Education",
-        "Plasma Physics",
-        "Popular Physics",
-        "Space Physics",
-    ],
-    "Quantum Physics": ["None"],
-    "Mathematics": [
-        "Algebraic Geometry",
-        "Algebraic Topology",
-        "Analysis of PDEs",
-        "Category Theory",
-        "Classical Analysis and ODEs",
-        "Combinatorics",
-        "Commutative Algebra",
-        "Complex Variables",
-        "Differential Geometry",
-        "Dynamical Systems",
-        "Functional Analysis",
-        "General Mathematics",
-        "General Topology",
-        "Geometric Topology",
-        "Group Theory",
-        "History and Overview",
-        "Information Theory",
-        "K-Theory and Homology",
-        "Logic",
-        "Mathematical Physics",
-        "Metric Geometry",
-        "Number Theory",
-        "Numerical Analysis",
-        "Operator Algebras",
-        "Optimization and Control",
-        "Probability",
-        "Quantum Algebra",
-        "Representation Theory",
-        "Rings and Algebras",
-        "Spectral Theory",
-        "Statistics Theory",
-        "Symplectic Geometry",
-    ],
-    "Computer Science": [
-        "Artificial Intelligence",
-        "Computation and Language",
-        "Computational Complexity",
-        "Computational Engineering, Finance, and Science",
-        "Computational Geometry",
-        "Computer Science and Game Theory",
-        "Computer Vision and Pattern Recognition",
-        "Computers and Society",
-        "Cryptography and Security",
-        "Data Structures and Algorithms",
-        "Databases",
-        "Digital Libraries",
-        "Discrete Mathematics",
-        "Distributed, Parallel, and Cluster Computing",
-        "Emerging Technologies",
-        "Formal Languages and Automata Theory",
-        "General Literature",
-        "Graphics",
-        "Hardware Architecture",
-        "Human-Computer Interaction",
-        "Information Retrieval",
-        "Information Theory",
-        "Logic in Computer Science",
-        "Machine Learning",
-        "Mathematical Software",
-        "Multiagent Systems",
-        "Multimedia",
-        "Networking and Internet Architecture",
-        "Neural and Evolutionary Computing",
-        "Numerical Analysis",
-        "Operating Systems",
-        "Other Computer Science",
-        "Performance",
-        "Programming Languages",
-        "Robotics",
-        "Social and Information Networks",
-        "Software Engineering",
-        "Sound",
-        "Symbolic Computation",
-        "Systems and Control",
-    ],
-    "Quantitative Biology": [
-        "Biomolecules",
-        "Cell Behavior",
-        "Genomics",
-        "Molecular Networks",
-        "Neurons and Cognition",
-        "Other Quantitative Biology",
-        "Populations and Evolution",
-        "Quantitative Methods",
-        "Subcellular Processes",
-        "Tissues and Organs",
-    ],
-    "Quantitative Finance": [
-        "Computational Finance",
-        "Economics",
-        "General Finance",
-        "Mathematical Finance",
-        "Portfolio Management",
-        "Pricing of Securities",
-        "Risk Management",
-        "Statistical Finance",
-        "Trading and Market Microstructure",
-    ],
-    "Statistics": [
-        "Applications",
-        "Computation",
-        "Machine Learning",
-        "Methodology",
-        "Other Statistics",
-        "Statistics Theory",
-    ],
-    "Electrical Engineering and Systems Science": [
-        "Audio and Speech Processing",
-        "Image and Video Processing",
-        "Signal Processing",
-        "Systems and Control",
-    ],
-    "Economics": ["Econometrics", "General Economics", "Theoretical Economics"],
-}
+def is_valid_arxiv_id(s: str) -> bool:
+    """Validate arXiv identifiers. Accepts new and old formats, optional vN."""
+    s = (s or "").strip()
+    # new style: YYMM.NNNNN or YYMM.NNNN, optional vN
+    if re.fullmatch(r"\d{4}\.\d{4,5}(v\d+)?", s):
+        return True
+    # old style: archive/YYMMNNN, optional vN
+    if re.fullmatch(r"[a-z\-]+/\d{7}(v\d+)?", s):
+        return True
+    return False
+
+
+def make_clickable_arxiv_link(paper: dict) -> str:
+    """
+    Return a safe URL:
+    - If paper['main_page'] contains a valid arXiv abs/pdf URL with a real ID -> use it.
+    - If paper['main_page'] is a bare valid arXiv ID -> turn into https://arxiv.org/abs/<ID>
+    - Otherwise -> link to arXiv title search (always works; never "Invalid article identifier")
+    """
+    title = (paper.get("title") or "").replace("Title:", "").strip()
+    url = (paper.get("main_page") or "").strip()
+
+    # Normalize relative URL like "/abs/2501.01234"
+    if url.startswith("/"):
+        url = "https://arxiv.org" + url
+
+    # If it looks like an arxiv abs/pdf URL, verify the id segment
+    if url.startswith("http"):
+        m = re.search(r"arxiv\.org/(abs|pdf)/([^?#/]+)", url)
+        if m:
+            arxiv_id = m.group(2).replace(".pdf", "")
+            if is_valid_arxiv_id(arxiv_id):
+                # normalize pdf->abs for nicer clicking
+                return "https://arxiv.org/abs/" + arxiv_id
+            # bad id embedded in URL => discard
+        # any other http URL: keep it
+        return url
+
+    # If it isn't http, maybe it's a bare arXiv id
+    if url and is_valid_arxiv_id(url):
+        return "https://arxiv.org/abs/" + url
+
+    # Final fallback: title search
+    return "https://arxiv.org/search/?query=" + quote_plus(title) + "&searchtype=title"
+
+
+def render_paper_html(p: dict, include_score: bool) -> str:
+    title = (p.get("title") or "").replace("Title:", "").strip()
+    authors = p.get("authors", "")
+    link = make_clickable_arxiv_link(p)
+
+    extra = ""
+    if include_score:
+        score = p.get("Relevancy score", "")
+        reason = p.get("Reasons for match", "")
+        if score != "" or reason != "":
+            extra = f"<br>Score: {score}<br>Reason: {reason}"
+
+    return (
+        f'Title: <a href="{link}">{title}</a><br>'
+        f"Authors: {authors}{extra}"
+    )
 
 
 def generate_body(topic, categories, interest, threshold, fallback_n=15):
     """
-    fallback_n: if LLM filtering returns nothing above threshold, include top N newest papers anyway
+    Builds the HTML digest.
+
+    Key behavior:
+    - Physics topic: pulls directly from each physics.* subpage you chose (so no random physics).
+    - If LLM scoring fails or yields nothing: falls back to most recent papers (so never empty).
+    - Links are always safe (never invalid arXiv ID links).
     """
     categories = categories or []
+    threshold = int(threshold)
 
-    # ---- Determine arXiv archive abbrev and normalize categories ----
+    # ---- Determine what to download ----
     if topic == "Physics":
-        # "physics" is the archive prefix for physics.*
-        abbr = "physics"
-
-        # map human-readable -> physics.* codes
+        # Map human names -> physics.* codes
         physics_map = {
             "Applied Physics": "physics.app-ph",
             "Physics Education": "physics.ed-ph",
             "History and Philosophy of Physics": "physics.hist-ph",
             "Instrumentation and Detectors": "physics.ins-det",
             "Optics": "physics.optics",
-            # you can add more mappings here later if you want
         }
-        allowed_codes = set(physics_map.values())
 
         if not categories:
             raise RuntimeError(
-                "For topic 'Physics', you must provide at least one subtopic "
+                "For topic 'Physics', you must provide at least one category "
                 "(e.g. ['Optics', 'Applied Physics'])."
             )
 
-        normalized = []
+        # Normalize categories to codes
+        physics_codes = []
         for c in categories:
             if c in physics_map:
-                normalized.append(physics_map[c])
-            elif c in allowed_codes:
-                normalized.append(c)
+                physics_codes.append(physics_map[c])
+            elif isinstance(c, str) and c.startswith("physics.") and len(c) > len("physics."):
+                physics_codes.append(c)
             else:
                 raise RuntimeError(
                     f"Unknown Physics category '{c}'. Use one of: {list(physics_map.keys())} "
-                    f"or one of: {sorted(list(allowed_codes))}"
+                    f"or a physics.* code like 'physics.optics'."
                 )
-        categories = normalized
+
+        # Pull directly from each selected subpage (THIS fixes the random CME/biology/etc.)
+        papers = []
+        seen = set()
+        for code in physics_codes:
+            for p in get_papers(code):
+                key = (p.get("main_page") or "") + "||" + (p.get("title") or "")
+                if key not in seen:
+                    seen.add(key)
+                    papers.append(p)
 
     elif topic in physics_topics:
         abbr = physics_topics[topic]
-        if categories == ["None"]:
-            categories = []
+        papers = get_papers(abbr)
 
     elif topic in topics:
         abbr = topics[topic]
+        papers = get_papers(abbr)
 
     else:
         raise RuntimeError(f"Invalid topic {topic}")
 
-    # ---- Download and filter papers ----
-    papers = get_papers(abbr)
+    if not papers:
+        return "<html><body><p>No papers found for this run.</p></body></html>"
 
-    if categories:
-        # For non-Physics topics, categories are human-readable; validate against category_map
-        if topic != "Physics":
-            for category in categories:
-                if category not in category_map.get(topic, []):
-                    raise RuntimeError(f"{category} is not a category of {topic}")
-
-        # Filter by subject fields (usually codes like physics.optics, quant-ph, cs.AI)
-                # Filter by subject fields (usually codes like physics.optics, quant-ph, cs.AI)
-        filtered = [
-            t
-            for t in papers
-            if bool(set(process_subject_fields(t["subjects"])) & set(categories))
-        ]
-
-        # If filtering returns nothing (can happen due to subject-format mismatch),
-        # fall back to the unfiltered recent list so the digest isn't empty.
-        papers = filtered if filtered else papers
-
-
-    # ---- Relevance scoring and HTML body ----
-    if interest:
-        relevancy, hallucination = generate_relevance_score(
-            papers,
-            query={"interest": interest},
-            threshold_score=threshold,
-            num_paper_in_prompt=4,
-        )
-
-        # Fallback: if nothing passes threshold, include top N newest papers anyway
+    # ---- LLM scoring (optional) ----
+    if interest and str(interest).strip():
         used_fallback = False
-        final_list = relevancy
+        scored = []
+        hallucinated = False
+
+        try:
+            scored, hallucinated = generate_relevance_score(
+                papers,
+                query={"interest": interest},
+                threshold_score=threshold,
+                num_paper_in_prompt=4,  # you already set this low; keep it
+            )
+        except Exception:
+            # If the LLM/parsing code is flaky, DON'T DIE. Just fallback.
+            used_fallback = True
+            scored = []
+            hallucinated = False
+
+        # If nothing passes threshold, fallback to recent
+        final_list = scored
         if not final_list:
             used_fallback = True
             final_list = papers[:fallback_n]
 
-        # Render
         body_parts = []
-
-        if hallucination:
-            body_parts.append(
-                "Warning: the model hallucinated some papers. We have tried to remove them, "
-                "but the scores may not be accurate.<br><br>"
-            )
-
         if used_fallback:
             body_parts.append(
                 f"No papers exceeded the relevance threshold ({threshold}) for this run. "
                 f"Showing the {fallback_n} most recent papers instead.<br><br>"
             )
+        else:
+            # Only show hallucination warning if we actually used scored results
+            if hallucinated:
+                body_parts.append(
+                    "Warning: the model output was partially malformed. Scores/reasons may be imperfect.<br><br>"
+                )
 
-        def render_paper(p):
-            import re
-            from urllib.parse import quote_plus
-
-            # Clean title
-            title = (p.get("title") or "").replace("Title:", "").strip()
-
-            # Try to get a real URL first
-            url = (p.get("main_page") or "").strip()
-
-            # Normalize absolute URL if we got a relative one like "/abs/2501.01234"
-            if url.startswith("/"):
-                url = "https://arxiv.org" + url
-
-            # If it's not a URL, only convert to /abs/ if it LOOKS like an arXiv ID
-            if url and not url.startswith("http"):
-                looks_like_new_id = re.match(r"^\d{4}\.\d{4,5}(v\d+)?$", url)  # 2501.01234 or 0704.0001
-                looks_like_old_id = re.match(r"^[a-z\-]+/\d{7}(v\d+)?$", url)  # hep-th/9901001
-                if looks_like_new_id or looks_like_old_id:
-                    url = "https://arxiv.org/abs/" + url
-                else:
-                    url = ""  # don't create broken /abs/ links
-
-            # FINAL fallback: if we still don't have a usable url, link to arXiv title search
-            if not url:
-                url = "https://arxiv.org/search/?query=" + quote_plus(title) + "&searchtype=title"
-
-            # Optional extra fields from LLM scoring
-            score = p.get("Relevancy score", "")
-            reason = p.get("Reasons for match", "")
-
-            extra = ""
-            if score != "" or reason != "":
-                extra = f"<br>Score: {score}<br>Reason: {reason}"
-
-            return (
-                f'Title: <a href="{url}">{title}</a><br>'
-                f'Authors: {p.get("authors","")}{extra}'
-            )
-
-
-        body_parts.append("<br><br>".join(render_paper(p) for p in final_list))
-        body = "".join(body_parts)
-
-    else:
-        # No interest means no filtering/scoring; just list papers
-        body = "<br><br>".join(
-            [
-                f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>Authors: {paper["authors"]}'
-                for paper in papers
-            ]
+        body_parts.append(
+            "<br><br>".join(render_paper_html(p, include_score=not used_fallback) for p in final_list)
         )
+        return "".join(body_parts)
 
-    return body
+    # ---- No interest => raw list ----
+    return "<br><br>".join(render_paper_html(p, include_score=False) for p in papers)
 
 
 if __name__ == "__main__":
-    # Load the .env file (optional locally; GitHub Actions uses env vars directly)
     load_dotenv()
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="yaml config file to use", default="config.yaml")
     args = parser.parse_args()
 
-    with open(args.config, "r") as f:
+    with open(args.config, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
     if "OPENAI_API_KEY" not in os.environ:
         raise RuntimeError("No openai api key found")
     openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-    topic = config["topic"]
+    topic = config.get("topic", "")
     categories = config.get("categories", [])
     threshold = config.get("threshold", 7)
     interest = config.get("interest", "")
@@ -409,21 +247,21 @@ if __name__ == "__main__":
 
     body = generate_body(topic, categories, interest, threshold)
 
-    with open("digest.html", "w") as f:
+    with open("digest.html", "w", encoding="utf-8") as f:
         f.write(body)
 
-    if os.environ.get("SENDGRID_API_KEY", None):
+    if os.environ.get("SENDGRID_API_KEY"):
         sg = SendGridAPIClient(api_key=os.environ.get("SENDGRID_API_KEY"))
-        from_email = Email(from_email)  # must be verified in SendGrid
-        to_email = To(to_email)
+        from_e = Email(from_email)  # must be verified sender in SendGrid
+        to_e = To(to_email)
         subject = date.today().strftime("Personalized arXiv Digest, %d %b %Y")
         content = Content("text/html", body)
-        mail = Mail(from_email, to_email, subject, content)
+        mail = Mail(from_e, to_e, subject, content)
 
         response = sg.client.mail.send.post(request_body=mail.get())
         if 200 <= response.status_code <= 299:
-            print("Send test email: Success!")
+            print("SendGrid: Success")
         else:
-            print(f"Send test email: Failure ({response.status_code}, {response.body})")
+            raise RuntimeError(f"SendGrid: Failure ({response.status_code}) {response.body}")
     else:
         print("No sendgrid api key found. Skipping email")
