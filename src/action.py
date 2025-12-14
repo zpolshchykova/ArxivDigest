@@ -319,29 +319,101 @@ def llm_score_papers(papers: List[Paper], interest: str) -> List[Paper]:
     return papers
 
 
+# def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: str) -> str:
+#     header = f"<h2>{html.escape(title)}</h2>"
+#     meta = f"<div><i>{html.escape(lookback_label)}. Threshold = {threshold}.</i></div>"
+
+#     # IMPORTANT FIX: if there are 0 papers, say so (don’t claim “showing 15”)
+#     if not papers:
+#         return header + meta + "<div><b>No papers found in this time window.</b></div>"
+
+#     relevant = [p for p in papers if (p.llm_score is not None and p.llm_score >= threshold)]
+
+#     used_fallback = False
+#     if not relevant:
+#         used_fallback = True
+#         ranked = sorted(papers, key=lambda p: (p.keyword_score, p.published), reverse=True)
+#         if ranked and ranked[0].keyword_score == 0:
+#             ranked = sorted(papers, key=lambda p: p.published, reverse=True)
+#         relevant = ranked[:15]
+
+#     if used_fallback:
+#         meta += (
+#             f"<div style='margin-top:6px; color:#a00;'><b>"
+#             f"No papers exceeded the relevance threshold ({threshold}) for this run. "
+#             f"Showing 15 keyword-ranked papers instead."
+#             f"</b></div>"
+#         )
+
+#     def paper_block(p: Paper) -> str:
+#         authors = ", ".join(p.authors)
+#         pub = p.published.astimezone(timezone.utc).strftime("%Y-%m-%d")
+#         cats = ", ".join(p.categories)
+
+#         score_part = ""
+#         if p.llm_score is not None:
+#             score_part = f"<div><b>Relevance:</b> {p.llm_score}/10</div>"
+#         reason_part = ""
+#         if p.llm_reason:
+#             reason_part = f"<div><b>Why:</b> {html.escape(p.llm_reason)}</div>"
+
+#         return (
+#             "<div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'>"
+#             f"<div style='font-size: 16px;'><b>Title:</b> "
+#             f"<a href='{html.escape(p.pdf_url)}'>{html.escape(p.title)}</a></div>"
+#             f"<div><b>Authors:</b> {html.escape(authors)}</div>"
+#             f"<div><b>Published:</b> {pub}</div>"
+#             f"<div><b>Categories:</b> {html.escape(cats)}</div>"
+#             f"{score_part}{reason_part}"
+#             f"<div style='margin-top: 6px;'><a href='{html.escape(p.abs_url)}'>Abstract page</a></div>"
+#             "</div>"
+#         )
+
+#     blocks = "\n".join(paper_block(p) for p in relevant)
+#     return header + meta + blocks
 def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: str) -> str:
     header = f"<h2>{html.escape(title)}</h2>"
     meta = f"<div><i>{html.escape(lookback_label)}. Threshold = {threshold}.</i></div>"
 
-    # IMPORTANT FIX: if there are 0 papers, say so (don’t claim “showing 15”)
+    # If there are 0 papers (should be prevented by your "always show latest" fallback),
+    # still handle gracefully.
     if not papers:
-        return header + meta + "<div><b>No papers found in this time window.</b></div>"
+        return header + meta + "<div><b>No papers found.</b></div>"
 
+    # -------- Auto-raise threshold to keep <= 10 papers --------
+    base_threshold = int(threshold)
+    used_threshold = base_threshold
+
+    while True:
+        relevant = [p for p in papers if (p.llm_score is not None and p.llm_score >= used_threshold)]
+        if len(relevant) <= 10 or used_threshold >= 10:
+            break
+        used_threshold += 1
+
+    if used_threshold != base_threshold:
+        meta += (
+            f"<div><b>Auto-adjust:</b> threshold raised from {base_threshold} "
+            f"to {used_threshold} to keep ≤ 10 papers.</div>"
+        )
+
+    threshold = used_threshold  # use the adjusted threshold from here on
+
+    # Recompute relevant using final threshold
     relevant = [p for p in papers if (p.llm_score is not None and p.llm_score >= threshold)]
 
+    # -------- Fallback if none pass threshold --------
     used_fallback = False
     if not relevant:
         used_fallback = True
         ranked = sorted(papers, key=lambda p: (p.keyword_score, p.published), reverse=True)
         if ranked and ranked[0].keyword_score == 0:
             ranked = sorted(papers, key=lambda p: p.published, reverse=True)
-        relevant = ranked[:15]
+        relevant = ranked[:10]
 
-    if used_fallback:
         meta += (
             f"<div style='margin-top:6px; color:#a00;'><b>"
             f"No papers exceeded the relevance threshold ({threshold}) for this run. "
-            f"Showing 15 keyword-ranked papers instead."
+            f"Showing 10 keyword-ranked papers instead."
             f"</b></div>"
         )
 
@@ -353,6 +425,7 @@ def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: 
         score_part = ""
         if p.llm_score is not None:
             score_part = f"<div><b>Relevance:</b> {p.llm_score}/10</div>"
+
         reason_part = ""
         if p.llm_reason:
             reason_part = f"<div><b>Why:</b> {html.escape(p.llm_reason)}</div>"
@@ -371,6 +444,7 @@ def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: 
 
     blocks = "\n".join(paper_block(p) for p in relevant)
     return header + meta + blocks
+
 
 
 def main() -> int:
