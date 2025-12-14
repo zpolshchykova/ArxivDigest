@@ -1,0 +1,17 @@
+topic: "Quantum Physics"
+
+# Leave empty to include all categories under this topic (quant-ph is the main one)
+categories: []
+
+threshold: 7
+
+interest: |
+  I am an experimental physicist working on quantum optics and integrated photonics
+  (especially thin-film lithium niobate / LNOI / TFLN).
+
+  Prioritize experimental and implementation-focused papers in:
+  - photonic quantum information, integrated quantum photonics
+  - quantum light sources, entanglement, frequency conversion, SPDC/SFWM, PPLN
+  - device-focused or measurement/instrumentation work that supports experiments
+
+  De-prioritize purely theoretical/formal papers without a clear experimental pathway.
