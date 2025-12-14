@@ -5,33 +5,29 @@ categories:
   - "Instrumentation and Detectors"
   - "Optics"
 
-# Keep 7 if you want “only strong matches”, but this can go empty sometimes.
-# If you want fewer empty digests without code changes, set this to 5 or 6.
+# 1–10. 5 = “pretty relevant”, 7 = “very relevant”
 threshold: 5
 
+# How far back to look (because you're not running daily anymore)
+days_back: 4
+
 interest: |
-  I am an experimental physicist working in integrated photonics and quantum optics.
-  My main platforms include thin-film lithium niobate (LNOI / TFLN) and silicon photonics (Si/SiN),
-  and I care about experimentally demonstrated devices and measurements.
+  IMPORTANT: A paper is relevant if it matches ANY ONE of the items below.
+  It does NOT need to satisfy all criteria.
 
-  Prioritize papers with experimental results related to:
-  - integrated photonics / nanophotonics / photonic integrated circuits (PICs)
-  - thin-film lithium niobate (LNOI/TFLN), PPLN, electro-optic modulators, χ(2) nonlinear optics
-  - silicon photonics / silicon nitride (SiN), low-loss waveguides, microresonators, ring resonators
-  - nonlinear and quantum photonics on-chip: SPDC, SFWM, SHG, OPO, frequency conversion, frequency combs
-  - integrated single-photon sources (including color centers / emitters), entangled photon sources, squeezing
-  - cavities and resonators: whispering-gallery, microrings, photonic crystals, high-Q resonators
-  - optical measurement/instrumentation relevant to photonics experiments: interferometry, spectroscopy, metrology, detectors
-  - packaging and coupling: fiber-to-chip coupling, grating couplers, edge coupling, alignment, stability
+  I work in integrated photonics and quantum optics (experimental), mainly:
+  - thin-film lithium niobate (LNOI / TFLN / LiNbO3)
+  - silicon photonics and silicon nitride (Si / SiN)
 
-  Also prioritize work aligned with topics commonly appearing in Rachel Grange’s research area:
-  - nanophotonics and integrated photonics for light–matter interaction
-  - microcavities and resonant enhancement
-  - nonlinear nanophotonics / frequency conversion
-  - quantum/semiconductor emitters coupled to photonic structures
-  - integrated devices enabling quantum optics experiments
+  Strong keywords / topics (any of these is enough):
+  - lithium niobate, LiNbO3, LNOI, TFLN, PPLN
+  - Pockels effect, electro-optic modulation, EO modulators
+  - nonlinear photonics: χ(2), χ(3), SHG, OPO, frequency conversion, frequency combs
+  - integrated photonics / photonic integrated circuits, waveguides, microrings, microresonators, high-Q resonators
+  - quantum photonics: SPDC, SFWM, squeezing, entanglement, single photons, integrated quantum photonics
+  - packaging / coupling / measurement: fiber-to-chip coupling, grating couplers, edge coupling, characterization, metrology, detectors
 
-  De-prioritize:
-  - purely theoretical/formal work without a clear experimental pathway or measurable predictions
-  - papers that are mainly about a specific human language or NLP datasets
-  - work unrelated to photonics/optics experiments (e.g., high-energy theory, cosmology, etc.)
+  Also relevant if it overlaps with topics commonly appearing in Rachel Grange’s area:
+  - nanophotonics, microcavities, resonant enhancement, nonlinear nanophotonics, light–matter interaction, emitters coupled to photonics
+
+  Theory papers are OK if they clearly connect to experiments, devices, or measurable predictions.
