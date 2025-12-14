@@ -9,7 +9,7 @@ categories:
 threshold: 5
 
 # How far back to look (because you're not running daily anymore)
-days_back: 4
+days_back: 2
 
 interest: |
   IMPORTANT: A paper is relevant if it matches ANY ONE of the items below.
