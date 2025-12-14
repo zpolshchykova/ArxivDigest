@@ -1,5 +1,6 @@
-topic: "Quantum Physics"
-categories: []
+topic: "Physics"
+categories: ["Quantum Physics"]
+
 threshold: 8
 interest: |
   I am an experimental physicist interested in quantum optics, quantum information, and integrated photonics (especially LNOI).
