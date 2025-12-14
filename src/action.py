@@ -303,7 +303,7 @@ def generate_body(topic, categories, interest, threshold, fallback_n=15):
             papers,
             query={"interest": interest},
             threshold_score=threshold,
-            num_paper_in_prompt=16,
+            num_paper_in_prompt=4,
         )
 
         # Fallback: if nothing passes threshold, include top N newest papers anyway
