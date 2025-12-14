@@ -1,5 +1,6 @@
-topic: "Applied Physics"
-categories: []
+topic: "Physics"
+categories: ["Applied Physics"]
+
 threshold: 7
 interest: |
   I am an experimental physicist working in integrated photonics, especially lithium niobate on insulator (LNOI).
