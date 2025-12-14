@@ -7,7 +7,7 @@ categories:
 
 # Keep 7 if you want “only strong matches”, but this can go empty sometimes.
 # If you want fewer empty digests without code changes, set this to 5 or 6.
-threshold: 6
+threshold: 5
 
 interest: |
   I am an experimental physicist working in integrated photonics and quantum optics.
