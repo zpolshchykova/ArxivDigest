@@ -55,7 +55,7 @@ def is_valid_arxiv_id(s: str) -> bool:
 
 def clean_title(raw: str) -> str:
     t = (raw or "").strip()
-    # remove repeated "Title:" prefixes (sometimes duplicated)
+    # remove repeated "Title:" prefixes
     while True:
         new = re.sub(r"^\s*Title:\s*", "", t).strip()
         if new == t:
@@ -64,16 +64,16 @@ def clean_title(raw: str) -> str:
     return t
 
 
-def safe_link_for_paper(paper: dict) -> str:
+def safe_pdf_link_for_paper(paper: dict) -> str:
     """
     ALWAYS returns a working link.
-    - If we can extract a VALID arXiv id -> https://arxiv.org/abs/<id>
+    - If we can extract a VALID arXiv id -> https://arxiv.org/pdf/<id>.pdf
     - Otherwise -> arXiv title search URL
     """
     title = clean_title(paper.get("title", ""))
     url = (paper.get("main_page") or "").strip()
 
-    # Normalize relative URLs
+    # Normalize relative URLs like "/abs/2501.01234"
     if url.startswith("/"):
         url = "https://arxiv.org" + url
 
@@ -82,22 +82,22 @@ def safe_link_for_paper(paper: dict) -> str:
     if m:
         arxiv_id = m.group(2).replace(".pdf", "").strip()
         if is_valid_arxiv_id(arxiv_id):
-            return "https://arxiv.org/abs/" + arxiv_id
-        # If it's arXiv but NOT a valid id, DO NOT return it (this was the bug)
+            return "https://arxiv.org/pdf/" + arxiv_id + ".pdf"
+        # If it’s arXiv but NOT a valid id, discard it
         url = ""
 
-    # If url is a bare arXiv id
+    # If url is a bare arXiv id (rare but possible)
     if url and not url.startswith("http") and is_valid_arxiv_id(url):
-        return "https://arxiv.org/abs/" + url
+        return "https://arxiv.org/pdf/" + url + ".pdf"
 
-    # Final fallback: title search (never gives "Invalid article identifier")
+    # Final fallback: title search (always works)
     return "https://arxiv.org/search/?query=" + quote_plus(title) + "&searchtype=title"
 
 
 def render_paper_html(p: dict, include_score: bool) -> str:
     title = clean_title(p.get("title", ""))
     authors = p.get("authors", "")
-    link = safe_link_for_paper(p)
+    link = safe_pdf_link_for_paper(p)
 
     extra = ""
     if include_score:
@@ -139,7 +139,7 @@ def generate_body(topic, categories, interest, threshold, fallback_n=15):
                     f"Unknown Physics category '{c}'. Use one of {list(physics_map.keys())}."
                 )
 
-        # Pull directly from the subpages so we don't mix in unrelated physics
+        # Pull directly from the chosen subpages so we don't mix in unrelated physics
         papers = []
         seen = set()
         for code in physics_codes:
@@ -166,17 +166,22 @@ def generate_body(topic, categories, interest, threshold, fallback_n=15):
         used_fallback = False
         scored = []
 
-        try:
-            scored, _ = generate_relevance_score(
-                papers,
-                query={"interest": interest},
-                threshold_score=threshold,
-                num_paper_in_prompt=4,  # you already reduced; keep it
-            )
-        except Exception:
-            # If LLM output/parsing is flaky, do NOT crash — fallback
-            used_fallback = True
-            scored = []
+        # Try with your threshold first; if empty, try a looser threshold automatically
+        thresholds_to_try = [threshold, max(1, threshold - 2)]
+
+        for thr in thresholds_to_try:
+            try:
+                scored, _ = generate_relevance_score(
+                    papers,
+                    query={"interest": interest},
+                    threshold_score=thr,
+                    num_paper_in_prompt=4,  # keep small for stability
+                )
+            except Exception:
+                scored = []
+
+            if scored:
+                break
 
         final_list = scored
         if not final_list:
@@ -223,7 +228,7 @@ if __name__ == "__main__":
     with open("digest.html", "w", encoding="utf-8") as f:
         f.write(body)
 
-    # This sendgrid block is mainly for local runs; in your GitHub Action you send later.
+    # Local-run email (your GitHub workflow sends the combined email separately)
     if os.environ.get("SENDGRID_API_KEY"):
         sg = SendGridAPIClient(api_key=os.environ.get("SENDGRID_API_KEY"))
         from_email = Email(os.environ.get("FROM_EMAIL"))
