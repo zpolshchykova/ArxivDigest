@@ -223,7 +223,31 @@ category_map = {
 
 def generate_body(topic, categories, interest, threshold):
     if topic == "Physics":
-        raise RuntimeError("You must choose a physics subtopic.")
+        # Allow Physics + the physics.* subpages (physics.app-ph, physics.optics, etc.)
+        # Your config uses the *natural language* names, so we map them here.
+        physics_map = {
+            "Applied Physics": "physics.app-ph",
+            "Physics Education": "physics.ed-ph",
+            "History and Philosophy of Physics": "physics.hist-ph",
+            "Instrumentation and Detectors": "physics.ins-det",
+            "Optics": "physics.optics",
+        }
+
+        if not categories:
+            raise RuntimeError(
+                "For topic 'Physics', you must provide at least one category, e.g. ['Optics']."
+            )
+
+        unknown = [c for c in categories if c not in physics_map]
+        if unknown:
+            raise RuntimeError(
+                f"Unknown Physics category name(s): {unknown}. "
+                f"Use one of: {list(physics_map.keys())}"
+            )
+
+        # IMPORTANT: overwrite categories with the arXiv category codes
+        categories = [physics_map[c] for c in categories]
+
     elif topic in physics_topics:
         abbr = physics_topics[topic]
     elif topic in topics:
