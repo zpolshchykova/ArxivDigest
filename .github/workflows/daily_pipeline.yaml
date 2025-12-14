@@ -74,7 +74,6 @@ jobs:
 
     # Send ONE email via SendGrid (recommended path)
     - name: Send combined email (SendGrid)
-      if: ${{ secrets.SENDGRID_API_KEY != '' }}
       env:
         SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
         FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
