@@ -285,11 +285,17 @@ def generate_body(topic, categories, interest, threshold, fallback_n=15):
                     raise RuntimeError(f"{category} is not a category of {topic}")
 
         # Filter by subject fields (usually codes like physics.optics, quant-ph, cs.AI)
-        papers = [
+                # Filter by subject fields (usually codes like physics.optics, quant-ph, cs.AI)
+        filtered = [
             t
             for t in papers
             if bool(set(process_subject_fields(t["subjects"])) & set(categories))
         ]
+
+        # If filtering returns nothing (can happen due to subject-format mismatch),
+        # fall back to the unfiltered recent list so the digest isn't empty.
+        papers = filtered if filtered else papers
+
 
     # ---- Relevance scoring and HTML body ----
     if interest:
