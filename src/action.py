@@ -221,10 +221,87 @@ category_map = {
 }
 
 
+# def generate_body(topic, categories, interest, threshold):
+#     if topic == "Physics":
+#         # Allow Physics + the physics.* subpages (physics.app-ph, physics.optics, etc.)
+#         # Your config uses the *natural language* names, so we map them here.
+#         physics_map = {
+#             "Applied Physics": "physics.app-ph",
+#             "Physics Education": "physics.ed-ph",
+#             "History and Philosophy of Physics": "physics.hist-ph",
+#             "Instrumentation and Detectors": "physics.ins-det",
+#             "Optics": "physics.optics",
+#         }
+
+#         if not categories:
+#             raise RuntimeError(
+#                 "For topic 'Physics', you must provide at least one category, e.g. ['Optics']."
+#             )
+
+#         unknown = [c for c in categories if c not in physics_map]
+#         if unknown:
+#             raise RuntimeError(
+#                 f"Unknown Physics category name(s): {unknown}. "
+#                 f"Use one of: {list(physics_map.keys())}"
+#             )
+
+#         # IMPORTANT: overwrite categories with the arXiv category codes
+#         categories = [physics_map[c] for c in categories]
+
+#     elif topic in physics_topics:
+#         abbr = physics_topics[topic]
+#     elif topic in topics:
+#         abbr = topics[topic]
+#     else:
+#         raise RuntimeError(f"Invalid topic {topic}")
+#     if categories:
+#         for category in categories:
+#             if category not in category_map[topic]:
+#                 raise RuntimeError(f"{category} is not a category of {topic}")
+#         papers = get_papers(abbr)
+#         papers = [
+#             t
+#             for t in papers
+#             if bool(set(process_subject_fields(t["subjects"])) & set(categories))
+#         ]
+#     else:
+#         papers = get_papers(abbr)
+#     if interest:
+#         relevancy, hallucination = generate_relevance_score(
+#             papers,
+#             query={"interest": interest},
+#             threshold_score=threshold,
+#             num_paper_in_prompt=16,
+#         )
+#         body = "<br><br>".join(
+#             [
+#                 f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>Authors: {paper["authors"]}<br>Score: {paper["Relevancy score"]}<br>Reason: {paper["Reasons for match"]}'
+#                 for paper in relevancy
+#             ]
+#         )
+#         if hallucination:
+#             body = (
+#                 "Warning: the model hallucinated some papers. We have tried to remove them, but the scores may not be accurate.<br><br>"
+#                 + body
+#             )
+#     else:
+#         body = "<br><br>".join(
+#             [
+#                 f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>Authors: {paper["authors"]}'
+#                 for paper in papers
+#             ]
+#         )
+#     return body
+
 def generate_body(topic, categories, interest, threshold):
+    categories = categories or []
+
+    # ---- Figure out arXiv "abbr" and normalize categories ----
     if topic == "Physics":
-        # Allow Physics + the physics.* subpages (physics.app-ph, physics.optics, etc.)
-        # Your config uses the *natural language* names, so we map them here.
+        # For the Physics archive, arXiv uses "physics" as the archive prefix
+        abbr = "physics"
+
+        # Map human-readable Physics subpages -> arXiv category codes
         physics_map = {
             "Applied Physics": "physics.app-ph",
             "Physics Education": "physics.ed-ph",
@@ -232,40 +309,57 @@ def generate_body(topic, categories, interest, threshold):
             "Instrumentation and Detectors": "physics.ins-det",
             "Optics": "physics.optics",
         }
+        allowed_codes = set(physics_map.values())
 
         if not categories:
             raise RuntimeError(
-                "For topic 'Physics', you must provide at least one category, e.g. ['Optics']."
+                "You must choose at least one Physics subtopic (e.g. ['Optics', 'Applied Physics'])."
             )
 
-        unknown = [c for c in categories if c not in physics_map]
-        if unknown:
-            raise RuntimeError(
-                f"Unknown Physics category name(s): {unknown}. "
-                f"Use one of: {list(physics_map.keys())}"
-            )
-
-        # IMPORTANT: overwrite categories with the arXiv category codes
-        categories = [physics_map[c] for c in categories]
+        normalized = []
+        for c in categories:
+            # allow either natural language names OR already-coded categories
+            if c in physics_map:
+                normalized.append(physics_map[c])
+            elif c in allowed_codes:
+                normalized.append(c)
+            else:
+                raise RuntimeError(
+                    f"Unknown Physics category '{c}'. Use one of: {list(physics_map.keys())} "
+                    f"or one of: {sorted(list(allowed_codes))}"
+                )
+        categories = normalized
 
     elif topic in physics_topics:
         abbr = physics_topics[topic]
+        # In this repo, some physics subtopics have "None" categories – treat as no filtering
+        if categories == ["None"]:
+            categories = []
+
     elif topic in topics:
         abbr = topics[topic]
+
     else:
         raise RuntimeError(f"Invalid topic {topic}")
+
+    # ---- Download and filter papers ----
+    papers = get_papers(abbr)
+
     if categories:
-        for category in categories:
-            if category not in category_map[topic]:
-                raise RuntimeError(f"{category} is not a category of {topic}")
-        papers = get_papers(abbr)
+        # For non-Physics topics, categories are human-readable and we validate against category_map
+        if topic != "Physics":
+            for category in categories:
+                if category not in category_map.get(topic, []):
+                    raise RuntimeError(f"{category} is not a category of {topic}")
+
+        # Filter by subject fields (these are usually codes like physics.optics, quant-ph, cs.AI, etc.)
         papers = [
             t
             for t in papers
             if bool(set(process_subject_fields(t["subjects"])) & set(categories))
         ]
-    else:
-        papers = get_papers(abbr)
+
+    # ---- Relevance scoring and HTML body ----
     if interest:
         relevancy, hallucination = generate_relevance_score(
             papers,
@@ -275,22 +369,27 @@ def generate_body(topic, categories, interest, threshold):
         )
         body = "<br><br>".join(
             [
-                f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>Authors: {paper["authors"]}<br>Score: {paper["Relevancy score"]}<br>Reason: {paper["Reasons for match"]}'
+                f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>'
+                f'Authors: {paper["authors"]}<br>'
+                f'Score: {paper["Relevancy score"]}<br>'
+                f'Reason: {paper["Reasons for match"]}'
                 for paper in relevancy
             ]
         )
         if hallucination:
             body = (
-                "Warning: the model hallucinated some papers. We have tried to remove them, but the scores may not be accurate.<br><br>"
-                + body
+                "Warning: the model hallucinated some papers. We have tried to remove them, "
+                "but the scores may not be accurate.<br><br>" + body
             )
     else:
         body = "<br><br>".join(
             [
-                f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>Authors: {paper["authors"]}'
+                f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>'
+                f'Authors: {paper["authors"]}'
                 for paper in papers
             ]
         )
+
     return body
 
 
