@@ -3,20 +3,17 @@ from sendgrid.helpers.mail import Mail, Email, To, Content
 
 from datetime import date
 import argparse
-import yaml
 import os
 import re
 from urllib.parse import quote_plus
 
+import yaml
 from dotenv import load_dotenv
 import openai
 
 from relevancy import generate_relevance_score
 from download_new_papers import get_papers
 
-
-# Hackathon quality code. Don't judge too harshly.
-# Feel free to submit pull requests to improve the code.
 
 topics = {
     "Physics": "",  # special-cased below
@@ -47,55 +44,60 @@ physics_topics = {
 
 
 def is_valid_arxiv_id(s: str) -> bool:
-    """Validate arXiv identifiers. Accepts new and old formats, optional vN."""
+    """Valid arXiv IDs: YYMM.NNNNN (or YYMM.NNNN) with optional vN; or archive/YYMMNNN with optional vN."""
     s = (s or "").strip()
-    # new style: YYMM.NNNNN or YYMM.NNNN, optional vN
     if re.fullmatch(r"\d{4}\.\d{4,5}(v\d+)?", s):
         return True
-    # old style: archive/YYMMNNN, optional vN
     if re.fullmatch(r"[a-z\-]+/\d{7}(v\d+)?", s):
         return True
     return False
 
 
-def make_clickable_arxiv_link(paper: dict) -> str:
+def clean_title(raw: str) -> str:
+    t = (raw or "").strip()
+    # remove repeated "Title:" prefixes (sometimes duplicated)
+    while True:
+        new = re.sub(r"^\s*Title:\s*", "", t).strip()
+        if new == t:
+            break
+        t = new
+    return t
+
+
+def safe_link_for_paper(paper: dict) -> str:
     """
-    Return a safe URL:
-    - If paper['main_page'] contains a valid arXiv abs/pdf URL with a real ID -> use it.
-    - If paper['main_page'] is a bare valid arXiv ID -> turn into https://arxiv.org/abs/<ID>
-    - Otherwise -> link to arXiv title search (always works; never "Invalid article identifier")
+    ALWAYS returns a working link.
+    - If we can extract a VALID arXiv id -> https://arxiv.org/abs/<id>
+    - Otherwise -> arXiv title search URL
     """
-    title = (paper.get("title") or "").replace("Title:", "").strip()
+    title = clean_title(paper.get("title", ""))
     url = (paper.get("main_page") or "").strip()
 
-    # Normalize relative URL like "/abs/2501.01234"
+    # Normalize relative URLs
     if url.startswith("/"):
         url = "https://arxiv.org" + url
 
-    # If it looks like an arxiv abs/pdf URL, verify the id segment
-    if url.startswith("http"):
-        m = re.search(r"arxiv\.org/(abs|pdf)/([^?#/]+)", url)
-        if m:
-            arxiv_id = m.group(2).replace(".pdf", "")
-            if is_valid_arxiv_id(arxiv_id):
-                # normalize pdf->abs for nicer clicking
-                return "https://arxiv.org/abs/" + arxiv_id
-            # bad id embedded in URL => discard
-        # any other http URL: keep it
-        return url
+    # If it's an arXiv abs/pdf URL, validate the ID part
+    m = re.search(r"arxiv\.org/(abs|pdf)/([^?#/]+)", url)
+    if m:
+        arxiv_id = m.group(2).replace(".pdf", "").strip()
+        if is_valid_arxiv_id(arxiv_id):
+            return "https://arxiv.org/abs/" + arxiv_id
+        # If it's arXiv but NOT a valid id, DO NOT return it (this was the bug)
+        url = ""
 
-    # If it isn't http, maybe it's a bare arXiv id
-    if url and is_valid_arxiv_id(url):
+    # If url is a bare arXiv id
+    if url and not url.startswith("http") and is_valid_arxiv_id(url):
         return "https://arxiv.org/abs/" + url
 
-    # Final fallback: title search
+    # Final fallback: title search (never gives "Invalid article identifier")
     return "https://arxiv.org/search/?query=" + quote_plus(title) + "&searchtype=title"
 
 
 def render_paper_html(p: dict, include_score: bool) -> str:
-    title = (p.get("title") or "").replace("Title:", "").strip()
+    title = clean_title(p.get("title", ""))
     authors = p.get("authors", "")
-    link = make_clickable_arxiv_link(p)
+    link = safe_link_for_paper(p)
 
     extra = ""
     if include_score:
@@ -104,27 +106,16 @@ def render_paper_html(p: dict, include_score: bool) -> str:
         if score != "" or reason != "":
             extra = f"<br>Score: {score}<br>Reason: {reason}"
 
-    return (
-        f'Title: <a href="{link}">{title}</a><br>'
-        f"Authors: {authors}{extra}"
-    )
+    return f'Title: <a href="{link}">{title}</a><br>Authors: {authors}{extra}'
 
 
 def generate_body(topic, categories, interest, threshold, fallback_n=15):
-    """
-    Builds the HTML digest.
-
-    Key behavior:
-    - Physics topic: pulls directly from each physics.* subpage you chose (so no random physics).
-    - If LLM scoring fails or yields nothing: falls back to most recent papers (so never empty).
-    - Links are always safe (never invalid arXiv ID links).
-    """
     categories = categories or []
     threshold = int(threshold)
 
-    # ---- Determine what to download ----
+    # ---- Download papers ----
     if topic == "Physics":
-        # Map human names -> physics.* codes
+        # Map human-readable -> physics.* codes
         physics_map = {
             "Applied Physics": "physics.app-ph",
             "Physics Education": "physics.ed-ph",
@@ -132,27 +123,23 @@ def generate_body(topic, categories, interest, threshold, fallback_n=15):
             "Instrumentation and Detectors": "physics.ins-det",
             "Optics": "physics.optics",
         }
-
         if not categories:
             raise RuntimeError(
-                "For topic 'Physics', you must provide at least one category "
-                "(e.g. ['Optics', 'Applied Physics'])."
+                "For topic 'Physics', you must provide at least one category (e.g. ['Optics'])."
             )
 
-        # Normalize categories to codes
         physics_codes = []
         for c in categories:
             if c in physics_map:
                 physics_codes.append(physics_map[c])
-            elif isinstance(c, str) and c.startswith("physics.") and len(c) > len("physics."):
+            elif isinstance(c, str) and c.startswith("physics."):
                 physics_codes.append(c)
             else:
                 raise RuntimeError(
-                    f"Unknown Physics category '{c}'. Use one of: {list(physics_map.keys())} "
-                    f"or a physics.* code like 'physics.optics'."
+                    f"Unknown Physics category '{c}'. Use one of {list(physics_map.keys())}."
                 )
 
-        # Pull directly from each selected subpage (THIS fixes the random CME/biology/etc.)
+        # Pull directly from the subpages so we don't mix in unrelated physics
         papers = []
         seen = set()
         for code in physics_codes:
@@ -163,63 +150,52 @@ def generate_body(topic, categories, interest, threshold, fallback_n=15):
                     papers.append(p)
 
     elif topic in physics_topics:
-        abbr = physics_topics[topic]
-        papers = get_papers(abbr)
+        papers = get_papers(physics_topics[topic])
 
     elif topic in topics:
-        abbr = topics[topic]
-        papers = get_papers(abbr)
+        papers = get_papers(topics[topic])
 
     else:
         raise RuntimeError(f"Invalid topic {topic}")
 
     if not papers:
-        return "<html><body><p>No papers found for this run.</p></body></html>"
+        return "<p>No papers found for this run.</p>"
 
-    # ---- LLM scoring (optional) ----
+    # ---- Scoring / fallback ----
     if interest and str(interest).strip():
         used_fallback = False
         scored = []
-        hallucinated = False
 
         try:
-            scored, hallucinated = generate_relevance_score(
+            scored, _ = generate_relevance_score(
                 papers,
                 query={"interest": interest},
                 threshold_score=threshold,
-                num_paper_in_prompt=4,  # you already set this low; keep it
+                num_paper_in_prompt=4,  # you already reduced; keep it
             )
         except Exception:
-            # If the LLM/parsing code is flaky, DON'T DIE. Just fallback.
+            # If LLM output/parsing is flaky, do NOT crash — fallback
             used_fallback = True
             scored = []
-            hallucinated = False
 
-        # If nothing passes threshold, fallback to recent
         final_list = scored
         if not final_list:
             used_fallback = True
             final_list = papers[:fallback_n]
 
-        body_parts = []
+        parts = []
         if used_fallback:
-            body_parts.append(
+            parts.append(
                 f"No papers exceeded the relevance threshold ({threshold}) for this run. "
                 f"Showing the {fallback_n} most recent papers instead.<br><br>"
             )
-        else:
-            # Only show hallucination warning if we actually used scored results
-            if hallucinated:
-                body_parts.append(
-                    "Warning: the model output was partially malformed. Scores/reasons may be imperfect.<br><br>"
-                )
 
-        body_parts.append(
+        parts.append(
             "<br><br>".join(render_paper_html(p, include_score=not used_fallback) for p in final_list)
         )
-        return "".join(body_parts)
+        return "".join(parts)
 
-    # ---- No interest => raw list ----
+    # No interest => raw list
     return "<br><br>".join(render_paper_html(p, include_score=False) for p in papers)
 
 
@@ -242,26 +218,22 @@ if __name__ == "__main__":
     threshold = config.get("threshold", 7)
     interest = config.get("interest", "")
 
-    from_email = os.environ.get("FROM_EMAIL")
-    to_email = os.environ.get("TO_EMAIL")
-
     body = generate_body(topic, categories, interest, threshold)
 
     with open("digest.html", "w", encoding="utf-8") as f:
         f.write(body)
 
+    # This sendgrid block is mainly for local runs; in your GitHub Action you send later.
     if os.environ.get("SENDGRID_API_KEY"):
         sg = SendGridAPIClient(api_key=os.environ.get("SENDGRID_API_KEY"))
-        from_e = Email(from_email)  # must be verified sender in SendGrid
-        to_e = To(to_email)
+        from_email = Email(os.environ.get("FROM_EMAIL"))
+        to_email = To(os.environ.get("TO_EMAIL"))
         subject = date.today().strftime("Personalized arXiv Digest, %d %b %Y")
         content = Content("text/html", body)
-        mail = Mail(from_e, to_e, subject, content)
+        mail = Mail(from_email, to_email, subject, content)
 
-        response = sg.client.mail.send.post(request_body=mail.get())
-        if 200 <= response.status_code <= 299:
-            print("SendGrid: Success")
-        else:
-            raise RuntimeError(f"SendGrid: Failure ({response.status_code}) {response.body}")
+        resp = sg.client.mail.send.post(request_body=mail.get())
+        if not (200 <= resp.status_code <= 299):
+            raise RuntimeError(f"SendGrid failed: {resp.status_code} {resp.body}")
     else:
         print("No sendgrid api key found. Skipping email")
