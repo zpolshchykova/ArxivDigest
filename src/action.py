@@ -402,9 +402,17 @@ def main() -> int:
         cutoff = now - timedelta(days=dd)
         lookback_label = f"Looking back {dd} day(s)"
 
+    cutoff = cutoff.replace(hour=0, minute=0, second=0, microsecond=0)
+
     cat_codes = resolve_category_codes(topic, categories)
 
     papers = fetch_recent_papers(cat_codes, cutoff=cutoff, max_results_per_cat=200)
+
+    if not papers:
+        # Absolute fallback: show newest papers in these categories (ignore time window)
+        very_old = datetime(1900, 1, 1, tzinfo=timezone.utc)
+        papers = fetch_recent_papers(cat_codes, cutoff=very_old, max_results_per_cat=200)
+        lookback_label += " — no results in window, showing latest available instead"
 
     for p in papers:
         p.keyword_score = compute_keyword_score(p)
