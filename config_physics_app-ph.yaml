@@ -1,0 +1,15 @@
+topic: "Applied Physics"
+categories: []
+threshold: 7
+interest: |
+  I am an experimental physicist working in integrated photonics, especially lithium niobate on insulator (LNOI).
+
+  Prioritize:
+  - Integrated photonics and nanophotonics devices (especially LNOI / LiNbO3)
+  - Electro-optic modulators, resonators (microrings), waveguides, couplers, gratings
+  - Photonic integrated circuit fabrication, packaging, characterization
+  - Nonlinear optics on chip (SHG, SPDC, frequency conversion) when experimentally demonstrated
+
+  Deprioritize:
+  - Pure theory with no clear experimental path or device relevance
+  - Papers focused mainly on non-photonics applications (unless clearly transferrable to integrated photonics)
