@@ -1,42 +1,114 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: Daily pipeline 
+name: Daily pipeline
 
 on:
   workflow_dispatch: {}
   schedule:
-    # * is a special character in YAML so you have to quote this string
-    # Feel free to change this cron schedule
-    # Currently its scheduled for 1:25 pm UTC, Sun-Thurs
-    - cron:  '25 13 * * 0-4'
+    - cron: '25 13 * * 0-4'
 
 jobs:
   generate_and_send_digest:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Generate Digest 
-      run: |
-        python src/action.py
+        # Make sure SendGrid lib is present even if requirements.txt changes
+        pip install sendgrid
+
+    # Generate digests for ALL your config files (no emailing yet)
+    - name: Generate digests (all configs)
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        set -e
+        configs=(
+          config_physics_app-ph.yaml
+          config_physics_ed-ph.yaml
+          config_physics_hist-ph.yaml
+          config_physics_ins-det.yaml
+          config_physics_optics.yaml
+          config_quant-ph.yaml
+        )
+
+        mkdir -p out
+
+        for cfg in "${configs[@]}"; do
+          echo "=== Running $cfg ==="
+          cp "$cfg" config.yaml
+          python src/action.py
+          mv digest.html "out/digest_${cfg}.html"
+        done
+
+    # Combine them into one file
+    - name: Combine into one HTML
+      run: |
+        python - <<'PY'
+        import glob, os, html
+        files = sorted(glob.glob("out/digest_*.html"))
+
+        parts = []
+        parts.append("<html><body>")
+        parts.append("<h1>Personalized arXiv Digest (combined)</h1>")
+        parts.append("<hr/>")
+
+        for fp in files:
+          title = os.path.basename(fp).replace("digest_", "").replace(".html", "")
+          parts.append(f"<h2>{html.escape(title)}</h2>")
+          with open(fp, "r", encoding="utf-8") as f:
+            parts.append(f.read())
+          parts.append("<hr/>")
+
+        parts.append("</body></html>")
+
+        with open("digest.html", "w", encoding="utf-8") as f:
+          f.write("\n".join(parts))
+        PY
+
+    # Send ONE email via SendGrid (recommended path)
+    - name: Send combined email (SendGrid)
+      if: ${{ secrets.SENDGRID_API_KEY != '' }}
+      env:
         SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
         FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
         TO_EMAIL: ${{ secrets.TO_EMAIL }}
+      run: |
+        python - <<'PY'
+        import os
+        from sendgrid import SendGridAPIClient
+        from sendgrid.helpers.mail import Mail, Email, To, Content
+        from datetime import datetime
+
+        with open("digest.html", "r", encoding="utf-8") as f:
+          body = f.read()
+
+        subject = "Personalized arXiv Digest (combined) — " + datetime.utcnow().strftime("%Y-%m-%d")
+
+        sg = SendGridAPIClient(api_key=os.environ["SENDGRID_API_KEY"])
+        mail = Mail(
+          Email(os.environ["FROM_EMAIL"]),
+          To(os.environ["TO_EMAIL"]),
+          subject,
+          Content("text/html", body),
+        )
+        sg.client.mail.send.post(request_body=mail.get())
+        print("Sent combined digest email via SendGrid.")
+        PY
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
         name: digest.html
         path: digest.html
+
+    # SMTP fallback path (kept from your original)
     - name: check
       id: check
       env:
@@ -45,32 +117,24 @@ jobs:
         MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
         MAIL_CONNECTION: ${{ secrets.MAIL_CONNECTION }}
       if: "${{ env.SENDGRID_API_KEY == '' && (env.MAIL_CONNECTION || env.MAIL_USERNAME != '' && env.MAIL_PASSWORD != '') }}"
-      run: echo "DEFINED=true" >> $GITHUB_OUTPUT 
-    - name: Send mail
+      run: echo "DEFINED=true" >> $GITHUB_OUTPUT
+
+    - name: Send mail (SMTP fallback)
       uses: dawidd6/action-send-mail@v3
       env:
         DEFINED: ${{ steps.check.outputs.DEFINED }}
       if: ${{ env.DEFINED == 'true' }}
       with:
-        # Specify connection via URL (replaces server_address, server_port, secure,
-        # username and password)
-        #
-        # Format:
-        #
-        #  * smtp://user:password@server:port
-        #  * smtp+starttls://user:password@server:port
         connection_url: ${{secrets.MAIL_CONNECTION}}
-        # Required mail server address if not connection_url:
         server_address: smtp.gmail.com
-        # Server port, default 25:
         server_port: 465
         username: ${{secrets.MAIL_USERNAME}}
         password: ${{secrets.MAIL_PASSWORD}}
         secure: true
-        subject: Personalized arXiv Digest 
-        to: ${{ secrets.TO_EMAIL }} 
-        from: "Personalized arxiv digest" 
+        subject: Personalized arXiv Digest (combined)
+        to: ${{ secrets.TO_EMAIL }}
+        from: "Personalized arxiv digest"
         html_body: file://digest.html
         ignore_cert: true
         convert_markdown: true
-        priority: normal 
+        priority: normal
