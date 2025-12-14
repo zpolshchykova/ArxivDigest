@@ -1,0 +1,16 @@
+topic: "Optics"
+categories: []
+threshold: 7
+interest: |
+  I am an experimental physicist working in integrated photonics, especially lithium niobate on insulator (LNOI).
+
+  Prioritize:
+  - Integrated photonics / photonic integrated circuits (PICs)
+  - Thin-film LiNbO3 / LNOI devices and electro-optic modulation
+  - Integrated nonlinear optics: SHG, SPDC, OPO, frequency conversion, combs
+  - Integrated quantum photonics / quantum optics experiments implemented with photonics
+    (single photons, entanglement, squeezing, homodyne, quantum frequency conversion)
+
+  Deprioritize:
+  - Purely theoretical optics papers with no realistic experimental validation
+  - Papers that are mainly about a specific natural language / NLP / unrelated “optics” metaphor usage
