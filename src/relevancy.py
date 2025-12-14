@@ -35,48 +35,114 @@ def encode_prompt(query, prompt_papers):
     return prompt
 
 
-def post_process_chat_gpt_response(paper_data, response, threshold_score=8):
-    selected_data = []
-    if response is None:
-        return []
-    json_items = response['message']['content'].replace("\n\n", "\n").split("\n")
-    pattern = r"^\d+\. |\\"
-    import pprint
+# def post_process_chat_gpt_response(paper_data, response, threshold_score=8):
+#     selected_data = []
+#     if response is None:
+#         return []
+#     json_items = response['message']['content'].replace("\n\n", "\n").split("\n")
+#     pattern = r"^\d+\. |\\"
+#     import pprint
+#     try:
+#         score_items = [
+#             json.loads(re.sub(pattern, "", line))
+#             for line in json_items if "relevancy score" in line.lower()]
+#     except Exception:
+#         pprint.pprint([re.sub(pattern, "", line) for line in json_items if "relevancy score" in line.lower()])
+#         return [], True
+
+#     pprint.pprint(score_items)
+#     scores = []
+#     for item in score_items:
+#         temp = item["Relevancy score"]
+#         if isinstance(temp, str) and "/" in temp:
+#             scores.append(int(temp.split("/")[0]))
+#         else:
+#             scores.append(int(temp))
+#     if len(score_items) != len(paper_data):
+#         score_items = score_items[:len(paper_data)]
+#         hallucination = True
+#     else:
+#         hallucination = False
+
+#     for idx, inst in enumerate(score_items):
+#         # if the decoding stops due to length, the last example is likely truncated so we discard it
+#         if scores[idx] < threshold_score:
+#             continue
+#         output_str = "Title: " + paper_data[idx]["title"] + "\n"
+#         output_str += "Authors: " + paper_data[idx]["authors"] + "\n"
+#         output_str += "Link: " + paper_data[idx]["main_page"] + "\n"
+#         for key, value in inst.items():
+#             paper_data[idx][key] = value
+#             output_str += str(key) + ": " + str(value) + "\n"
+#         paper_data[idx]['summarized_text'] = output_str
+#         selected_data.append(paper_data[idx])
+#     return selected_data, hallucination
+
+def post_process_chat_gpt_response(prompt_papers, response, threshold_score=7):
+    """
+    Robustly parse model output.
+    - Accepts extra text before/after JSON
+    - Extracts JSON objects even if not 1-per-line
+    - Never raises; returns (filtered_papers, hallucinated_flag)
+    """
+    import json
+    import re
+
+    text = ""
     try:
-        score_items = [
-            json.loads(re.sub(pattern, "", line))
-            for line in json_items if "relevancy score" in line.lower()]
+        # openai.ChatCompletion response shape
+        text = response["choices"][0]["message"]["content"]
     except Exception:
-        pprint.pprint([re.sub(pattern, "", line) for line in json_items if "relevancy score" in line.lower()])
+        # fallback
+        text = str(response)
+
+    # Pull out any JSON objects anywhere in the output
+    # (handles: extra prose, numbering, code fences, etc.)
+    candidates = re.findall(r"\{[\s\S]*?\}", text)
+
+    parsed = []
+    hallucinated = False
+
+    for c in candidates:
+        try:
+            obj = json.loads(c)
+            if isinstance(obj, dict):
+                parsed.append(obj)
+        except Exception:
+            hallucinated = True
+
+    # If we parsed nothing, treat as hallucination and return nothing above threshold
+    if not parsed:
         return [], True
 
-    pprint.pprint(score_items)
-    scores = []
-    for item in score_items:
-        temp = item["Relevancy score"]
-        if isinstance(temp, str) and "/" in temp:
-            scores.append(int(temp.split("/")[0]))
-        else:
-            scores.append(int(temp))
-    if len(score_items) != len(paper_data):
-        score_items = score_items[:len(paper_data)]
-        hallucination = True
-    else:
-        hallucination = False
+    # We expect up to len(prompt_papers) items; keep only that many
+    parsed = parsed[: len(prompt_papers)]
 
-    for idx, inst in enumerate(score_items):
-        # if the decoding stops due to length, the last example is likely truncated so we discard it
-        if scores[idx] < threshold_score:
+    out = []
+    for paper, obj in zip(prompt_papers, parsed):
+        # Normalize key names and values
+        score = obj.get("Relevancy score", obj.get("relevancy score", obj.get("score", obj.get("Score", None))))
+        reason = obj.get("Reasons for match", obj.get("reasons", obj.get("reason", obj.get("Reason", ""))))
+
+        try:
+            score_int = int(str(score).strip())
+        except Exception:
+            hallucinated = True
             continue
-        output_str = "Title: " + paper_data[idx]["title"] + "\n"
-        output_str += "Authors: " + paper_data[idx]["authors"] + "\n"
-        output_str += "Link: " + paper_data[idx]["main_page"] + "\n"
-        for key, value in inst.items():
-            paper_data[idx][key] = value
-            output_str += str(key) + ": " + str(value) + "\n"
-        paper_data[idx]['summarized_text'] = output_str
-        selected_data.append(paper_data[idx])
-    return selected_data, hallucination
+
+        # attach fields
+        paper = dict(paper)  # copy
+        paper["Relevancy score"] = score_int
+        paper["Reasons for match"] = str(reason).strip()
+
+        if score_int >= threshold_score:
+            out.append(paper)
+
+    # If output count is suspiciously low vs input, mark hallucination but don't fail
+    if len(out) == 0 and len(prompt_papers) > 0:
+        hallucinated = True
+
+    return out, hallucinated
 
 
 def find_word_in_string(w, s):
