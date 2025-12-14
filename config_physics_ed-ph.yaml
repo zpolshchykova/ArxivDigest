@@ -1,5 +1,6 @@
-topic: "Physics Education"
-categories: []
+topic: "Physics"
+categories: ["Physics Education"]
+
 threshold: 9
 interest: |
   I am an experimental physicist in integrated photonics and quantum optics.
