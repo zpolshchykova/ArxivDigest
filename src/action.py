@@ -329,16 +329,45 @@ def generate_body(topic, categories, interest, threshold, fallback_n=15):
             )
 
         def render_paper(p):
-            # If it came from relevancy results, it likely has score + reason fields
+            import re
+            from urllib.parse import quote_plus
+
+            # Clean title
+            title = (p.get("title") or "").replace("Title:", "").strip()
+
+            # Try to get a real URL first
+            url = (p.get("main_page") or "").strip()
+
+            # Normalize absolute URL if we got a relative one like "/abs/2501.01234"
+            if url.startswith("/"):
+                url = "https://arxiv.org" + url
+
+            # If it's not a URL, only convert to /abs/ if it LOOKS like an arXiv ID
+            if url and not url.startswith("http"):
+                looks_like_new_id = re.match(r"^\d{4}\.\d{4,5}(v\d+)?$", url)  # 2501.01234 or 0704.0001
+                looks_like_old_id = re.match(r"^[a-z\-]+/\d{7}(v\d+)?$", url)  # hep-th/9901001
+                if looks_like_new_id or looks_like_old_id:
+                    url = "https://arxiv.org/abs/" + url
+                else:
+                    url = ""  # don't create broken /abs/ links
+
+            # FINAL fallback: if we still don't have a usable url, link to arXiv title search
+            if not url:
+                url = "https://arxiv.org/search/?query=" + quote_plus(title) + "&searchtype=title"
+
+            # Optional extra fields from LLM scoring
             score = p.get("Relevancy score", "")
             reason = p.get("Reasons for match", "")
+
             extra = ""
             if score != "" or reason != "":
                 extra = f"<br>Score: {score}<br>Reason: {reason}"
+
             return (
-                f'Title: <a href="{p["main_page"]}">{p["title"]}</a><br>'
-                f'Authors: {p["authors"]}{extra}'
+                f'Title: <a href="{url}">{title}</a><br>'
+                f'Authors: {p.get("authors","")}{extra}'
             )
+
 
         body_parts.append("<br><br>".join(render_paper(p) for p in final_list))
         body = "".join(body_parts)
