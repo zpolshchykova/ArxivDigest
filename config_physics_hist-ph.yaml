@@ -1,0 +1,10 @@
+topic: "History and Philosophy of Physics"
+categories: []
+threshold: 9
+interest: |
+  I am an experimental physicist; I only want history/philosophy papers if they connect to:
+  - History of optics / lasers / quantum optics
+  - History of quantum information with clear relevance to experiments or photonics
+
+  Deprioritize:
+  - Broad philosophy papers without a clear connection to optics/quantum optics
