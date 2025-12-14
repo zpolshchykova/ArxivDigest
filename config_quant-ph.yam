@@ -1,0 +1,16 @@
+topic: "Quantum Physics"
+categories: []
+threshold: 8
+interest: |
+  I am an experimental physicist interested in quantum optics, quantum information, and integrated photonics (especially LNOI).
+
+  Prioritize experimental / implementation-focused work, especially photonics:
+  - Integrated quantum photonics, on-chip generation/manipulation of quantum states of light
+  - Entangled photon sources, SPDC, squeezing, CV photonics experiments
+  - Quantum frequency conversion / transduction with photonics platforms
+  - Practical quantum information experiments that are photonics-hardware grounded
+
+  Deprioritize:
+  - Pure theory / formal results without a clear experimental or photonics implementation
+  - Quantum algorithms / complexity without hardware relevance
+  - Foundations-only discussions with no experimental angle
