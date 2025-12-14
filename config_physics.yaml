@@ -9,7 +9,7 @@ categories:
 threshold: 5
 
 # How far back to look (because you're not running daily anymore)
-working_days_back: 2
+working_days_back: 1
 
 
 interest: |
