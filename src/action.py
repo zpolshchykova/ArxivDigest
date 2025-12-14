@@ -28,10 +28,7 @@ except Exception:
 
 
 ARXIV_API_URL = "https://export.arxiv.org/api/query"
-ATOM_NS = {
-    "atom": "http://www.w3.org/2005/Atom",
-    "arxiv": "http://arxiv.org/schemas/atom",
-}
+ATOM_NS = {"atom": "http://www.w3.org/2005/Atom"}
 
 PHYSICS_HUMAN_TO_CODE = {
     "Applied Physics": "physics.app-ph",
@@ -44,9 +41,8 @@ PHYSICS_HUMAN_TO_CODE = {
 # Keyword fallback so “no LLM matches” still shows relevant-ish stuff
 KEYWORDS = [
     # Platforms/materials
-    "lithium niobate", "linbo3", "linbo", "linb", "linbo₃", "linbo3",
-    "linbo", "liNbO3", "lnoi", "tfln", "thin-film lithium niobate", "ppln",
-    "silicon photonics", "silicon nitride", "siN", "si/siN",
+    "lithium niobate", "linbo3", "linbo", "liNbO3", "lnoi", "tfln", "thin-film lithium niobate", "ppln",
+    "silicon photonics", "silicon nitride", "sin", "si/sin",
     # Devices/components
     "electro-optic", "pockels", "modulator",
     "microring", "micro-ring", "microresonator", "resonator",
@@ -62,9 +58,7 @@ KEYWORDS = [
     "interferometer", "spectroscopy", "metrology", "detector",
 ]
 
-AUTHOR_BOOST_KEYWORDS = [
-    "grange",  # boosts if author list contains this
-]
+AUTHOR_BOOST_KEYWORDS = ["grange"]  # small boost if author list includes "grange"
 
 
 @dataclass
@@ -83,14 +77,14 @@ class Paper:
 
 
 def working_days_cutoff(now_utc: datetime, working_days_back: int) -> datetime:
-    """Return a cutoff datetime that is N working days back (skips Sat/Sun)."""
+    """Return cutoff datetime N working days back (skips Sat/Sun)."""
     if working_days_back <= 0:
         return now_utc
     d = now_utc
     remaining = working_days_back
     while remaining > 0:
         d = d - timedelta(days=1)
-        if d.weekday() < 5:  # Mon=0 .. Fri=4
+        if d.weekday() < 5:  # Mon=0..Fri=4
             remaining -= 1
     return d
 
@@ -120,7 +114,6 @@ def _extract_base_id(abs_url: str) -> str:
 def resolve_category_codes(topic: str, categories: List[str]) -> List[str]:
     topic = (topic or "").strip()
 
-    # Physics: requires physics.* categories
     if topic == "Physics":
         if not categories:
             raise RuntimeError("For topic 'Physics', you must set categories (e.g. Optics).")
@@ -138,11 +131,10 @@ def resolve_category_codes(topic: str, categories: List[str]) -> List[str]:
                 )
         return codes
 
-    # Quantum Physics topic
     if topic in ("Quantum Physics", "quant-ph"):
         return ["quant-ph"]
 
-    # If someone passes a category code as "topic"
+    # allow raw category code as topic
     if re.match(r"^[a-z\-]+(\.[A-Z\-]+)?$", topic):
         return [topic]
 
@@ -150,7 +142,7 @@ def resolve_category_codes(topic: str, categories: List[str]) -> List[str]:
 
 
 def fetch_recent_papers(category_codes: List[str], cutoff: datetime, max_results_per_cat: int = 200) -> List[Paper]:
-    seen: set = set()
+    seen = set()
     out: List[Paper] = []
 
     for cat in category_codes:
@@ -179,10 +171,8 @@ def fetch_recent_papers(category_codes: List[str], cutoff: datetime, max_results
                 continue
 
             published = _parse_arxiv_dt(published_s)
-
-            # stop once older than cutoff (results are newest -> oldest)
             if published < cutoff:
-                break
+                break  # newest->oldest
 
             base_id = _extract_base_id(abs_url)
             if base_id in seen:
@@ -200,7 +190,7 @@ def fetch_recent_papers(category_codes: List[str], cutoff: datetime, max_results
 
             cats = []
             for c in entry.findall("atom:category", ATOM_NS):
-                term = c.attrib.get("term", "").strip()
+                term = (c.attrib.get("term", "") or "").strip()
                 if term:
                     cats.append(term)
 
@@ -237,6 +227,7 @@ def compute_keyword_score(p: Paper) -> int:
         if ak in author_blob:
             score += 6
 
+    # small bonus for target categories
     if any(c in ("physics.optics", "physics.app-ph", "physics.ins-det", "quant-ph") for c in p.categories):
         score += 1
 
@@ -310,6 +301,7 @@ def llm_score_papers(papers: List[Paper], interest: str) -> List[Paper]:
             continue
 
     if len(parsed) != len(papers_to_score):
+        # malformed output: ignore LLM scores
         return papers
 
     for p, (s, r) in zip(papers_to_score, parsed):
@@ -319,101 +311,54 @@ def llm_score_papers(papers: List[Paper], interest: str) -> List[Paper]:
     return papers
 
 
-# def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: str) -> str:
-#     header = f"<h2>{html.escape(title)}</h2>"
-#     meta = f"<div><i>{html.escape(lookback_label)}. Threshold = {threshold}.</i></div>"
-
-#     # IMPORTANT FIX: if there are 0 papers, say so (don’t claim “showing 15”)
-#     if not papers:
-#         return header + meta + "<div><b>No papers found in this time window.</b></div>"
-
-#     relevant = [p for p in papers if (p.llm_score is not None and p.llm_score >= threshold)]
-
-#     used_fallback = False
-#     if not relevant:
-#         used_fallback = True
-#         ranked = sorted(papers, key=lambda p: (p.keyword_score, p.published), reverse=True)
-#         if ranked and ranked[0].keyword_score == 0:
-#             ranked = sorted(papers, key=lambda p: p.published, reverse=True)
-#         relevant = ranked[:15]
-
-#     if used_fallback:
-#         meta += (
-#             f"<div style='margin-top:6px; color:#a00;'><b>"
-#             f"No papers exceeded the relevance threshold ({threshold}) for this run. "
-#             f"Showing 15 keyword-ranked papers instead."
-#             f"</b></div>"
-#         )
-
-#     def paper_block(p: Paper) -> str:
-#         authors = ", ".join(p.authors)
-#         pub = p.published.astimezone(timezone.utc).strftime("%Y-%m-%d")
-#         cats = ", ".join(p.categories)
-
-#         score_part = ""
-#         if p.llm_score is not None:
-#             score_part = f"<div><b>Relevance:</b> {p.llm_score}/10</div>"
-#         reason_part = ""
-#         if p.llm_reason:
-#             reason_part = f"<div><b>Why:</b> {html.escape(p.llm_reason)}</div>"
-
-#         return (
-#             "<div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'>"
-#             f"<div style='font-size: 16px;'><b>Title:</b> "
-#             f"<a href='{html.escape(p.pdf_url)}'>{html.escape(p.title)}</a></div>"
-#             f"<div><b>Authors:</b> {html.escape(authors)}</div>"
-#             f"<div><b>Published:</b> {pub}</div>"
-#             f"<div><b>Categories:</b> {html.escape(cats)}</div>"
-#             f"{score_part}{reason_part}"
-#             f"<div style='margin-top: 6px;'><a href='{html.escape(p.abs_url)}'>Abstract page</a></div>"
-#             "</div>"
-#         )
-
-#     blocks = "\n".join(paper_block(p) for p in relevant)
-#     return header + meta + blocks
 def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: str) -> str:
     header = f"<h2>{html.escape(title)}</h2>"
-    meta = f"<div><i>{html.escape(lookback_label)}. Threshold = {threshold}.</i></div>"
+    meta = f"<div><i>{html.escape(lookback_label)}. Base threshold = {threshold}.</i></div>"
 
-    # If there are 0 papers (should be prevented by your "always show latest" fallback),
-    # still handle gracefully.
     if not papers:
         return header + meta + "<div><b>No papers found.</b></div>"
 
-    # -------- Auto-raise threshold to keep <= 10 papers --------
+    # Sort by best-first for display
+    papers_sorted = sorted(papers, key=lambda p: (p.keyword_score, p.published), reverse=True)
+
+    # --- Auto-raise threshold to keep max 15 papers ---
     base_threshold = int(threshold)
     used_threshold = base_threshold
 
-    while True:
-        relevant = [p for p in papers if (p.llm_score is not None and p.llm_score >= used_threshold)]
-        if len(relevant) <= 10 or used_threshold >= 10:
-            break
+    def relevant_for(t: int) -> List[Paper]:
+        rel = [p for p in papers_sorted if (p.llm_score is not None and p.llm_score >= t)]
+        # sort relevant by (llm_score desc, keyword_score desc, recency desc)
+        rel.sort(key=lambda p: ((p.llm_score or 0), p.keyword_score, p.published), reverse=True)
+        return rel
+
+    relevant = relevant_for(used_threshold)
+    while len(relevant) > 15 and used_threshold < 10:
         used_threshold += 1
+        relevant = relevant_for(used_threshold)
 
     if used_threshold != base_threshold:
         meta += (
-            f"<div><b>Auto-adjust:</b> threshold raised from {base_threshold} "
-            f"to {used_threshold} to keep ≤ 10 papers.</div>"
+            f"<div><b>Auto-adjust:</b> threshold raised from {base_threshold} to {used_threshold} "
+            f"to keep ≤ 15 papers.</div>"
         )
 
-    threshold = used_threshold  # use the adjusted threshold from here on
+    # If still > 15 even at threshold 10, cap to 15
+    if len(relevant) > 15:
+        relevant = relevant[:15]
+        meta += "<div><b>Note:</b> still > 15 at threshold 10, capped to 15.</div>"
 
-    # Recompute relevant using final threshold
-    relevant = [p for p in papers if (p.llm_score is not None and p.llm_score >= threshold)]
-
-    # -------- Fallback if none pass threshold --------
+    # --- Fallback if none pass threshold (or no LLM scores exist) ---
     used_fallback = False
     if not relevant:
         used_fallback = True
-        ranked = sorted(papers, key=lambda p: (p.keyword_score, p.published), reverse=True)
+        ranked = sorted(papers_sorted, key=lambda p: (p.keyword_score, p.published), reverse=True)
         if ranked and ranked[0].keyword_score == 0:
-            ranked = sorted(papers, key=lambda p: p.published, reverse=True)
-        relevant = ranked[:10]
-
+            ranked = sorted(papers_sorted, key=lambda p: p.published, reverse=True)
+        relevant = ranked[:15]
         meta += (
             f"<div style='margin-top:6px; color:#a00;'><b>"
-            f"No papers exceeded the relevance threshold ({threshold}) for this run. "
-            f"Showing 10 keyword-ranked papers instead."
+            f"No papers exceeded the relevance threshold ({used_threshold}) for this run. "
+            f"Showing 15 keyword-ranked papers instead."
             f"</b></div>"
         )
 
@@ -423,11 +368,11 @@ def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: 
         cats = ", ".join(p.categories)
 
         score_part = ""
-        if p.llm_score is not None:
+        if p.llm_score is not None and not used_fallback:
             score_part = f"<div><b>Relevance:</b> {p.llm_score}/10</div>"
 
         reason_part = ""
-        if p.llm_reason:
+        if p.llm_reason and not used_fallback:
             reason_part = f"<div><b>Why:</b> {html.escape(p.llm_reason)}</div>"
 
         return (
@@ -446,7 +391,6 @@ def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: 
     return header + meta + blocks
 
 
-
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="config.yaml", help="YAML config to load")
@@ -456,12 +400,10 @@ def main() -> int:
         cfg = yaml.safe_load(f) or {}
 
     topic = str(cfg.get("topic", "")).strip()
-    categories = cfg.get("categories") or []
-    categories = [str(c).strip() for c in categories]
+    categories = [str(c).strip() for c in (cfg.get("categories") or [])]
     threshold = int(cfg.get("threshold", 6))
     interest = str(cfg.get("interest", "") or "")
 
-    # NEW: working-days lookback (preferred)
     working_days_back = cfg.get("working_days_back", None)
     days_back = cfg.get("days_back", None)
 
@@ -471,19 +413,19 @@ def main() -> int:
         cutoff = working_days_cutoff(now, wd)
         lookback_label = f"Looking back {wd} working day(s)"
     else:
-        # fallback: calendar days
-        dd = int(days_back) if days_back is not None else 2
+        dd = int(days_back) if days_back is not None else 1
         cutoff = now - timedelta(days=dd)
         lookback_label = f"Looking back {dd} day(s)"
 
+    # IMPORTANT: start cutoff at midnight UTC so you don't miss earlier papers in the cutoff day
     cutoff = cutoff.replace(hour=0, minute=0, second=0, microsecond=0)
 
     cat_codes = resolve_category_codes(topic, categories)
 
     papers = fetch_recent_papers(cat_codes, cutoff=cutoff, max_results_per_cat=200)
 
+    # Absolute fallback: if the window is empty, show latest available in these categories
     if not papers:
-        # Absolute fallback: show newest papers in these categories (ignore time window)
         very_old = datetime(1900, 1, 1, tzinfo=timezone.utc)
         papers = fetch_recent_papers(cat_codes, cutoff=very_old, max_results_per_cat=200)
         lookback_label += " — no results in window, showing latest available instead"
@@ -491,7 +433,7 @@ def main() -> int:
     for p in papers:
         p.keyword_score = compute_keyword_score(p)
 
-    # pre-rank before LLM to keep costs sane
+    # Pre-rank before LLM to keep costs sane
     papers.sort(key=lambda p: (p.keyword_score, p.published), reverse=True)
 
     papers = llm_score_papers(papers, interest=interest)
@@ -505,7 +447,7 @@ def main() -> int:
     with open("digest.html", "w", encoding="utf-8") as f:
         f.write(digest_html)
 
-    # Optional local sending
+    # Optional local sending (your GitHub workflow sends combined email separately)
     sg_key = os.environ.get("SENDGRID_API_KEY", "").strip()
     from_email = os.environ.get("FROM_EMAIL", "").strip()
     to_email = os.environ.get("TO_EMAIL", "").strip()
