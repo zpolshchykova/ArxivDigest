@@ -1,0 +1,14 @@
+topic: "Instrumentation and Detectors"
+categories: []
+threshold: 8
+interest: |
+  I am an experimental physicist working in integrated photonics and quantum optics (especially LNOI).
+
+  Prioritize:
+  - Optical / photonic instrumentation that supports integrated photonics experiments
+  - Single-photon detectors, SNSPDs, photon counting, low-noise readout (especially for optics/quantum optics)
+  - Measurement methods relevant to photonics: interferometry, frequency metrology, spectroscopy setups
+  - Packaging, fiber-to-chip coupling, alignment techniques, cryogenic/low-noise setups (if optics-related)
+
+  Deprioritize:
+  - Detectors/instrumentation that are purely for particle/nuclear/HEP experiments unless clearly transferable to photonics
