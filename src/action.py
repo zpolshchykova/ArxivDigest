@@ -8,6 +8,7 @@ import yaml
 import os
 from dotenv import load_dotenv
 import openai
+
 from relevancy import generate_relevance_score, process_subject_fields
 from download_new_papers import get_papers
 
@@ -221,104 +222,36 @@ category_map = {
 }
 
 
-# def generate_body(topic, categories, interest, threshold):
-#     if topic == "Physics":
-#         # Allow Physics + the physics.* subpages (physics.app-ph, physics.optics, etc.)
-#         # Your config uses the *natural language* names, so we map them here.
-#         physics_map = {
-#             "Applied Physics": "physics.app-ph",
-#             "Physics Education": "physics.ed-ph",
-#             "History and Philosophy of Physics": "physics.hist-ph",
-#             "Instrumentation and Detectors": "physics.ins-det",
-#             "Optics": "physics.optics",
-#         }
-
-#         if not categories:
-#             raise RuntimeError(
-#                 "For topic 'Physics', you must provide at least one category, e.g. ['Optics']."
-#             )
-
-#         unknown = [c for c in categories if c not in physics_map]
-#         if unknown:
-#             raise RuntimeError(
-#                 f"Unknown Physics category name(s): {unknown}. "
-#                 f"Use one of: {list(physics_map.keys())}"
-#             )
-
-#         # IMPORTANT: overwrite categories with the arXiv category codes
-#         categories = [physics_map[c] for c in categories]
-
-#     elif topic in physics_topics:
-#         abbr = physics_topics[topic]
-#     elif topic in topics:
-#         abbr = topics[topic]
-#     else:
-#         raise RuntimeError(f"Invalid topic {topic}")
-#     if categories:
-#         for category in categories:
-#             if category not in category_map[topic]:
-#                 raise RuntimeError(f"{category} is not a category of {topic}")
-#         papers = get_papers(abbr)
-#         papers = [
-#             t
-#             for t in papers
-#             if bool(set(process_subject_fields(t["subjects"])) & set(categories))
-#         ]
-#     else:
-#         papers = get_papers(abbr)
-#     if interest:
-#         relevancy, hallucination = generate_relevance_score(
-#             papers,
-#             query={"interest": interest},
-#             threshold_score=threshold,
-#             num_paper_in_prompt=16,
-#         )
-#         body = "<br><br>".join(
-#             [
-#                 f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>Authors: {paper["authors"]}<br>Score: {paper["Relevancy score"]}<br>Reason: {paper["Reasons for match"]}'
-#                 for paper in relevancy
-#             ]
-#         )
-#         if hallucination:
-#             body = (
-#                 "Warning: the model hallucinated some papers. We have tried to remove them, but the scores may not be accurate.<br><br>"
-#                 + body
-#             )
-#     else:
-#         body = "<br><br>".join(
-#             [
-#                 f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>Authors: {paper["authors"]}'
-#                 for paper in papers
-#             ]
-#         )
-#     return body
-
-def generate_body(topic, categories, interest, threshold):
+def generate_body(topic, categories, interest, threshold, fallback_n=15):
+    """
+    fallback_n: if LLM filtering returns nothing above threshold, include top N newest papers anyway
+    """
     categories = categories or []
 
-    # ---- Figure out arXiv "abbr" and normalize categories ----
+    # ---- Determine arXiv archive abbrev and normalize categories ----
     if topic == "Physics":
-        # For the Physics archive, arXiv uses "physics" as the archive prefix
+        # "physics" is the archive prefix for physics.*
         abbr = "physics"
 
-        # Map human-readable Physics subpages -> arXiv category codes
+        # map human-readable -> physics.* codes
         physics_map = {
             "Applied Physics": "physics.app-ph",
             "Physics Education": "physics.ed-ph",
             "History and Philosophy of Physics": "physics.hist-ph",
             "Instrumentation and Detectors": "physics.ins-det",
             "Optics": "physics.optics",
+            # you can add more mappings here later if you want
         }
         allowed_codes = set(physics_map.values())
 
         if not categories:
             raise RuntimeError(
-                "You must choose at least one Physics subtopic (e.g. ['Optics', 'Applied Physics'])."
+                "For topic 'Physics', you must provide at least one subtopic "
+                "(e.g. ['Optics', 'Applied Physics'])."
             )
 
         normalized = []
         for c in categories:
-            # allow either natural language names OR already-coded categories
             if c in physics_map:
                 normalized.append(physics_map[c])
             elif c in allowed_codes:
@@ -332,7 +265,6 @@ def generate_body(topic, categories, interest, threshold):
 
     elif topic in physics_topics:
         abbr = physics_topics[topic]
-        # In this repo, some physics subtopics have "None" categories – treat as no filtering
         if categories == ["None"]:
             categories = []
 
@@ -346,13 +278,13 @@ def generate_body(topic, categories, interest, threshold):
     papers = get_papers(abbr)
 
     if categories:
-        # For non-Physics topics, categories are human-readable and we validate against category_map
+        # For non-Physics topics, categories are human-readable; validate against category_map
         if topic != "Physics":
             for category in categories:
                 if category not in category_map.get(topic, []):
                     raise RuntimeError(f"{category} is not a category of {topic}")
 
-        # Filter by subject fields (these are usually codes like physics.optics, quant-ph, cs.AI, etc.)
+        # Filter by subject fields (usually codes like physics.optics, quant-ph, cs.AI)
         papers = [
             t
             for t in papers
@@ -367,25 +299,49 @@ def generate_body(topic, categories, interest, threshold):
             threshold_score=threshold,
             num_paper_in_prompt=16,
         )
-        body = "<br><br>".join(
-            [
-                f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>'
-                f'Authors: {paper["authors"]}<br>'
-                f'Score: {paper["Relevancy score"]}<br>'
-                f'Reason: {paper["Reasons for match"]}'
-                for paper in relevancy
-            ]
-        )
+
+        # Fallback: if nothing passes threshold, include top N newest papers anyway
+        used_fallback = False
+        final_list = relevancy
+        if not final_list:
+            used_fallback = True
+            final_list = papers[:fallback_n]
+
+        # Render
+        body_parts = []
+
         if hallucination:
-            body = (
+            body_parts.append(
                 "Warning: the model hallucinated some papers. We have tried to remove them, "
-                "but the scores may not be accurate.<br><br>" + body
+                "but the scores may not be accurate.<br><br>"
             )
+
+        if used_fallback:
+            body_parts.append(
+                f"No papers exceeded the relevance threshold ({threshold}) for this run. "
+                f"Showing the {fallback_n} most recent papers instead.<br><br>"
+            )
+
+        def render_paper(p):
+            # If it came from relevancy results, it likely has score + reason fields
+            score = p.get("Relevancy score", "")
+            reason = p.get("Reasons for match", "")
+            extra = ""
+            if score != "" or reason != "":
+                extra = f"<br>Score: {score}<br>Reason: {reason}"
+            return (
+                f'Title: <a href="{p["main_page"]}">{p["title"]}</a><br>'
+                f'Authors: {p["authors"]}{extra}'
+            )
+
+        body_parts.append("<br><br>".join(render_paper(p) for p in final_list))
+        body = "".join(body_parts)
+
     else:
+        # No interest means no filtering/scoring; just list papers
         body = "<br><br>".join(
             [
-                f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>'
-                f'Authors: {paper["authors"]}'
+                f'Title: <a href="{paper["main_page"]}">{paper["title"]}</a><br>Authors: {paper["authors"]}'
                 for paper in papers
             ]
         )
@@ -394,13 +350,13 @@ def generate_body(topic, categories, interest, threshold):
 
 
 if __name__ == "__main__":
-    # Load the .env file.
+    # Load the .env file (optional locally; GitHub Actions uses env vars directly)
     load_dotenv()
+
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--config", help="yaml config file to use", default="config.yaml"
-    )
+    parser.add_argument("--config", help="yaml config file to use", default="config.yaml")
     args = parser.parse_args()
+
     with open(args.config, "r") as f:
         config = yaml.safe_load(f)
 
@@ -409,28 +365,30 @@ if __name__ == "__main__":
     openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     topic = config["topic"]
-    categories = config["categories"]
+    categories = config.get("categories", [])
+    threshold = config.get("threshold", 7)
+    interest = config.get("interest", "")
+
     from_email = os.environ.get("FROM_EMAIL")
     to_email = os.environ.get("TO_EMAIL")
-    threshold = config["threshold"]
-    interest = config["interest"]
+
     body = generate_body(topic, categories, interest, threshold)
+
     with open("digest.html", "w") as f:
         f.write(body)
+
     if os.environ.get("SENDGRID_API_KEY", None):
         sg = SendGridAPIClient(api_key=os.environ.get("SENDGRID_API_KEY"))
-        from_email = Email(from_email)  # Change to your verified sender
+        from_email = Email(from_email)  # must be verified in SendGrid
         to_email = To(to_email)
         subject = date.today().strftime("Personalized arXiv Digest, %d %b %Y")
         content = Content("text/html", body)
         mail = Mail(from_email, to_email, subject, content)
-        mail_json = mail.get()
 
-        # Send an HTTP POST request to /mail/send
-        response = sg.client.mail.send.post(request_body=mail_json)
-        if response.status_code >= 200 and response.status_code <= 300:
+        response = sg.client.mail.send.post(request_body=mail.get())
+        if 200 <= response.status_code <= 299:
             print("Send test email: Success!")
         else:
-            print("Send test email: Failure ({response.status_code}, {response.text})")
+            print(f"Send test email: Failure ({response.status_code}, {response.body})")
     else:
         print("No sendgrid api key found. Skipping email")
