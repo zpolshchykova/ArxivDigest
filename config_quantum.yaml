@@ -1,24 +1,22 @@
 topic: "Quantum Physics"
+
 categories: []
 
 threshold: 5
+days_back: 4
 
 interest: |
-  I am an experimental physicist focused on quantum optics, quantum information, and integrated photonics.
-  I prefer experimental demonstrations, hardware, and measurement-oriented papers.
+  IMPORTANT: A paper is relevant if it matches ANY ONE of the items below.
+  It does NOT need to satisfy all criteria.
 
-  Prioritize papers about:
-  - quantum optics experiments (DV and CV), entanglement generation, squeezing, homodyne/heterodyne detection
-  - photonic quantum information: QKD implementations, quantum networking, interfaces, frequency conversion
-  - integrated quantum photonics (LNOI/TFLN, Si/SiN, AlN, diamond, InP): on-chip sources, interferometers, resonators
-  - nonlinear processes for quantum light: SPDC, SFWM, SHG, quantum frequency conversion
-  - single-photon detectors and experimental techniques relevant to photonic quantum experiments (e.g., SNSPDs)
-  - light–matter interfaces with an experimental angle (color centers, cavity QED in photonic platforms)
+  I am an experimental physicist in quantum optics and integrated photonics.
+  Platforms: LNOI/TFLN (LiNbO3), Si/SiN integrated photonics.
 
-  Also prioritize topics aligned with Rachel Grange–adjacent experimental photonics/quantum photonics themes:
-  - microcavities, nanophotonic resonators, enhanced nonlinear/quantum emission in resonant structures
-  - integrated photonics enabling strong light–matter interaction and quantum optical functionality
+  Relevant if it includes any of:
+  - integrated quantum photonics, photonic quantum information
+  - on-chip quantum light sources, entanglement, squeezing
+  - SPDC / SFWM / frequency conversion / χ(2) nonlinear optics (especially LiNbO3 / PPLN / TFLN)
+  - photonic interfaces, quantum networking components, frequency translation, telecom compatibility
+  - experimental demonstrations, device implementations, measurement setups, detectors, characterization
 
-  De-prioritize:
-  - purely theoretical quantum information (algorithms/complexity) with no clear experimental implementation path
-  - foundational discussions without experimental proposals or measurable outcomes
+  Theory is OK if it has a clear experimental pathway or device relevance.
