@@ -1,0 +1,24 @@
+topic: "Physics"
+
+# These are the physics.* categories you listed:
+categories:
+  - "Applied Physics"
+  - "Physics Education"
+  - "History and Philosophy of Physics"
+  - "Instrumentation and Detectors"
+  - "Optics"
+
+threshold: 7
+
+interest: |
+  I am an experimental physicist focused on quantum optics and integrated photonics,
+  especially thin-film lithium niobate (LNOI / TFLN).
+
+  Prioritize papers about:
+  - integrated photonics / integrated quantum photonics
+  - thin-film lithium niobate / LNOI / TFLN devices (modulators, resonators, PPLN, frequency conversion, combs)
+  - quantum optics experiments, sources, detectors, characterization, packaging, fabrication that enable experiments
+
+  De-prioritize:
+  - purely theoretical papers with no experimental demonstration, no clear experimental proposal, or no device/measurement relevance
+  - papers focused mainly on a specific human language (e.g., Arabic-only NLP, Chinese-only NLP, etc.)
