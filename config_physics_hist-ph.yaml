@@ -1,5 +1,7 @@
-topic: "History and Philosophy of Physics"
-categories: []
+topic: "Physics"
+categories: ["History and Philosophy of Physics"]
+
+
 threshold: 9
 interest: |
   I am an experimental physicist; I only want history/philosophy papers if they connect to:
