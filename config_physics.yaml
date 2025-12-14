@@ -1,22 +1,37 @@
 topic: "Physics"
 
-# These are the physics.* categories you listed:
 categories:
   - "Applied Physics"
   - "Instrumentation and Detectors"
   - "Optics"
 
-threshold: 7
+# Keep 7 if you want “only strong matches”, but this can go empty sometimes.
+# If you want fewer empty digests without code changes, set this to 5 or 6.
+threshold: 6
 
 interest: |
-  I am an experimental physicist focused on quantum optics and integrated photonics,
-  especially thin-film lithium niobate (LNOI / TFLN).
+  I am an experimental physicist working in integrated photonics and quantum optics.
+  My main platforms include thin-film lithium niobate (LNOI / TFLN) and silicon photonics (Si/SiN),
+  and I care about experimentally demonstrated devices and measurements.
 
-  Prioritize papers about:
-  - integrated photonics / integrated quantum photonics
-  - thin-film lithium niobate / LNOI / TFLN devices (modulators, resonators, PPLN, frequency conversion, combs)
-  - quantum optics experiments, sources, detectors, characterization, packaging, fabrication that enable experiments
+  Prioritize papers with experimental results related to:
+  - integrated photonics / nanophotonics / photonic integrated circuits (PICs)
+  - thin-film lithium niobate (LNOI/TFLN), PPLN, electro-optic modulators, χ(2) nonlinear optics
+  - silicon photonics / silicon nitride (SiN), low-loss waveguides, microresonators, ring resonators
+  - nonlinear and quantum photonics on-chip: SPDC, SFWM, SHG, OPO, frequency conversion, frequency combs
+  - integrated single-photon sources (including color centers / emitters), entangled photon sources, squeezing
+  - cavities and resonators: whispering-gallery, microrings, photonic crystals, high-Q resonators
+  - optical measurement/instrumentation relevant to photonics experiments: interferometry, spectroscopy, metrology, detectors
+  - packaging and coupling: fiber-to-chip coupling, grating couplers, edge coupling, alignment, stability
+
+  Also prioritize work aligned with topics commonly appearing in Rachel Grange’s research area:
+  - nanophotonics and integrated photonics for light–matter interaction
+  - microcavities and resonant enhancement
+  - nonlinear nanophotonics / frequency conversion
+  - quantum/semiconductor emitters coupled to photonic structures
+  - integrated devices enabling quantum optics experiments
 
   De-prioritize:
-  - purely theoretical papers with no experimental demonstration, no clear experimental proposal, or no device/measurement relevance
-  - papers focused mainly on a specific human language (e.g., Arabic-only NLP, Chinese-only NLP, etc.)
+  - purely theoretical/formal work without a clear experimental pathway or measurable predictions
+  - papers that are mainly about a specific human language or NLP datasets
+  - work unrelated to photonics/optics experiments (e.g., high-energy theory, cosmology, etc.)
