@@ -72,7 +72,7 @@ jobs:
           f.write("\n".join(parts))
         PY
 
-    # Send ONE email via SendGrid (recommended path)
+    # Send ONE email via SendGrid (always tries; will fail if secrets missing)
     - name: Send combined email (SendGrid)
       env:
         SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
@@ -107,7 +107,7 @@ jobs:
         name: digest.html
         path: digest.html
 
-    # SMTP fallback path (kept from your original)
+    # SMTP fallback path (only runs if SendGrid key is empty AND SMTP creds exist)
     - name: check
       id: check
       env:
@@ -115,7 +115,7 @@ jobs:
         MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
         MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
         MAIL_CONNECTION: ${{ secrets.MAIL_CONNECTION }}
-      if: "${{ env.SENDGRID_API_KEY == '' && (env.MAIL_CONNECTION || env.MAIL_USERNAME != '' && env.MAIL_PASSWORD != '') }}"
+      if: ${{ env.SENDGRID_API_KEY == '' && (env.MAIL_CONNECTION != '' || (env.MAIL_USERNAME != '' && env.MAIL_PASSWORD != '')) }}
       run: echo "DEFINED=true" >> $GITHUB_OUTPUT
 
     - name: Send mail (SMTP fallback)
@@ -124,11 +124,11 @@ jobs:
         DEFINED: ${{ steps.check.outputs.DEFINED }}
       if: ${{ env.DEFINED == 'true' }}
       with:
-        connection_url: ${{secrets.MAIL_CONNECTION}}
+        connection_url: ${{ secrets.MAIL_CONNECTION }}
         server_address: smtp.gmail.com
         server_port: 465
-        username: ${{secrets.MAIL_USERNAME}}
-        password: ${{secrets.MAIL_PASSWORD}}
+        username: ${{ secrets.MAIL_USERNAME }}
+        password: ${{ secrets.MAIL_PASSWORD }}
         secure: true
         subject: Personalized arXiv Digest (combined)
         to: ${{ secrets.TO_EMAIL }}
