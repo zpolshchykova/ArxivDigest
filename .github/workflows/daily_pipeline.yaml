@@ -100,11 +100,6 @@ jobs:
         name: digest.html
         path: digest.html
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: digest.html
-        path: digest.html
 
     # SMTP fallback (only used if SendGrid key is empty AND SMTP creds exist)
     - name: check
@@ -117,22 +112,22 @@ jobs:
       if: ${{ env.SENDGRID_API_KEY == '' && (env.MAIL_CONNECTION != '' || (env.MAIL_USERNAME != '' && env.MAIL_PASSWORD != '')) }}
       run: echo "DEFINED=true" >> $GITHUB_OUTPUT
 
-    - name: Send mail (SMTP fallback)
-      uses: dawidd6/action-send-mail@v3
-      env:
-        DEFINED: ${{ steps.check.outputs.DEFINED }}
-      if: ${{ env.DEFINED == 'true' }}
-      with:
-        connection_url: ${{ secrets.MAIL_CONNECTION }}
-        server_address: smtp.gmail.com
-        server_port: 465
-        username: ${{ secrets.MAIL_USERNAME }}
-        password: ${{ secrets.MAIL_PASSWORD }}
-        secure: true
-        subject: Personalized arXiv Digest (combined)
-        to: ${{ secrets.TO_EMAIL }}
-        from: "Personalized arxiv digest"
-        html_body: file://digest.html
-        ignore_cert: true
-        convert_markdown: true
-        priority: normal
+    # - name: Send mail (SMTP fallback)
+    #   uses: dawidd6/action-send-mail@v3
+    #   env:
+    #     DEFINED: ${{ steps.check.outputs.DEFINED }}
+    #   if: ${{ env.DEFINED == 'true' }}
+    #   with:
+    #     connection_url: ${{ secrets.MAIL_CONNECTION }}
+    #     server_address: smtp.gmail.com
+    #     server_port: 465
+    #     username: ${{ secrets.MAIL_USERNAME }}
+    #     password: ${{ secrets.MAIL_PASSWORD }}
+    #     secure: true
+    #     subject: Personalized arXiv Digest (combined)
+    #     to: ${{ secrets.TO_EMAIL }}
+    #     from: "Personalized arxiv digest"
+    #     html_body: file://digest.html
+    #     ignore_cert: true
+    #     convert_markdown: true
+    #     priority: normal
