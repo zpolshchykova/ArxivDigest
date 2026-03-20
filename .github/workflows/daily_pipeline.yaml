@@ -67,33 +67,38 @@ jobs:
           f.write("\n".join(parts))
         PY
 
-    - name: Send combined email (SendGrid)
-      env:
-        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-        FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
-        TO_EMAIL: ${{ secrets.TO_EMAIL }}
-      run: |
-        python - <<'PY'
-        import os
-        from sendgrid import SendGridAPIClient
-        from sendgrid.helpers.mail import Mail, Email, To, Content
-        from datetime import datetime
+    # - name: Send combined email (SendGrid)
+    #   env:
+    #     SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+    #     FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+    #     TO_EMAIL: ${{ secrets.TO_EMAIL }}
+    #   run: |
+    #     python - <<'PY'
+    #     import os
+    #     from sendgrid import SendGridAPIClient
+    #     from sendgrid.helpers.mail import Mail, Email, To, Content
+    #     from datetime import datetime
 
-        with open("digest.html", "r", encoding="utf-8") as f:
-          body = f.read()
+    #     with open("digest.html", "r", encoding="utf-8") as f:
+    #       body = f.read()
 
-        subject = "Personalized arXiv Digest (combined) — " + datetime.utcnow().strftime("%Y-%m-%d")
+    #     subject = "Personalized arXiv Digest (combined) — " + datetime.utcnow().strftime("%Y-%m-%d")
 
-        sg = SendGridAPIClient(api_key=os.environ["SENDGRID_API_KEY"])
-        mail = Mail(
-          Email(os.environ["FROM_EMAIL"]),
-          To(os.environ["TO_EMAIL"]),
-          subject,
-          Content("text/html", body),
-        )
-        sg.client.mail.send.post(request_body=mail.get())
-        print("Sent combined digest email via SendGrid.")
-        PY
+    #     sg = SendGridAPIClient(api_key=os.environ["SENDGRID_API_KEY"])
+    #     mail = Mail(
+    #       Email(os.environ["FROM_EMAIL"]),
+    #       To(os.environ["TO_EMAIL"]),
+    #       subject,
+    #       Content("text/html", body),
+    #     )
+    #     sg.client.mail.send.post(request_body=mail.get())
+    #     print("Sent combined digest email via SendGrid.")
+    #     PY
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: digest.html
+        path: digest.html
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
