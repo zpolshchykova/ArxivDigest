@@ -6,6 +6,7 @@ import json
 import os
 import re
 import sys
+import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import List, Tuple, Optional
@@ -29,6 +30,8 @@ except Exception:
 
 ARXIV_API_URL = "https://export.arxiv.org/api/query"
 ATOM_NS = {"atom": "http://www.w3.org/2005/Atom"}
+ARXIV_RETRY_ATTEMPTS = 4
+ARXIV_RETRY_BACKOFF_SECONDS = (10, 30, 60)
 
 PHYSICS_HUMAN_TO_CODE = {
     "Applied Physics": "physics.app-ph",
@@ -141,6 +144,37 @@ def resolve_category_codes(topic: str, categories: List[str]) -> List[str]:
     raise RuntimeError("Unsupported topic. Use 'Physics' or 'Quantum Physics'.")
 
 
+def _get_arxiv_response(params: dict) -> requests.Response:
+    last_error = None
+    for attempt in range(1, ARXIV_RETRY_ATTEMPTS + 1):
+        try:
+            response = requests.get(
+                ARXIV_API_URL,
+                params=params,
+                timeout=(10, 60),
+                headers={"User-Agent": "ArxivDigestBot/1.0 (personal use)"},
+            )
+            response.raise_for_status()
+            return response
+        except requests.exceptions.RequestException as exc:
+            last_error = exc
+            if attempt == ARXIV_RETRY_ATTEMPTS:
+                break
+            wait_seconds = ARXIV_RETRY_BACKOFF_SECONDS[
+                min(attempt - 1, len(ARXIV_RETRY_BACKOFF_SECONDS) - 1)
+            ]
+            print(
+                f"arXiv request failed on attempt {attempt}/{ARXIV_RETRY_ATTEMPTS}: "
+                f"{exc}. Retrying in {wait_seconds}s...",
+                file=sys.stderr,
+            )
+            time.sleep(wait_seconds)
+
+    raise RuntimeError(
+        f"arXiv request failed after {ARXIV_RETRY_ATTEMPTS} attempts"
+    ) from last_error
+
+
 def fetch_recent_papers(category_codes: List[str], cutoff: datetime, max_results_per_cat: int = 200) -> List[Paper]:
     seen = set()
     out: List[Paper] = []
@@ -153,13 +187,7 @@ def fetch_recent_papers(category_codes: List[str], cutoff: datetime, max_results
             "sortBy": "submittedDate",
             "sortOrder": "descending",
         }
-        r = requests.get(
-            ARXIV_API_URL,
-            params=params,
-            timeout=30,
-            headers={"User-Agent": "ArxivDigestBot/1.0 (personal use)"},
-        )
-        r.raise_for_status()
+        r = _get_arxiv_response(params)
 
         import xml.etree.ElementTree as ET
         root = ET.fromstring(r.text)

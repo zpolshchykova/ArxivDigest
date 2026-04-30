@@ -28,7 +28,8 @@ jobs:
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
-        set -e
+        set +e
+        failed=0
         configs=(
           config_physics.yaml
           config_quantum.yaml
@@ -39,14 +40,30 @@ jobs:
         for cfg in "${configs[@]}"; do
           echo "=== Running $cfg ==="
           cp "$cfg" config.yaml
-          python src/action.py
-          mv digest.html "out/digest_${cfg}.html"
+          if python src/action.py; then
+            mv digest.html "out/digest_${cfg}.html"
+          else
+            failed=1
+            cat > "out/digest_${cfg}.html" <<EOF
+        <html><body>
+        <h1>Digest generation failed</h1>
+        <p><b>Config:</b> ${cfg}</p>
+        <p>See the GitHub Actions logs for the full error. Other successful config digests are still included in this artifact.</p>
+        </body></html>
+        EOF
+          fi
         done
 
+        if [ "$failed" -ne 0 ]; then
+          touch out/.digest_generation_failed
+        fi
+
     - name: Combine into one HTML
+      if: always()
       run: |
         python - <<'PY'
         import glob, os, html
+        os.makedirs("out", exist_ok=True)
         files = sorted(glob.glob("out/digest_*.html"))
 
         parts = []
@@ -54,12 +71,15 @@ jobs:
         parts.append("<h1>Personalized arXiv Digest (combined)</h1>")
         parts.append("<hr/>")
 
-        for fp in files:
-          title = os.path.basename(fp).replace("digest_", "").replace(".html", "")
-          parts.append(f"<h2>{html.escape(title)}</h2>")
-          with open(fp, "r", encoding="utf-8") as f:
-            parts.append(f.read())
-          parts.append("<hr/>")
+        if not files:
+          parts.append("<p><b>No per-config digest files were generated.</b></p>")
+        else:
+          for fp in files:
+            title = os.path.basename(fp).replace("digest_", "").replace(".html", "")
+            parts.append(f"<h2>{html.escape(title)}</h2>")
+            with open(fp, "r", encoding="utf-8") as f:
+              parts.append(f.read())
+            parts.append("<hr/>")
 
         parts.append("</body></html>")
 
@@ -95,10 +115,22 @@ jobs:
     #     print("Sent combined digest email via SendGrid.")
     #     PY
     - name: Upload Artifact
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: digest.html
-        path: digest.html
+        path: |
+          digest.html
+          out/*.html
+        if-no-files-found: warn
+
+    - name: Fail if any digest failed
+      if: always()
+      run: |
+        if [ -f out/.digest_generation_failed ]; then
+          echo "One or more digest configs failed. The partial digest artifact was uploaded."
+          exit 1
+        fi
 
 
     # SMTP fallback (only used if SendGrid key is empty AND SMTP creds exist)
