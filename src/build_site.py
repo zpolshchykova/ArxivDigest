@@ -112,7 +112,7 @@ def main():
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>arXiv digest archive</title>
+<title>Daily reading notes</title>
 <style>
   body {{ font-family: Georgia, serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; }}
   h1 {{ font-size: 1.6rem; }} h2 {{ font-size: 1.15rem; margin-top: 2.2rem; }}
@@ -126,7 +126,7 @@ def main():
 </style>
 </head>
 <body>
-<h1>arXiv digest archive</h1>
+<h1>Daily reading notes</h1>
 """
     if dates:
         latest = dates[0]
@@ -152,7 +152,7 @@ def main():
 {''.join(day_rows)}
 </table>
 
-<footer>Rebuilt automatically by build_site.py on each digest run. arXiv announces new papers Sunday–Thursday (US Eastern), so Fridays/Saturdays are expected to be empty.</footer>
+<footer>Rebuilt automatically after each update. Some days are expected to be quiet.</footer>
 </body>
 </html>
 """

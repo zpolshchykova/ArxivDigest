@@ -2,8 +2,7 @@ name: Daily digest to GitHub Pages
 
 on:
   schedule:
-    # 13:25 UTC daily — adjust to taste. arXiv announces Sun–Thu evenings (US Eastern),
-    # so a morning-UTC run picks up the latest announcement.
+    # 13:25 UTC daily. A morning-UTC run usually picks up the latest update.
     - cron: "25 13 * * *"
   workflow_dispatch: {}
 
@@ -14,33 +13,85 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Generate digest
+      - name: Generate and archive digests
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          # No SendGrid / SMTP secrets needed anymore — we publish instead of emailing.
-        run: python src/action.py
-
-      - name: Archive today's digest
+          # No SendGrid / SMTP secrets needed anymore. We publish instead of emailing.
         run: |
+          set +e
+          failed=0
+          today="$(date -u +%F)"
+          configs=(
+            config_physics.yaml
+            config_quantum.yaml
+          )
+
           mkdir -p docs/digests
-          cp digest.html "docs/digests/$(date -u +%F).html"
+
+          for cfg in "${configs[@]}"; do
+            label="${cfg#config_}"
+            label="${label%.yaml}"
+            dest="docs/digests/${today}_${label}.html"
+
+            echo "Generating ${cfg} -> ${dest}"
+            if python src/action.py --config "${cfg}"; then
+              cp digest.html "${dest}"
+            else
+              failed=1
+              cat > "${dest}" <<EOF
+          <!doctype html>
+          <html lang="en">
+          <head><meta charset="utf-8"><title>Digest failed</title></head>
+          <body>
+          <h1>Digest generation failed</h1>
+          <p><b>Config:</b> ${cfg}</p>
+          <p>See the GitHub Actions logs for the full error.</p>
+          </body>
+          </html>
+          EOF
+            fi
+          done
+
+          if [ "${failed}" -ne 0 ]; then
+            touch .digest_generation_failed
+          fi
 
       - name: Rebuild index and stats
+        if: always()
         run: python src/build_site.py
 
+      - name: Upload digest artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-digests
+          path: |
+            docs/index.html
+            docs/digests/*.html
+          if-no-files-found: warn
+
       - name: Commit and push
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs
-          git commit -m "Digest $(date -u +%F)" || echo "Nothing to commit"
+          git commit -m "Publish digest $(date -u +%F)" || echo "Nothing to commit"
           git push
+
+      - name: Fail if any digest failed
+        if: always()
+        run: |
+          if [ -f .digest_generation_failed ]; then
+            echo "One or more digest configs failed. Any successful digests were still published."
+            exit 1
+          fi

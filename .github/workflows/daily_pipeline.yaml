@@ -2,8 +2,8 @@ name: Daily pipeline
 
 on:
   workflow_dispatch: {}
-  schedule:
-    - cron: '0 3 * * 1-5'
+  # Website publishing now happens in publish_digest.yaml.
+  # Keep this workflow manual-only as a legacy artifact/email runner.
 
 
 jobs:
