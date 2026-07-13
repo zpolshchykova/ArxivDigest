@@ -5,32 +5,43 @@ categories:
   - "Instrumentation and Detectors"
   - "Optics"
 
-# 1–10. 5 = “pretty relevant”, 7 = “very relevant”
-threshold: 5
+# 1-10. 7 = worth opening; 9-10 = directly useful / must-read.
+threshold: 7
 
-# How far back to look (because you're not running daily anymore)
-working_days_back: 3
+# Keep each daily page to the previous UTC day only.
+date_window: "previous_day"
 
 
 interest: |
-  IMPORTANT: A paper is relevant if it matches ANY ONE of the items below.
-  It does NOT need to satisfy all criteria.
+  Score strictly for my current research, not for general scientific interest.
+  Broad topical overlap is not enough for a high score.
+
+  Use 9-10 only for papers directly relevant to my experimental work in
+  integrated photonics / quantum optics, especially device-level work in
+  thin-film lithium niobate or closely related integrated platforms.
+
+  Use 7-8 for papers I should probably open because they are clearly relevant
+  but not central. Use 5-6 for adjacent background. Use 1-4 for broad optics,
+  broad quantum, generic materials, or theory papers without a clear device or
+  experimental connection.
 
   I work in integrated photonics and quantum optics (experimental), mainly:
   - thin-film lithium niobate (LNOI / TFLN / LiNbO3)
 
-  Strong keywords / topics (any of these is enough):
+  Highest-priority topics:
   - lithium niobate, LiNbO3, LNOI, TFLN, PPLN
   - Pockels effect, electro-optic modulation, EO modulators
   - nonlinear photonics: χ(2), χ(3), SHG, OPO, frequency conversion, frequency combs
   - integrated photonics / photonic integrated circuits, waveguides, microrings, microresonators, high-Q resonators
   - quantum photonics: SPDC, SFWM, squeezing, entanglement, single photons, integrated quantum photonics
   - packaging / coupling / measurement: fiber-to-chip coupling, grating couplers, edge coupling, characterization, metrology, detectors
+
+  Lower-priority unless there is a direct experimental or device connection:
   - hBN, hexagonal boron-nitride, Sorkin test, Peres test
   - GHZ, Greenberger–Horne–Zeilinger state 
 
 
-  Also relevant if it overlaps with topics commonly appearing in Rachel Grange’s area:
+  Also relevant, but usually not 9-10 by itself, if it overlaps with topics commonly appearing in Rachel Grange’s area:
   - nanophotonics, microcavities, resonant enhancement, nonlinear nanophotonics, light–matter interaction, emitters coupled to photonics
 
   Theory papers are OK if they clearly connect to experiments, devices, or measurable predictions.

@@ -2,17 +2,30 @@ topic: "Quantum Physics"
 
 categories: []
 
-threshold: 5
-working_days_back: 3
+# 1-10. 7 = worth opening; 9-10 = directly useful / must-read.
+threshold: 7
+
+# Keep each daily page to the previous UTC day only.
+date_window: "previous_day"
 
 interest: |
-  IMPORTANT: A paper is relevant if it matches ANY ONE of the items below.
-  It does NOT need to satisfy all criteria.
+  Score strictly for my current research, not for general scientific interest.
+  Broad quantum-information or quantum-foundations overlap is not enough for a
+  high score.
+
+  Use 9-10 only for papers directly relevant to experimental quantum optics or
+  integrated quantum photonics, especially device-level work in LNOI/TFLN,
+  LiNbO3, PPLN, Si, or SiN platforms.
+
+  Use 7-8 for papers I should probably open because they are clearly relevant
+  but not central. Use 5-6 for adjacent background. Use 1-4 for abstract theory,
+  broad quantum algorithms/information, generic sensing, or non-photonic papers
+  without a clear experimental/device connection.
 
   I am an experimental physicist in quantum optics and integrated photonics.
   Platforms: LNOI/TFLN (LiNbO3), Si/SiN integrated photonics.
 
-  Relevant if it includes any of:
+  Highest-priority topics:
   - integrated quantum photonics, photonic quantum information
   - on-chip quantum light sources, entanglement, squeezing
   - SPDC / SFWM / frequency conversion / χ(2) nonlinear optics (especially LiNbO3 / PPLN / TFLN)

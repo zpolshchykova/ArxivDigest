@@ -2,10 +2,18 @@ name: Daily digest to GitHub Pages
 
 on:
   schedule:
-    # 13:25 UTC daily — adjust to taste. arXiv announces Sun–Thu evenings (US Eastern),
-    # so a morning-UTC run picks up the latest announcement.
+    # 13:25 UTC daily. A morning-UTC run usually picks up the latest update.
     - cron: "25 13 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      start_date:
+        description: "Optional backfill start date, YYYY-MM-DD"
+        required: false
+        type: string
+      end_date:
+        description: "Optional backfill end date, YYYY-MM-DD"
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -14,33 +22,114 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Generate digest
+      - name: Generate and archive digests
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          # No SendGrid / SMTP secrets needed anymore — we publish instead of emailing.
-        run: python src/action.py
-
-      - name: Archive today's digest
+          # No SendGrid / SMTP secrets needed anymore. We publish instead of emailing.
         run: |
+          set +e
+          failed=0
+          start_date="${{ github.event.inputs.start_date }}"
+          end_date="${{ github.event.inputs.end_date }}"
+          configs=(
+            config_physics.yaml
+            config_quantum.yaml
+          )
+
           mkdir -p docs/digests
-          cp digest.html "docs/digests/$(date -u +%F).html"
+
+          if [ -n "${start_date}" ] || [ -n "${end_date}" ]; then
+            if [ -z "${start_date}" ] || [ -z "${end_date}" ]; then
+              echo "For a backfill, set both start_date and end_date."
+              exit 1
+            fi
+            mapfile -t target_dates < <(python - <<PY
+          from datetime import date, timedelta
+          start = date.fromisoformat("${start_date}")
+          end = date.fromisoformat("${end_date}")
+          if end < start:
+              raise SystemExit("end_date must be on or after start_date")
+          d = start
+          while d <= end:
+              print(d.isoformat())
+              d += timedelta(days=1)
+          PY
+          )
+          else
+            mapfile -t target_dates < <(python - <<'PY'
+          from datetime import datetime, timedelta, timezone
+          print((datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat())
+          PY
+          )
+          fi
+
+          for target_date in "${target_dates[@]}"; do
+            for cfg in "${configs[@]}"; do
+              label="${cfg#config_}"
+              label="${label%.yaml}"
+              dest="docs/digests/${target_date}_${label}.html"
+
+              echo "Generating ${cfg} for ${target_date} -> ${dest}"
+              if python src/action.py --config "${cfg}" --target-date "${target_date}"; then
+                cp digest.html "${dest}"
+              else
+                failed=1
+                cat > "${dest}" <<EOF
+          <!doctype html>
+          <html lang="en">
+          <head><meta charset="utf-8"><title>Digest failed</title></head>
+          <body>
+          <h1>Digest generation failed</h1>
+          <p><b>Config:</b> ${cfg}</p>
+          <p><b>Date:</b> ${target_date}</p>
+          <p>See the GitHub Actions logs for the full error.</p>
+          </body>
+          </html>
+          EOF
+              fi
+            done
+          done
+
+          if [ "${failed}" -ne 0 ]; then
+            touch .digest_generation_failed
+          fi
 
       - name: Rebuild index and stats
+        if: always()
         run: python src/build_site.py
 
+      - name: Upload digest artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-digests
+          path: |
+            docs/index.html
+            docs/digests/*.html
+          if-no-files-found: warn
+
       - name: Commit and push
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs
-          git commit -m "Digest $(date -u +%F)" || echo "Nothing to commit"
+          git commit -m "Publish digest $(date -u +%F)" || echo "Nothing to commit"
           git push
+
+      - name: Fail if any digest failed
+        if: always()
+        run: |
+          if [ -f .digest_generation_failed ]; then
+            echo "One or more digest configs failed. Any successful digests were still published."
+            exit 1
+          fi

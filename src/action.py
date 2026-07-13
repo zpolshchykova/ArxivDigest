@@ -175,7 +175,12 @@ def _get_arxiv_response(params: dict) -> requests.Response:
     ) from last_error
 
 
-def fetch_recent_papers(category_codes: List[str], cutoff: datetime, max_results_per_cat: int = 200) -> List[Paper]:
+def fetch_recent_papers(
+    category_codes: List[str],
+    cutoff: datetime,
+    end_cutoff: Optional[datetime] = None,
+    max_results_per_cat: int = 200,
+) -> List[Paper]:
     seen = set()
     out: List[Paper] = []
 
@@ -199,6 +204,8 @@ def fetch_recent_papers(category_codes: List[str], cutoff: datetime, max_results
                 continue
 
             published = _parse_arxiv_dt(published_s)
+            if end_cutoff is not None and published >= end_cutoff:
+                continue
             if published < cutoff:
                 break  # newest->oldest
 
@@ -292,9 +299,16 @@ def llm_score_papers(papers: List[Paper], interest: str) -> List[Paper]:
         "Output must be machine-parseable."
     )
     user = (
-        "For each paper, give a relevance score from 1 to 10 (integer), where 10 is extremely relevant.\n"
-        "A paper is relevant if it matches ANY ONE of the interests below. It does NOT need to match all.\n"
-        "De-prioritize means lower score, not automatically zero.\n\n"
+        "For each paper, give a relevance score from 1 to 10 (integer).\n"
+        "Use a strict personal-relevance scale, not a general scientific-interest scale:\n"
+        "10 = must-read; directly about the user's core experimental work, platform, or device class.\n"
+        "9 = very strong match with clear direct use for the user's current research.\n"
+        "7-8 = relevant and worth opening, but not necessarily central.\n"
+        "5-6 = adjacent background or broad topical overlap.\n"
+        "3-4 = only weakly related, even if it is in quantum optics or photonics.\n"
+        "1-2 = not relevant.\n"
+        "Do NOT give 9 or 10 for generic quantum, optics, AI, theory, sensing, or materials papers unless the abstract clearly connects to the user's specific experimental platforms or devices.\n"
+        "A paper may be somewhat relevant if it matches one interest below, but broad category overlap alone should score low.\n\n"
         f"Interests:\n{interest.strip()}\n\n"
         "Output format:\n"
         "Return EXACTLY one JSON object per paper, one per line, in the SAME ORDER.\n"
@@ -422,6 +436,11 @@ def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="config.yaml", help="YAML config to load")
+    parser.add_argument(
+        "--target-date",
+        default="",
+        help="UTC publication date to digest, formatted YYYY-MM-DD. Overrides date_window.",
+    )
     args = parser.parse_args()
 
     with open(args.config, "r", encoding="utf-8") as f:
@@ -432,11 +451,27 @@ def main() -> int:
     threshold = int(cfg.get("threshold", 6))
     interest = str(cfg.get("interest", "") or "")
 
+    date_window = str(cfg.get("date_window", "") or "").strip()
     working_days_back = cfg.get("working_days_back", None)
     days_back = cfg.get("days_back", None)
 
     now = datetime.now(timezone.utc)
-    if working_days_back is not None:
+    end_cutoff = None
+    allow_latest_fallback = True
+
+    if args.target_date:
+        target_day = datetime.strptime(args.target_date, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        cutoff = target_day
+        end_cutoff = target_day + timedelta(days=1)
+        allow_latest_fallback = False
+        lookback_label = f"Showing papers published on {args.target_date} UTC"
+    elif date_window == "previous_day":
+        today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        cutoff = today - timedelta(days=1)
+        end_cutoff = today
+        allow_latest_fallback = False
+        lookback_label = f"Showing papers published on {cutoff.strftime('%Y-%m-%d')} UTC"
+    elif working_days_back is not None:
         wd = int(working_days_back)
         cutoff = working_days_cutoff(now, wd)
         lookback_label = f"Looking back {wd} working day(s)"
@@ -450,10 +485,10 @@ def main() -> int:
 
     cat_codes = resolve_category_codes(topic, categories)
 
-    papers = fetch_recent_papers(cat_codes, cutoff=cutoff, max_results_per_cat=200)
+    papers = fetch_recent_papers(cat_codes, cutoff=cutoff, end_cutoff=end_cutoff, max_results_per_cat=200)
 
     # Absolute fallback: if the window is empty, show latest available in these categories
-    if not papers:
+    if not papers and allow_latest_fallback:
         very_old = datetime(1900, 1, 1, tzinfo=timezone.utc)
         papers = fetch_recent_papers(cat_codes, cutoff=very_old, max_results_per_cat=200)
         lookback_label += " — no results in window, showing latest available instead"

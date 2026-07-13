@@ -8,6 +8,9 @@ You can try it out on [Hugging Face](https://huggingface.co/spaces/AutoLLM/Arxiv
 
 You can also create a daily subscription pipeline to email you the results.
 
+This fork can also publish a small GitHub Pages reading list. The daily
+workflow writes each run to `docs/digests/` and rebuilds `docs/index.html`.
+
 ## 📚 Contents
 
 - [What this repo does](#🔍-what-this-repo-does)
@@ -89,6 +92,27 @@ To locally run the same UI as the Huggign Face space:
 - Do not edit the original `.env.template` with your keys or your email address, since `.template.env` is tracked by git and editing it might cause you to commit your secrets.
 
 > **WARNING:** Do not edit and commit your `.env.template` with your personal keys or email address! Doing so may expose these to the world!
+
+### Publishing a daily reading list with GitHub Pages
+
+This repository includes `.github/workflows/publish_digest.yaml`, which runs
+daily and publishes the generated pages into `docs/`.
+
+To turn on the website:
+
+1. Add the repository secret `OPENAI_API_KEY`.
+2. In GitHub, go to **Settings -> Pages**.
+3. Set **Build and deployment** to **Deploy from a branch**.
+4. Select branch `main` and folder `/docs`.
+5. Manually run **Daily digest to GitHub Pages** once, or wait for the next
+   scheduled run.
+
+To fill older dates, manually run **Daily digest to GitHub Pages** and set both
+`start_date` and `end_date` in `YYYY-MM-DD` format. Leaving those fields blank
+runs only the normal previous-day update.
+
+After that, the public site will be available at:
+`https://zpolshchykova.github.io/ArxivDigest/`
 
 ## ✅ Roadmap
 
