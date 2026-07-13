@@ -34,6 +34,7 @@ jobs:
       - name: Generate and archive digests
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
           # No SendGrid / SMTP secrets needed anymore. We publish instead of emailing.
         run: |
           set +e
@@ -105,6 +106,8 @@ jobs:
 
       - name: Rebuild index and stats
         if: always()
+        env:
+          SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
         run: python src/build_site.py
 
       - name: Upload digest artifact

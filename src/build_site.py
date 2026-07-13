@@ -18,6 +18,8 @@ from collections import defaultdict
 from datetime import date
 from pathlib import Path
 
+from password_gate import gate_body_end, gate_body_start, gate_enabled, gate_head, protect_html_document
+
 DIGEST_DIR = Path("docs/digests")
 INDEX_PATH = Path("docs/index.html")
 
@@ -40,6 +42,17 @@ def analyze_digest(path: Path):
         "n_papers": len(paper_ids),
         "scores": scores,
     }
+
+
+def protect_archived_digests():
+    if not gate_enabled():
+        return
+
+    for path in DIGEST_DIR.glob("*.html"):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        protected = protect_html_document(text)
+        if protected != text:
+            path.write_text(protected, encoding="utf-8")
 
 
 def digest_label(path: Path, day: str) -> str:
@@ -99,6 +112,7 @@ def build_calendar(by_date):
 
 def main():
     DIGEST_DIR.mkdir(parents=True, exist_ok=True)
+    protect_archived_digests()
 
     # Group digest files by date (a date can have several files if you run multiple configs)
     by_date = defaultdict(list)
@@ -194,8 +208,10 @@ def main():
   .latest {{ font-size: 1.05rem; margin: 1rem 0; }}
   footer {{ margin-top: 3rem; font-size: 0.8rem; color: #888; }}
 </style>
+{gate_head()}
 </head>
 <body>
+{gate_body_start()}
 <h1>Daily reading notes</h1>
 """
     if dates:
@@ -226,6 +242,7 @@ def main():
 </table>
 
 <footer>Rebuilt automatically after each update. Some days are expected to be quiet.</footer>
+{gate_body_end()}
 </body>
 </html>
 """

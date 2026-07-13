@@ -14,6 +14,8 @@ from typing import List, Tuple, Optional
 import requests
 import yaml
 
+from password_gate import gate_body_end, gate_body_start, gate_head
+
 # OpenAI (repo uses old-style openai.ChatCompletion.create)
 try:
     import openai  # type: ignore
@@ -501,9 +503,21 @@ def main() -> int:
 
     papers = llm_score_papers(papers, interest=interest)
 
-    full = ["<html><body>"]
+    full = [
+        "<!doctype html>",
+        "<html lang='en'>",
+        "<head>",
+        "<meta charset='utf-8'>",
+        "<meta name='viewport' content='width=device-width, initial-scale=1'>",
+        "<title>Daily reading notes</title>",
+        gate_head(),
+        "</head>",
+        "<body>",
+        gate_body_start(),
+    ]
     full.append("<h1>Personalized arXiv Digest</h1>")
     full.append(build_html(papers, threshold=threshold, lookback_label=lookback_label, title=os.path.basename(args.config)))
+    full.append(gate_body_end())
     full.append("</body></html>")
     digest_html = "\n".join(full)
 

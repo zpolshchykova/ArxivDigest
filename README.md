@@ -101,10 +101,12 @@ daily and publishes the generated pages into `docs/`.
 To turn on the website:
 
 1. Add the repository secret `OPENAI_API_KEY`.
-2. In GitHub, go to **Settings -> Pages**.
-3. Set **Build and deployment** to **Deploy from a branch**.
-4. Select branch `main` and folder `/docs`.
-5. Manually run **Daily digest to GitHub Pages** once, or wait for the next
+2. Optional: add the repository secret `SITE_PASSWORD` to require a password
+   before viewing the pages.
+3. In GitHub, go to **Settings -> Pages**.
+4. Set **Build and deployment** to **Deploy from a branch**.
+5. Select branch `main` and folder `/docs`.
+6. Manually run **Daily digest to GitHub Pages** once, or wait for the next
    scheduled run.
 
 To fill older dates, manually run **Daily digest to GitHub Pages** and set both
