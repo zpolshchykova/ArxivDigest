@@ -26,8 +26,69 @@
   footer { margin-top: 3rem; font-size: 0.8rem; color: #888; }
 </style>
 
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+
 </head>
 <body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
 
 <h1>Daily reading notes</h1>
 <p class="latest">Latest: <b>2026-07-13</b> — <a href="digests/2026-07-13_physics.html">physics</a> · <a href="digests/2026-07-13_quantum.html">quantum</a></p>
@@ -38,25 +99,67 @@
 <h3>July 2026</h3>
 <table class="calendar">
 <tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>
-<tr><td class='cal-empty'></td><td class='cal-empty'></td><td><div class='cal-day dim'>1</div></td><td><div class='cal-day dim'>2</div></td><td><div class='cal-day dim'>3</div></td><td><div class='cal-day dim'>4</div></td><td><div class='cal-day dim'>5</div></td></tr><tr><td><div class='cal-day dim'>6</div></td><td class='cal-hit'><div class='cal-day'>7</div><div class='cal-links'><a href="digests/2026-07-07_physics.html">physics</a> <a href="digests/2026-07-07_quantum.html">quantum</a></div></td><td class='cal-hit'><div class='cal-day'>8</div><div class='cal-links'><a href="digests/2026-07-08_physics.html">physics</a> <a href="digests/2026-07-08_quantum.html">quantum</a></div></td><td class='cal-hit'><div class='cal-day'>9</div><div class='cal-links'><a href="digests/2026-07-09_physics.html">physics</a> <a href="digests/2026-07-09_quantum.html">quantum</a></div></td><td><div class='cal-day dim'>10</div></td><td><div class='cal-day dim'>11</div></td><td class='cal-hit'><div class='cal-day'>12</div><div class='cal-links'><a href="digests/2026-07-12_physics.html">physics</a> <a href="digests/2026-07-12_quantum.html">quantum</a></div></td></tr><tr><td class='cal-hit'><div class='cal-day'>13</div><div class='cal-links'><a href="digests/2026-07-13_physics.html">physics</a> <a href="digests/2026-07-13_quantum.html">quantum</a></div></td><td><div class='cal-day dim'>14</div></td><td><div class='cal-day dim'>15</div></td><td><div class='cal-day dim'>16</div></td><td><div class='cal-day dim'>17</div></td><td><div class='cal-day dim'>18</div></td><td><div class='cal-day dim'>19</div></td></tr><tr><td><div class='cal-day dim'>20</div></td><td><div class='cal-day dim'>21</div></td><td><div class='cal-day dim'>22</div></td><td><div class='cal-day dim'>23</div></td><td><div class='cal-day dim'>24</div></td><td><div class='cal-day dim'>25</div></td><td><div class='cal-day dim'>26</div></td></tr><tr><td><div class='cal-day dim'>27</div></td><td><div class='cal-day dim'>28</div></td><td><div class='cal-day dim'>29</div></td><td><div class='cal-day dim'>30</div></td><td><div class='cal-day dim'>31</div></td><td class='cal-empty'></td><td class='cal-empty'></td></tr>
+<tr><td class='cal-empty'></td><td class='cal-empty'></td><td class='cal-hit'><div class='cal-day'>1</div><div class='cal-links'><a href="digests/2026-07-01_physics.html">physics</a> <a href="digests/2026-07-01_quantum.html">quantum</a></div></td><td class='cal-hit'><div class='cal-day'>2</div><div class='cal-links'><a href="digests/2026-07-02_physics.html">physics</a> <a href="digests/2026-07-02_quantum.html">quantum</a></div></td><td class='cal-hit'><div class='cal-day'>3</div><div class='cal-links'><a href="digests/2026-07-03_physics.html">physics</a> <a href="digests/2026-07-03_quantum.html">quantum</a></div></td><td class='cal-hit'><div class='cal-day'>4</div><div class='cal-links'><a href="digests/2026-07-04_physics.html">physics</a> <a href="digests/2026-07-04_quantum.html">quantum</a></div></td><td class='cal-hit'><div class='cal-day'>5</div><div class='cal-links'><a href="digests/2026-07-05_physics.html">physics</a> <a href="digests/2026-07-05_quantum.html">quantum</a></div></td></tr><tr><td class='cal-hit'><div class='cal-day'>6</div><div class='cal-links'><a href="digests/2026-07-06_physics.html">physics</a> <a href="digests/2026-07-06_quantum.html">quantum</a></div></td><td class='cal-hit'><div class='cal-day'>7</div><div class='cal-links'><a href="digests/2026-07-07_physics.html">physics</a> <a href="digests/2026-07-07_quantum.html">quantum</a></div></td><td class='cal-hit'><div class='cal-day'>8</div><div class='cal-links'><a href="digests/2026-07-08_physics.html">physics</a> <a href="digests/2026-07-08_quantum.html">quantum</a></div></td><td class='cal-hit'><div class='cal-day'>9</div><div class='cal-links'><a href="digests/2026-07-09_physics.html">physics</a> <a href="digests/2026-07-09_quantum.html">quantum</a></div></td><td><div class='cal-day dim'>10</div></td><td><div class='cal-day dim'>11</div></td><td class='cal-hit'><div class='cal-day'>12</div><div class='cal-links'><a href="digests/2026-07-12_physics.html">physics</a> <a href="digests/2026-07-12_quantum.html">quantum</a></div></td></tr><tr><td class='cal-hit'><div class='cal-day'>13</div><div class='cal-links'><a href="digests/2026-07-13_physics.html">physics</a> <a href="digests/2026-07-13_quantum.html">quantum</a></div></td><td><div class='cal-day dim'>14</div></td><td><div class='cal-day dim'>15</div></td><td><div class='cal-day dim'>16</div></td><td><div class='cal-day dim'>17</div></td><td><div class='cal-day dim'>18</div></td><td><div class='cal-day dim'>19</div></td></tr><tr><td><div class='cal-day dim'>20</div></td><td><div class='cal-day dim'>21</div></td><td><div class='cal-day dim'>22</div></td><td><div class='cal-day dim'>23</div></td><td><div class='cal-day dim'>24</div></td><td><div class='cal-day dim'>25</div></td><td><div class='cal-day dim'>26</div></td></tr><tr><td><div class='cal-day dim'>27</div></td><td><div class='cal-day dim'>28</div></td><td><div class='cal-day dim'>29</div></td><td><div class='cal-day dim'>30</div></td><td><div class='cal-day dim'>31</div></td><td class='cal-empty'></td><td class='cal-empty'></td></tr>
 </table>
 </section>
 
 
 <h2>Stats by day of week</h2>
-<p>5 digest days · 64 papers total · overall avg relevancy –</p>
+<p>11 digest days · 111 papers total · overall avg relevancy –</p>
 <table>
 <tr><th>Weekday</th><th>Digests</th><th>Avg papers/day</th><th>Avg relevancy</th><th>Avg papers ≥7/day</th></tr>
-<tr><td>Monday</td><td>1</td><td>25.0 <span class='bar' style='width:100px'></span></td><td>–</td><td>0.0</td></tr><tr><td>Tuesday</td><td>1</td><td>3.0 <span class='bar' style='width:12px'></span></td><td>–</td><td>0.0</td></tr><tr><td>Wednesday</td><td>1</td><td>17.0 <span class='bar' style='width:68px'></span></td><td>–</td><td>0.0</td></tr><tr><td>Thursday</td><td>1</td><td>19.0 <span class='bar' style='width:76px'></span></td><td>–</td><td>0.0</td></tr><tr><td>Friday</td><td colspan=4 class='dim'>no digests yet</td></tr><tr><td>Saturday</td><td colspan=4 class='dim'>no digests yet</td></tr><tr><td>Sunday</td><td>1</td><td>0.0 <span class='bar' style='width:0px'></span></td><td>–</td><td>0.0</td></tr>
+<tr><td>Monday</td><td>2</td><td>14.0 <span class='bar' style='width:82px'></span></td><td>–</td><td>0.0</td></tr><tr><td>Tuesday</td><td>1</td><td>3.0 <span class='bar' style='width:17px'></span></td><td>–</td><td>0.0</td></tr><tr><td>Wednesday</td><td>2</td><td>9.5 <span class='bar' style='width:55px'></span></td><td>–</td><td>0.0</td></tr><tr><td>Thursday</td><td>2</td><td>17.0 <span class='bar' style='width:100px'></span></td><td>–</td><td>0.0</td></tr><tr><td>Friday</td><td>1</td><td>15.0 <span class='bar' style='width:88px'></span></td><td>–</td><td>0.0</td></tr><tr><td>Saturday</td><td>1</td><td>10.0 <span class='bar' style='width:58px'></span></td><td>–</td><td>0.0</td></tr><tr><td>Sunday</td><td>2</td><td>1.0 <span class='bar' style='width:5px'></span></td><td>–</td><td>0.0</td></tr>
 </table>
 
 <h2>All days</h2>
 <table>
 <tr><th>Date</th><th>Day</th><th>Papers</th><th>Avg score</th><th>≥7</th><th>Digest</th></tr>
-<tr><td>2026-07-13</td><td>Mon</td><td>25</td><td>–</td><td>0</td><td><a href="digests/2026-07-13_physics.html">physics</a> · <a href="digests/2026-07-13_quantum.html">quantum</a></td></tr><tr><td>2026-07-12</td><td>Sun</td><td>0</td><td>–</td><td>0</td><td><a href="digests/2026-07-12_physics.html">physics</a> · <a href="digests/2026-07-12_quantum.html">quantum</a></td></tr><tr><td>2026-07-09</td><td>Thu</td><td>19</td><td>–</td><td>0</td><td><a href="digests/2026-07-09_physics.html">physics</a> · <a href="digests/2026-07-09_quantum.html">quantum</a></td></tr><tr><td>2026-07-08</td><td>Wed</td><td>17</td><td>–</td><td>0</td><td><a href="digests/2026-07-08_physics.html">physics</a> · <a href="digests/2026-07-08_quantum.html">quantum</a></td></tr><tr><td>2026-07-07</td><td>Tue</td><td>3</td><td>–</td><td>0</td><td><a href="digests/2026-07-07_physics.html">physics</a> · <a href="digests/2026-07-07_quantum.html">quantum</a></td></tr>
+<tr><td>2026-07-13</td><td>Mon</td><td>25</td><td>–</td><td>0</td><td><a href="digests/2026-07-13_physics.html">physics</a> · <a href="digests/2026-07-13_quantum.html">quantum</a></td></tr><tr><td>2026-07-12</td><td>Sun</td><td>0</td><td>–</td><td>0</td><td><a href="digests/2026-07-12_physics.html">physics</a> · <a href="digests/2026-07-12_quantum.html">quantum</a></td></tr><tr><td>2026-07-09</td><td>Thu</td><td>19</td><td>–</td><td>0</td><td><a href="digests/2026-07-09_physics.html">physics</a> · <a href="digests/2026-07-09_quantum.html">quantum</a></td></tr><tr><td>2026-07-08</td><td>Wed</td><td>17</td><td>–</td><td>0</td><td><a href="digests/2026-07-08_physics.html">physics</a> · <a href="digests/2026-07-08_quantum.html">quantum</a></td></tr><tr><td>2026-07-07</td><td>Tue</td><td>3</td><td>–</td><td>0</td><td><a href="digests/2026-07-07_physics.html">physics</a> · <a href="digests/2026-07-07_quantum.html">quantum</a></td></tr><tr><td>2026-07-06</td><td>Mon</td><td>3</td><td>–</td><td>0</td><td><a href="digests/2026-07-06_physics.html">physics</a> · <a href="digests/2026-07-06_quantum.html">quantum</a></td></tr><tr><td>2026-07-05</td><td>Sun</td><td>2</td><td>–</td><td>0</td><td><a href="digests/2026-07-05_physics.html">physics</a> · <a href="digests/2026-07-05_quantum.html">quantum</a></td></tr><tr><td>2026-07-04</td><td>Sat</td><td>10</td><td>–</td><td>0</td><td><a href="digests/2026-07-04_physics.html">physics</a> · <a href="digests/2026-07-04_quantum.html">quantum</a></td></tr><tr><td>2026-07-03</td><td>Fri</td><td>15</td><td>–</td><td>0</td><td><a href="digests/2026-07-03_physics.html">physics</a> · <a href="digests/2026-07-03_quantum.html">quantum</a></td></tr><tr><td>2026-07-02</td><td>Thu</td><td>15</td><td>–</td><td>0</td><td><a href="digests/2026-07-02_physics.html">physics</a> · <a href="digests/2026-07-02_quantum.html">quantum</a></td></tr><tr><td>2026-07-01</td><td>Wed</td><td>2</td><td>–</td><td>0</td><td><a href="digests/2026-07-01_physics.html">physics</a> · <a href="digests/2026-07-01_quantum.html">quantum</a></td></tr>
 </table>
 
 <footer>Rebuilt automatically after each update. Some days are expected to be quiet.</footer>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
 
 </body>
 </html>

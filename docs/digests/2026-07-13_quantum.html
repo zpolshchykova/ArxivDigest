@@ -1,4 +1,67 @@
-<html><body>
+<html>
+<head>
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+</head><body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
+
 <h1>Personalized arXiv Digest</h1>
 <h2>config_quantum.yaml</h2><div><i>Looking back 3 working day(s). Base threshold = 5.</i></div><div style='margin-top:6px; color:#a00;'><b>No papers exceeded the relevance threshold (5) for this run. Showing 15 keyword-ranked papers instead.</b></div><div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.09597.pdf'>GHz-rate all-fiber active polarization state analyzer for quantum protocols</a></div><div><b>Authors:</b> Andrea Pompermaier, Kannan Vijayadharan, Costantino Agnesi, Marco Avesani, Giuseppe Vallone, Paolo Villoresi</div><div><b>Published:</b> 2026-07-10</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.09597'>Abstract page</a></div></div>
 <div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.09198.pdf'>Quantum Scattering Model of Dual Parallel Mach Zehnder Electro Optic Modulators: General Formalism, Impairments, and Applications to Frequency-Bin Photonic Quantum States</a></div><div><b>Authors:</b> Mar Yuste, Carlos R. Fernández Pousa, Javier Fraile Peláez, José Capmany</div><div><b>Published:</b> 2026-07-10</div><div><b>Categories:</b> quant-ph, physics.optics</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.09198'>Abstract page</a></div></div>
@@ -15,4 +78,47 @@
 <div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.09373.pdf'>Deterministic Generation of Linear Photonic Cluster States with Semiconductor Quantum Dots: A Detailed Comparison of Different Schemes</a></div><div><b>Authors:</b> Nikolas Köcher, Stefan Schumacher</div><div><b>Published:</b> 2026-07-10</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.09373'>Abstract page</a></div></div>
 <div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.09368.pdf'>Quantum Approximate Optimization via Noise-Directed Adaptive Warm-Starting</a></div><div><b>Authors:</b> Filip B. Maciejewski, Stuart Hadfield, Oscar Wallis, George Pennington, Sebastian Brandhofer, Stefan Woerner, Daniel J. Egger, Davide Venturelli</div><div><b>Published:</b> 2026-07-10</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.09368'>Abstract page</a></div></div>
 <div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.09162.pdf'>Quaternary-Squeeze Quantum Identity Authentication: Direction-Scaling Security via Single-Mode Squeezed Light</a></div><div><b>Authors:</b> Zhipeng Chen, Haolun Tang, Xiao-Qi Xiao, Li-Hua Gong</div><div><b>Published:</b> 2026-07-10</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.09162'>Abstract page</a></div></div>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
+
 </body></html>

@@ -1,7 +1,113 @@
-<html><body>
+<html>
+<head>
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+</head><body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
+
 <h1>Personalized arXiv Digest</h1>
 <h2>config_physics.yaml</h2><div><i>Showing papers published on 2026-07-09 UTC. Base threshold = 7.</i></div><div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.08266.pdf'>Ion-Implanted Silicon Nanoregions Enable Ultra-Low-Loss Trimming of Cladded Photonic Integrated Circuits</a></div><div><b>Authors:</b> Zhongyu Tang, Shabnam Taheriniya, Seongmin Jo, Xinyu Ma, Akhil Varri, Anna P. Ovvyan, Vincent Spreter, Liam McRae, Xiansong Meng, Wolfram H. P. Pernice, Rongyang Xu</div><div><b>Published:</b> 2026-07-09</div><div><b>Categories:</b> physics.optics, physics.app-ph</div><div><b>Relevance:</b> 9/10</div><div><b>Why:</b> The paper demonstrates ultra-low-loss trimming of photonic integrated circuits using silicon ion implantation, which is directly relevant to the user&#x27;s work in integrated photonics.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.08266'>Abstract page</a></div></div>
 <div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.08687.pdf'>Low-latency FPGA-based electronic control system for fast preparation of defect-free atom arrays</a></div><div><b>Authors:</b> Ya-Dong Hu, Dong-Qi Ma, Tian-Yang Zhang, Liang Chen, Yi-Chen Zhang, Xiao-Kang Zhong, Wen-Yi Zhu, Hong-Jie Fan, Qing-Xuan Jie, Yan-Lei Zhang, Gang Li, Xi-Feng Ren, Xu-Liang Zhang, Guang-Can Guo, Zhu-Bo Wang, Chang-Ling Zou</div><div><b>Published:</b> 2026-07-09</div><div><b>Categories:</b> quant-ph, physics.optics</div><div><b>Relevance:</b> 9/10</div><div><b>Why:</b> The paper presents a low-latency electronic control system for quantum computing, which is highly relevant to the user&#x27;s work in integrated photonics and quantum optics.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.08687'>Abstract page</a></div></div>
 <div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.08558.pdf'>Broadband silicon photonic phase shifters driven by gradient optical forces</a></div><div><b>Authors:</b> Guillermo Arregui, Sander Jæger Linde, Magnus Vejby Nielsen, Bingrui Lu, Nikolaj B. Hougs, Babak Vosoughi Lahijani, Søren Stobbe</div><div><b>Published:</b> 2026-07-09</div><div><b>Categories:</b> physics.optics, physics.app-ph</div><div><b>Relevance:</b> 8/10</div><div><b>Why:</b> The paper presents a broadband silicon photonic phase shifter, which is relevant to integrated photonics and could have applications in quantum photonic circuits.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.08558'>Abstract page</a></div></div>
 <div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.08360.pdf'>Inverse-designed meta processing units for multi-task near-field photonic computing</a></div><div><b>Authors:</b> Chu Wu, Zeyu Cai, Songtao Yang, Ruoyu Shen, Yinan Zhao, Haiou Zhang, Wei Chu, Xing Lin</div><div><b>Published:</b> 2026-07-09</div><div><b>Categories:</b> physics.optics, eess.SP</div><div><b>Relevance:</b> 8/10</div><div><b>Why:</b> The paper introduces inverse-designed meta processing units for photonic computing, which is relevant to integrated photonics and could be applicable to the user&#x27;s research.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.08360'>Abstract page</a></div></div>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
+
 </body></html>
