@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Daily reading notes</title>
+
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+
+</head>
+<body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
+
+<h1>Personalized arXiv Digest</h1>
+<h2>config_physics.yaml</h2><div><i>Showing papers published on 2026-07-14 UTC. Base threshold = 7.</i></div><div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.12837.pdf'>End-to-End Quantum Key Distribution Across Hybrid Fiber and Free-Space Links with All-Optical Encoding Conversion</a></div><div><b>Authors:</b> Khen Cohen, Tomer Nahum, Michael Tzukran, Paz Or, Yehuda Pilnyak, Nitzan Livneh, Hagai Eisenberg, Yaron Oz, Haim Suchowski</div><div><b>Published:</b> 2026-07-14</div><div><b>Categories:</b> quant-ph, physics.optics</div><div><b>Relevance:</b> 8/10</div><div><b>Why:</b> The paper presents a hybrid quantum key distribution system that bridges fiber and free-space links, which is relevant to integrated quantum photonics.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.12837'>Abstract page</a></div></div>
+<div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.12751.pdf'>Traceable In Situ Microwave Power Measurement at the Cryogenic Device Plane in a Dilution Refrigerator</a></div><div><b>Authors:</b> Paolo Panetta, Andrea Celotto, Alessandro Alocco, Bernardo Galvano, Luca Fasolo, Emanuele Palumbo, Luca Callegaro, Luca Oberto, Patrizia Livreri, Emanuele Enrico</div><div><b>Published:</b> 2026-07-14</div><div><b>Categories:</b> physics.ins-det, physics.app-ph, quant-ph</div><div><b>Relevance:</b> 7/10</div><div><b>Why:</b> The paper presents a method for microwave power measurement in cryogenic environments, which is relevant for characterizing superconducting quantum circuits, potentially applicable to integrated quantum photonics.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.12751'>Abstract page</a></div></div>
+<div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'><div style='font-size: 16px;'><b>Title:</b> <a href='https://arxiv.org/pdf/2607.13004.pdf'>picoMUX: microcontroller based time-domain multiplexing readout for kilopixel TES arrays</a></div><div><b>Authors:</b> Simon Tartakovsky, Alexandre E. Adler, Jason E. Austermann, Steven J. Benton, Shannon M. Duff, Malcolm Durkin, Jeffrey P. Filippini, Aurelien A. Fraisse, Thomas J. L. J. Gascard, Sho M. Gibbs, Suren Gourapura, Jon E. Gudmundsson, Johannes Hubmayr, William C. Jones, Ashesh Khatua, Jared L. May, Darby McCauley, Johanna M. Nagy, Ivan L. Padilla, Ricardo R. Rodriguez, John E. Ruhl, M. Shaaf Sarwar, Christopher Rooney, Joseph van der List, Michael R. Vissers, Philippe Voyer</div><div><b>Published:</b> 2026-07-14</div><div><b>Categories:</b> astro-ph.IM, physics.ins-det</div><div><b>Relevance:</b> 7/10</div><div><b>Why:</b> The paper presents a new TDM readout architecture for kilopixel TES arrays, which is relevant to quantum device measurement and characterization.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2607.13004'>Abstract page</a></div></div>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
+
+</body></html>
