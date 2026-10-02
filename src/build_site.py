@@ -27,6 +27,7 @@ ARXIV_ID_RE = re.compile(r"arxiv\.org/(?:abs|pdf)/(\d{4}\.\d{4,5})")
 PAPER_BLOCK_RE = re.compile(r"<div style='font-size: 16px;'><b>Title:</b>")
 SCORE_RE = re.compile(r"[Ss]core\D{0,20}?(\d{1,2})\b")
 DATE_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})")
+WEEKLY_ROLLOUT = date(2026, 9, 21)
 
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 MONTH_NAMES = [
@@ -59,6 +60,11 @@ def protect_archived_digests():
 
 def digest_label(path: Path, day: str) -> str:
     return path.stem[len(day):].lstrip("_-") or "digest"
+
+
+def is_weekly_digest(path: Path) -> bool:
+    text = path.read_text(encoding="utf-8", errors="replace")
+    return "Showing papers published from" in text and " through " in text
 
 
 def build_calendar(by_date):
@@ -121,6 +127,9 @@ def main():
     for f in sorted(DIGEST_DIR.glob("*.html")):
         m = DATE_RE.match(f.name)
         if not m:
+            continue
+        d = date.fromisoformat(m.group(1))
+        if d >= WEEKLY_ROLLOUT and (d.weekday() != 0 or not is_weekly_digest(f)):
             continue
         by_date[m.group(1)].append(f)
 
