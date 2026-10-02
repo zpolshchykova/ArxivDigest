@@ -412,8 +412,17 @@ def fetch_published_papers(
                 "published,issued,container-title,URL,subject,ISSN"
             ),
         }
-        response = _get_crossref_response(params)
-        items = response.json().get("message", {}).get("items", [])
+        try:
+            response = _get_crossref_response(params)
+            items = response.json().get("message", {}).get("items", [])
+        except Exception as exc:
+            print(
+                f"Warning: skipping published journal '{fallback_name}' ({issn}) "
+                f"because Crossref lookup failed: {exc}",
+                file=sys.stderr,
+            )
+            time.sleep(1)
+            continue
 
         for item in items:
             doi = str(item.get("DOI", "") or "").strip().lower()
