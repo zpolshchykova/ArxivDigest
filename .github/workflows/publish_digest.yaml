@@ -1,9 +1,9 @@
-name: Daily digest to GitHub Pages
+name: Weekly digest to GitHub Pages
 
 on:
   schedule:
-    # 13:25 UTC daily. A morning-UTC run usually picks up the latest update.
-    - cron: "25 13 * * *"
+    # 13:25 UTC every Monday. The run covers the previous Monday-Sunday week.
+    - cron: "25 13 * * 1"
   workflow_dispatch:
     inputs:
       start_date:
@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Generate and archive digests
+      - name: Generate and archive weekly digests
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
@@ -53,34 +53,36 @@ jobs:
               echo "For a backfill, set both start_date and end_date."
               exit 1
             fi
-            mapfile -t target_dates < <(python - <<PY
-          from datetime import date, timedelta
+            mapfile -t target_ranges < <(python - <<PY
+          from datetime import date
           start = date.fromisoformat("${start_date}")
           end = date.fromisoformat("${end_date}")
           if end < start:
               raise SystemExit("end_date must be on or after start_date")
-          d = start
-          while d <= end:
-              print(d.isoformat())
-              d += timedelta(days=1)
+          print(f"{start.isoformat()} {end.isoformat()}")
           PY
           )
           else
-            mapfile -t target_dates < <(python - <<'PY'
+            mapfile -t target_ranges < <(python - <<'PY'
           from datetime import datetime, timedelta, timezone
-          print((datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat())
+          today = datetime.now(timezone.utc).date()
+          this_monday = today - timedelta(days=today.weekday())
+          previous_monday = this_monday - timedelta(days=7)
+          previous_sunday = this_monday - timedelta(days=1)
+          print(f"{previous_monday.isoformat()} {previous_sunday.isoformat()}")
           PY
           )
           fi
 
-          for target_date in "${target_dates[@]}"; do
+          for target_range in "${target_ranges[@]}"; do
+            read -r start end <<< "${target_range}"
             for cfg in "${configs[@]}"; do
               label="${cfg#config_}"
               label="${label%.yaml}"
-              dest="docs/digests/${target_date}_${label}.html"
+              dest="docs/digests/${start}_${label}.html"
 
-              echo "Generating ${cfg} for ${target_date} -> ${dest}"
-              if python src/action.py --config "${cfg}" --target-date "${target_date}"; then
+              echo "Generating ${cfg} for ${start} through ${end} -> ${dest}"
+              if python src/action.py --config "${cfg}" --start-date "${start}" --end-date "${end}"; then
                 cp digest.html "${dest}"
               else
                 failed=1
@@ -91,7 +93,7 @@ jobs:
           <body>
           <h1>Digest generation failed</h1>
           <p><b>Config:</b> ${cfg}</p>
-          <p><b>Date:</b> ${target_date}</p>
+          <p><b>Date range:</b> ${start} through ${end}</p>
           <p>See the GitHub Actions logs for the full error.</p>
           </body>
           </html>
@@ -114,7 +116,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: daily-digests
+          name: weekly-digests
           path: |
             docs/index.html
             docs/digests/*.html
@@ -126,7 +128,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs
-          git commit -m "Publish digest $(date -u +%F)" || echo "Nothing to commit"
+          git commit -m "Publish weekly digest $(date -u +%F)" || echo "Nothing to commit"
           git push
 
       - name: Fail if any digest failed

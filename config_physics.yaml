@@ -8,8 +8,13 @@ categories:
 # 1-10. 7 = worth opening; 9-10 = directly useful / must-read.
 threshold: 7
 
-# Keep each daily page to the previous UTC day only.
-date_window: "previous_day"
+# Weekly pages include arXiv preprints and selected published journals.
+sources:
+  - arxiv
+  - published
+
+published_journals: default_photonics
+max_crossref_results_per_journal: 50
 
 
 interest: |
@@ -33,6 +38,7 @@ interest: |
   - Pockels effect, electro-optic modulation, EO modulators
   - nonlinear photonics: χ(2), χ(3), SHG, OPO, frequency conversion, frequency combs
   - integrated photonics / photonic integrated circuits, waveguides, microrings, microresonators, high-Q resonators
+  - on-chip lasers, optical parametric oscillators, soliton microcombs, chip-scale frequency conversion
   - quantum photonics: SPDC, SFWM, squeezing, entanglement, single photons, integrated quantum photonics
   - packaging / coupling / measurement: fiber-to-chip coupling, grating couplers, edge coupling, characterization, metrology, detectors
 
@@ -43,5 +49,6 @@ interest: |
 
   Also relevant, but usually not 9-10 by itself, if it overlaps with topics commonly appearing in Rachel Grange’s area:
   - nanophotonics, microcavities, resonant enhancement, nonlinear nanophotonics, light–matter interaction, emitters coupled to photonics
+  - hybrid integrated photonics, heterogeneous integration, thin-film ferroelectrics, electro-optic materials
 
   Theory papers are OK if they clearly connect to experiments, devices, or measurable predictions.

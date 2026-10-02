@@ -5,8 +5,13 @@ categories: []
 # 1-10. 7 = worth opening; 9-10 = directly useful / must-read.
 threshold: 7
 
-# Keep each daily page to the previous UTC day only.
-date_window: "previous_day"
+# Weekly pages include arXiv preprints and selected published journals.
+sources:
+  - arxiv
+  - published
+
+published_journals: default_photonics
+max_crossref_results_per_journal: 50
 
 interest: |
   Score strictly for my current research, not for general scientific interest.
@@ -30,6 +35,8 @@ interest: |
   - on-chip quantum light sources, entanglement, squeezing
   - SPDC / SFWM / frequency conversion / χ(2) nonlinear optics (especially LiNbO3 / PPLN / TFLN)
   - photonic interfaces, quantum networking components, frequency translation, telecom compatibility
+  - quantum frequency conversion, microwave-to-optical conversion, quantum transduction
+  - chip-scale sources of nonclassical light, indistinguishable photons, heralded photons
   - experimental demonstrations, device implementations, measurement setups, detectors, characterization
 
   Theory is OK if it has a clear experimental pathway or device relevance.

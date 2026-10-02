@@ -5,8 +5,8 @@ Expects digest files named like:
     docs/digests/2026-07-07.html
     docs/digests/2026-07-07_quant-ph.html   (optional suffix if you run several configs)
 
-For each digest it counts papers (unique arxiv.org/abs links) and extracts
-relevancy scores, then aggregates stats by day of week.
+For each digest it counts rendered paper blocks and extracts relevancy scores,
+then aggregates stats by day of week.
 
 Run from the repo root:  python src/build_site.py
 """
@@ -24,6 +24,7 @@ DIGEST_DIR = Path("docs/digests")
 INDEX_PATH = Path("docs/index.html")
 
 ARXIV_ID_RE = re.compile(r"arxiv\.org/(?:abs|pdf)/(\d{4}\.\d{4,5})")
+PAPER_BLOCK_RE = re.compile(r"<div style='font-size: 16px;'><b>Title:</b>")
 SCORE_RE = re.compile(r"[Ss]core\D{0,20}?(\d{1,2})\b")
 DATE_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})")
 
@@ -37,9 +38,10 @@ MONTH_NAMES = [
 def analyze_digest(path: Path):
     text = path.read_text(encoding="utf-8", errors="replace")
     paper_ids = set(ARXIV_ID_RE.findall(text))
+    paper_blocks = len(PAPER_BLOCK_RE.findall(text))
     scores = [int(s) for s in SCORE_RE.findall(text) if 0 <= int(s) <= 10]
     return {
-        "n_papers": len(paper_ids),
+        "n_papers": max(len(paper_ids), paper_blocks),
         "scores": scores,
     }
 
@@ -187,7 +189,7 @@ def main():
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Daily reading notes</title>
+<title>Weekly reading notes</title>
 <style>
   body {{ font-family: Georgia, serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; }}
   h1 {{ font-size: 1.6rem; }} h2 {{ font-size: 1.15rem; margin-top: 2.2rem; }}
@@ -212,7 +214,7 @@ def main():
 </head>
 <body>
 {gate_body_start()}
-<h1>Daily reading notes</h1>
+<h1>Weekly reading notes</h1>
 """
     if dates:
         latest = dates[0]
@@ -228,20 +230,20 @@ def main():
 <h2>Calendar</h2>
 {calendar_html}
 
-<h2>Stats by day of week</h2>
+<h2>Stats by week start</h2>
 <p>{len(dates)} digest days · {total_papers} papers total · overall avg relevancy {overall_avg}</p>
 <table>
-<tr><th>Weekday</th><th>Digests</th><th>Avg papers/day</th><th>Avg relevancy</th><th>Avg papers ≥7/day</th></tr>
+<tr><th>Weekday</th><th>Digests</th><th>Avg papers/digest</th><th>Avg relevancy</th><th>Avg papers ≥7/digest</th></tr>
 {''.join(wk_rows)}
 </table>
 
-<h2>All days</h2>
+<h2>All digests</h2>
 <table>
-<tr><th>Date</th><th>Day</th><th>Papers</th><th>Avg score</th><th>≥7</th><th>Digest</th></tr>
+<tr><th>Week start</th><th>Day</th><th>Papers</th><th>Avg score</th><th>≥7</th><th>Digest</th></tr>
 {''.join(day_rows)}
 </table>
 
-<footer>Rebuilt automatically after each update. Some days are expected to be quiet.</footer>
+<footer>Rebuilt automatically after each weekly update. Some weeks are expected to be quiet.</footer>
 {gate_body_end()}
 </body>
 </html>
