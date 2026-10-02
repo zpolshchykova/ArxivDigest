@@ -643,8 +643,8 @@ def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: 
             reason_part = f"<div><b>Why:</b> {html.escape(p.llm_reason)}</div>"
 
         return (
-            "<div style='margin: 14px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;'>"
-            f"<div style='font-size: 16px;'><b>Title:</b> "
+            "<article class='paper-card'>"
+            f"<div class='paper-title'><b>Title:</b> "
             f"<a href='{html.escape(p.pdf_url)}'>{html.escape(p.title)}</a></div>"
             f"<div><b>Authors:</b> {html.escape(authors)}</div>"
             f"<div><b>Source:</b> {source_label}</div>"
@@ -653,17 +653,27 @@ def build_html(papers: List[Paper], threshold: int, lookback_label: str, title: 
             f"<div><b>Categories:</b> {html.escape(cats)}</div>"
             f"{score_part}{reason_part}"
             f"<div style='margin-top: 6px;'><a href='{html.escape(p.abs_url)}'>Abstract page</a></div>"
-            "</div>"
+            "</article>"
         )
 
     preprints = [p for p in relevant if p.source == "arxiv"]
     published = [p for p in relevant if p.source == "published"]
     sections = []
     if preprints:
-        sections.append("<h3>arXiv preprints</h3>" + "\n".join(paper_block(p) for p in preprints))
+        sections.append(
+            "<section class='source-column source-arxiv'>"
+            f"<h3>arXiv preprints <span>{len(preprints)}</span></h3>"
+            + "\n".join(paper_block(p) for p in preprints)
+            + "</section>"
+        )
     if published:
-        sections.append("<h3>Published papers</h3>" + "\n".join(paper_block(p) for p in published))
-    return header + meta + "\n".join(sections)
+        sections.append(
+            "<section class='source-column source-published'>"
+            f"<h3>Published papers <span>{len(published)}</span></h3>"
+            + "\n".join(paper_block(p) for p in published)
+            + "</section>"
+        )
+    return header + meta + "<div class='digest-grid'>" + "\n".join(sections) + "</div>"
 
 
 def main() -> int:
@@ -770,7 +780,27 @@ def main() -> int:
         "<head>",
         "<meta charset='utf-8'>",
         "<meta name='viewport' content='width=device-width, initial-scale=1'>",
-        "<title>Daily reading notes</title>",
+        "<title>Weekly reading notes</title>",
+        """
+<style>
+  body { font-family: Georgia, serif; max-width: 1180px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; background: #f7f7f5; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.15rem; margin-top: 1.8rem; }
+  h3 { font-family: Helvetica, Arial, sans-serif; font-size: 0.95rem; margin: 0 0 0.8rem; color: #333; }
+  h3 span { color: #777; font-weight: 400; }
+  a { color: #245c7a; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  .digest-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin-top: 1rem; }
+  .source-column { min-width: 0; }
+  .paper-card { margin: 0 0 0.85rem; padding: 0.8rem; border: 1px solid #d8d8d2; border-radius: 8px; background: #fff; line-height: 1.45; overflow-wrap: anywhere; }
+  .paper-title { font-size: 1rem; line-height: 1.35; margin-bottom: 0.25rem; }
+  .source-published .paper-card { border-left: 4px solid #4a8e9f; }
+  .source-arxiv .paper-card { border-left: 4px solid #8b8f73; }
+  @media (max-width: 860px) {
+    body { margin-top: 1rem; }
+    .digest-grid { grid-template-columns: 1fr; }
+  }
+</style>
+""",
         gate_head(),
         "</head>",
         "<body>",

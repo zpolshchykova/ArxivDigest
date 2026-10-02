@@ -24,7 +24,7 @@ DIGEST_DIR = Path("docs/digests")
 INDEX_PATH = Path("docs/index.html")
 
 ARXIV_ID_RE = re.compile(r"arxiv\.org/(?:abs|pdf)/(\d{4}\.\d{4,5})")
-PAPER_BLOCK_RE = re.compile(r"<div style='font-size: 16px;'><b>Title:</b>")
+PAPER_BLOCK_RE = re.compile(r"(?:<article class='paper-card'>|<div style='font-size: 16px;'><b>Title:</b>)")
 SCORE_RE = re.compile(r"[Ss]core\D{0,20}?(\d{1,2})\b")
 DATE_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})")
 WEEKLY_ROLLOUT = date(2026, 9, 21)
@@ -62,9 +62,26 @@ def digest_label(path: Path, day: str) -> str:
     return path.stem[len(day):].lstrip("_-") or "digest"
 
 
+def is_rollout_week(day: str) -> bool:
+    d = date.fromisoformat(day)
+    return d >= WEEKLY_ROLLOUT and d.weekday() == 0
+
+
 def is_weekly_digest(path: Path) -> bool:
     text = path.read_text(encoding="utf-8", errors="replace")
     return "Showing papers published from" in text and " through " in text
+
+
+def digest_links(files, day: str, compact: bool = False) -> str:
+    links = " ".join(
+        f'<a href="digests/{html.escape(f.name)}">{html.escape(digest_label(f, day))}</a>'
+        for f in files
+    )
+    if is_rollout_week(day):
+        prefix = "Weekly recap" if compact else "<span class='recap-label'>Weekly recap</span>"
+        separator = " " if compact else "<br>"
+        return f"{prefix}{separator}{links}"
+    return links
 
 
 def build_calendar(by_date):
@@ -90,10 +107,7 @@ def build_calendar(by_date):
 
                 files = by_date.get(day, [])
                 if files:
-                    links = " ".join(
-                        f'<a href="digests/{html.escape(f.name)}">{html.escape(digest_label(f, day))}</a>'
-                        for f in files
-                    )
+                    links = digest_links(files, day)
                     cells.append(
                         f"<td class='cal-hit'><div class='cal-day'>{day_date.day}</div>"
                         f"<div class='cal-links'>{links}</div></td>"
@@ -152,8 +166,7 @@ def main():
             info = analyze_digest(f)
             n_papers += info["n_papers"]
             scores += info["scores"]
-            label = digest_label(f, d)
-            links.append(f'<a href="digests/{html.escape(f.name)}">{html.escape(label)}</a>')
+        links.append(digest_links(by_date[d], d, compact=True))
 
         avg = f"{sum(scores)/len(scores):.1f}" if scores else "–"
         hits = sum(1 for s in scores if s >= 7)
@@ -200,23 +213,25 @@ def main():
 <meta name="robots" content="noindex">
 <title>Weekly reading notes</title>
 <style>
-  body {{ font-family: Georgia, serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; }}
-  h1 {{ font-size: 1.6rem; }} h2 {{ font-size: 1.15rem; margin-top: 2.2rem; }}
+  body {{ font-family: Georgia, serif; max-width: 980px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; background: #f7f7f5; }}
+  h1 {{ font-size: 1.7rem; margin-bottom: 0.4rem; }} h2 {{ font-size: 1.15rem; margin-top: 2.2rem; }}
   h3 {{ font-family: Helvetica, Arial, sans-serif; font-size: 0.9rem; margin: 1.2rem 0 0.4rem; color: #555; }}
-  table {{ border-collapse: collapse; width: 100%; font-size: 0.92rem; }}
+  a {{ color: #245c7a; text-decoration-thickness: 1px; text-underline-offset: 2px; }}
+  table {{ border-collapse: collapse; width: 100%; font-size: 0.92rem; background: #fff; }}
   th, td {{ text-align: left; padding: 0.35rem 0.6rem; border-bottom: 1px solid #ddd; vertical-align: top; }}
   th {{ font-family: Helvetica, Arial, sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; }}
   .calendar {{ table-layout: fixed; margin-bottom: 1.5rem; }}
   .calendar th, .calendar td {{ width: 14.28%; height: 4.4rem; padding: 0.35rem; border: 1px solid #e3e3e3; }}
   .calendar th {{ height: auto; text-align: center; }}
   .calendar td {{ background: #fafafa; }}
-  .calendar .cal-hit {{ background: #fff; }}
+  .calendar .cal-hit {{ background: #fff; border-color: #b9d4df; }}
   .cal-day {{ font-family: Helvetica, Arial, sans-serif; font-size: 0.78rem; margin-bottom: 0.35rem; }}
   .cal-links a {{ display: block; font-size: 0.78rem; line-height: 1.35; overflow-wrap: anywhere; }}
+  .recap-label {{ display: block; font-family: Helvetica, Arial, sans-serif; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #555; margin-bottom: 0.18rem; }}
   .cal-empty {{ background: #f4f4f4; }}
   .bar {{ display: inline-block; height: 0.6em; background: #4a6fa5; vertical-align: middle; margin-left: 6px; }}
   .dim {{ color: #999; }}
-  .latest {{ font-size: 1.05rem; margin: 1rem 0; }}
+  .latest {{ font-size: 1.05rem; margin: 1rem 0; padding: 0.8rem 1rem; background: #fff; border-left: 4px solid #4a8e9f; }}
   footer {{ margin-top: 3rem; font-size: 0.8rem; color: #888; }}
 </style>
 {gate_head()}
@@ -227,10 +242,7 @@ def main():
 """
     if dates:
         latest = dates[0]
-        latest_links = " · ".join(
-            f'<a href="digests/{html.escape(f.name)}">{html.escape(digest_label(f, latest))}</a>'
-            for f in by_date[latest]
-        )
+        latest_links = digest_links(by_date[latest], latest, compact=True)
         page += f'<p class="latest">Latest: <b>{latest}</b> — {latest_links}</p>\n'
     else:
         page += "<p>No digests archived yet.</p>\n"
