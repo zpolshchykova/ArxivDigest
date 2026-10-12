@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Weekly reading notes</title>
+
+<style>
+  body { font-family: Georgia, serif; max-width: 1180px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; background: #f7f7f5; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.15rem; margin-top: 1.8rem; }
+  h3 { font-family: Helvetica, Arial, sans-serif; font-size: 0.95rem; margin: 0 0 0.8rem; color: #333; }
+  h3 span { color: #777; font-weight: 400; }
+  a { color: #245c7a; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  .digest-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin-top: 1rem; }
+  .source-column { min-width: 0; }
+  .paper-card { margin: 0 0 0.85rem; padding: 0.8rem; border: 1px solid #d8d8d2; border-radius: 8px; background: #fff; line-height: 1.45; overflow-wrap: anywhere; }
+  .paper-title { font-size: 1rem; line-height: 1.35; margin-bottom: 0.25rem; }
+  .source-published .paper-card { border-left: 4px solid #4a8e9f; }
+  .source-arxiv .paper-card { border-left: 4px solid #8b8f73; }
+  @media (max-width: 860px) {
+    body { margin-top: 1rem; }
+    .digest-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+
+</head>
+<body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
+
+<h1>Personalized Research Digest</h1>
+<h2>config_quantum.yaml</h2><div><i>Showing papers published from 2026-10-05 through 2026-10-11 UTC. Base threshold = 7.</i></div><div style='margin-top:6px; color:#a00;'><b>No papers exceeded the relevance threshold (7) for this run. Showing 15 keyword-ranked papers instead.</b></div><div class='digest-grid'><section class='source-column source-arxiv'><h3>arXiv preprints <span>4</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.10700.pdf'>Millisecond phonon lifetimes in piezoelectric nanomechanical resonators</a></div><div><b>Authors:</b> Oliver A. Hitchcock, Matthew P. Maksymowych, Kaveh Pezeshki, Takuma Makihara, Erik Szakiel, Chou-Wei Kiang, Daniel Rugar, Amir H. Safavi-Naeini</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-07</div><div><b>Categories:</b> cond-mat.mes-hall, physics.app-ph, quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.10700'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.13664.pdf'>Judd-Ofelt analysis and coherent spectroscopy of europium-based molecular complexes for quantum information applications</a></div><div><b>Authors:</b> Nicholas Lester Jobbitt, Sascha Weis, Timo Schweizer, Vishnu Unni Chorakkunnath, Evgenij Vasilenko, Tobias Haas, Barbora Brachnakova, Senthil Kumar Kuppusamy, Hartmut Schubert, Mario Ruben, Michael Seitz, David Hunger</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-09</div><div><b>Categories:</b> quant-ph, physics.optics</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.13664'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.13196.pdf'>Graphene double quantum dot as a solid-state two-level system in the THz range</a></div><div><b>Authors:</b> Alexis Wietzke, Solen Coeymans, Benjamin Hue, Simon Messelot, Aurelien Schmitt, Michael Rosticher, Kenji Watanabe, Takashi Taniguchi, Jerome Tignon, Sukhdeep Dhillon, Rebeca Ribeiro, Audrey Cottet, Matthieu Delbecq, Takis Kontos, Juliette Mangeney</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-09</div><div><b>Categories:</b> cond-mat.mes-hall, quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.13196'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.13074.pdf'>All-optical deconvolution via quantum cross-correlation spectroscopy with bright twin beams</a></div><div><b>Authors:</b> Yujiro Eto</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-09</div><div><b>Categories:</b> quant-ph, physics.optics</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.13074'>Abstract page</a></div></article></section>
+<section class='source-column source-published'><h3>Published papers <span>11</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72005'>Photonic Chip‐Based High‐Efficiency Soliton Microcombs via Electro‐Optic‐Kerr Synergy</a></div><div><b>Authors:</b> Rui Niu, Shuai Wan, Pi‐Yu Wang, Rui Ma, Jin Li, Fang Bo, Zhen Shen, Guang‐Can Guo, Fang‐Wen Sun, Junqiu Liu, Chun‐Hua Dong</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-09</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72005'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/optica.614691'>Programmable heterogeneous lithium niobate photonic circuits via active–passive joint inverse design</a></div><div><b>Authors:</b> Ling-en Zhang, Haozong Zhong, Ning Qu, Hongbo Yu, Yuxuan Yang, Yanxi Chen, Ya Cheng, Lin Li</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optica</div><div><b>Published:</b> 2026-10-09</div><div><b>Categories:</b> Optica</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/optica.614691'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.611768'>Probabilistic photonic computing based on chaotic Kerr optical frequency combs</a></div><div><b>Authors:</b> Qi Liang, Qiuquan Yan, Hao Ouyang, Chao Zhou, Hao Hao, Licheng Wang, Yilun Wang, Yuhua Tang, Jun Zhang, Tian Jiang</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-10-06</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.611768'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1117/1.ap.8.5.056013'>Waveguide-array optical neural network on thin-film lithium niobate platform</a></div><div><b>Authors:</b> Jiacheng Sun, Jian Li, Tao Li</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Advanced Photonics</div><div><b>Published:</b> 2026-10-08</div><div><b>Categories:</b> Advanced Photonics</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1117/1.ap.8.5.056013'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/optica.607899'>Ultra-low-loss Ta 2 O 5 waveguide for integrated nonlinear photonics</a></div><div><b>Authors:</b> Xiaotong Zhang, Shuxuan Guo, Ruixuan Yi, Zheze Shi, Like Shui, Long Huang, Leiran Wang, Yang Wang, Junling Qu, Wenfu Zhang, Xuetao Gan</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optica</div><div><b>Published:</b> 2026-10-07</div><div><b>Categories:</b> Optica</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/optica.607899'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.611869'>Photon pair generation via direct and cascaded processes in a thin second-order nonlinear film</a></div><div><b>Authors:</b> Changjin Son, Maria Chekhova</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-10-07</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.611869'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72030'>A 3‐Bit Low‐Phase‐Error 360° Terahertz Phase‐Shifting Chip Using Branch Impedance Reconfiguration</a></div><div><b>Authors:</b> Huajie Liang, Tianchi Zhou, Hongxin Zeng, Shaokang Gu, Lan Wang, Sen Gong, Feng Lan, Lin Zou, Shixiong Liang, Ziqiang Yang, Yaxin Zhang</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-11</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72030'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.614071'>Low-parasitic-resistance and fabrication-tolerant silicon microring modulators operating beyond 100 GHz</a></div><div><b>Authors:</b> Yuxiang Yin, Kaihang Lu, Hao Chen, Baohua Wen, Xianyi Feng, YiHao Jian, Xuting Fan, King Hung Chiu, Yeyu Tong</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-10-09</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.614071'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.612165'>Tuning fork-cantilever coupled dual-resonance fiber-optic photoacoustic sensor for simultaneous dual-gas detection</a></div><div><b>Authors:</b> Yuchen Guan, Guojie Wu, Xianfeng Xie, Jiayang Sun, Hui Zhang, Qiang Wang, Wei Peng, Liang Mei, Zhenfeng Gong</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-10-09</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.612165'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/josab.596844'>High-efficiency circularly polarized filters based on cascaded metal metasurfaces</a></div><div><b>Authors:</b> Bo Cheng, Hanxiao Shao, Longfeng Lv, Yuxiao Zou, Guofeng Song, Kunpeng Zhai</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Journal of the Optical Society of America B</div><div><b>Published:</b> 2026-10-09</div><div><b>Categories:</b> Journal of the Optical Society of America B</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/josab.596844'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72042'>Quartz‐Tuning‐Fork‐Filtered Heterodyne Interferometric Phase‐Dispersion Gas Sensing Based on Dual‐Channel Hilbert Phase Extraction</a></div><div><b>Authors:</b> Yushuo Song, Shunda Qiao, Hanxu Ma, Ying He, Yufei Ma</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-09</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72042'>Abstract page</a></div></article></section></div>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
+
+</body></html>
