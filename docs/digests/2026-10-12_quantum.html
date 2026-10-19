@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Weekly reading notes</title>
+
+<style>
+  body { font-family: Georgia, serif; max-width: 1180px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; background: #f7f7f5; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.15rem; margin-top: 1.8rem; }
+  h3 { font-family: Helvetica, Arial, sans-serif; font-size: 0.95rem; margin: 0 0 0.8rem; color: #333; }
+  h3 span { color: #777; font-weight: 400; }
+  a { color: #245c7a; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  .digest-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin-top: 1rem; }
+  .source-column { min-width: 0; }
+  .paper-card { margin: 0 0 0.85rem; padding: 0.8rem; border: 1px solid #d8d8d2; border-radius: 8px; background: #fff; line-height: 1.45; overflow-wrap: anywhere; }
+  .paper-title { font-size: 1rem; line-height: 1.35; margin-bottom: 0.25rem; }
+  .source-published .paper-card { border-left: 4px solid #4a8e9f; }
+  .source-arxiv .paper-card { border-left: 4px solid #8b8f73; }
+  @media (max-width: 860px) {
+    body { margin-top: 1rem; }
+    .digest-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+
+</head>
+<body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
+
+<h1>Personalized Research Digest</h1>
+<h2>config_quantum.yaml</h2><div><i>Showing papers published from 2026-10-12 through 2026-10-18 UTC. Base threshold = 7.</i></div><div style='margin-top:6px; color:#a00;'><b>No papers exceeded the relevance threshold (7) for this run. Showing 15 keyword-ranked papers instead.</b></div><div class='digest-grid'><section class='source-column source-arxiv'><h3>arXiv preprints <span>8</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.23499.pdf'>A Fibre-Integrated SPDC Heralded Single-Photon Source Using Zn-Indiffused PPLN Ridge Waveguides at Telecom Wavelengths</a></div><div><b>Authors:</b> Peter Iveson, Paolo L. Mennea, Goronwy Tawy, Rex H. S. Bannerman, Noe Palomar-Davidson, Greg Blanchard-Emmerson, Patrick M. Ledingham, Peter G. R. Smith, James C. Gates, Corin B. E. Gawith</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-16</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.23499'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.20670.pdf'>Mechanical trisqueezing in circuit quantum acoustodynamics with SNAIL devices</a></div><div><b>Authors:</b> Yi-Zhou Bu, Matteo Fadel, Kai Xu, Heng Fan</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-14</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.20670'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.21754.pdf'>Remote Gottesman-Kitaev-Preskill Entanglement Generation between Trapped Ions</a></div><div><b>Authors:</b> Haruki Aoki, Kazufumi Tanji, Shohei Kiryu, Masahiro Takeoka, Junko Ishi-Hayase</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-15</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.21754'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.20148.pdf'>Loss-Tolerant Measurement-Device-Independent QKD over Untrusted Repeaters via High-Dimensional Time-Bin Multiplexing</a></div><div><b>Authors:</b> Yu-Chun Yin, Ching-Yi Lai, Alexei Ashikhmin</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-14</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.20148'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.23296.pdf'>Learning angles for quantum approximate optimization</a></div><div><b>Authors:</b> Johannes Jakubik, Isabelle Wittmann, Zaheed Gaffoor, Gciniwe Simphiwe Baloyi, Craig Mahlasi, Etienne Vos, Thomas Brunschwiler, Daniel J. Egger</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-16</div><div><b>Categories:</b> quant-ph, cs.LG</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.23296'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.22776.pdf'>Development of a fabrication-to-benchtop process for SiN-based quantum devices</a></div><div><b>Authors:</b> Connor Kupchak, Abubaker Tareki, Tara Moradi, Patrick Laferriere, Niall Tait, Khaled Mnaymneh</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-16</div><div><b>Categories:</b> physics.optics, quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.22776'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.22004.pdf'>Thermal activation of photon catalysis in difference-intensity Mach-Zehnder interferometry with squeezed thermal light</a></div><div><b>Authors:</b> Kirtpreet Singh, Arvind</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-15</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.22004'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.21909.pdf'>Looking Beyond Visibility: Resolving the Temporal Structure of Continuous-Wave Four-Photon Hong-Ou-Mandel Interference</a></div><div><b>Authors:</b> Sabine Häussler, Meritxell Cabrejo-Ponce, Ana Maria Torres, Baghdasar Baghdasaryan, Karen Lozano-Mendéz, Fabian Steinlechner</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-15</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.21909'>Abstract page</a></div></article></section>
+<section class='source-column source-published'><h3>Published papers <span>7</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/oe.604569'>High voltage, bandwidth-limited, segmented CPW transmission lines for a thin-film lithium niobate electro-optic modulator using a conical-shaped high-permittivity material</a></div><div><b>Authors:</b> Mohsen Karimian Kakolaki, Ahmad Bakhtafrouz, Parisa Karimi</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Express</div><div><b>Published:</b> 2026-10-15</div><div><b>Categories:</b> Optics Express</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/oe.604569'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.613227'>Efficient broadband normal-incidence grating coupler on a lithium niobate-silicon nitride platform</a></div><div><b>Authors:</b> Chengkai Jiang, Zhilin Ye, Jiachang Liang, Yue Hu, Xinyu Zhang, Kaiyan Pan, Min Guo, Yunfei Niu, Gang Zhao, Shining Zhu, Xiaopeng Hu</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-10-13</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.613227'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72057'>CMOS‐Compatible Hybrid Silicon and Strontium Barium Niobate Mach‐Zehnder Modulators</a></div><div><b>Authors:</b> Jun Zheng, Jiangfeng Yuan, Lei Zhang, Sen Liang, Haitao Wang, Yue Hong, Peng Rui, Hui Yu, Hui Ye</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-14</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72057'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1126/sciadv.aei9275'>Bedrock erodibility governs transient erosion and CO 2 release in alpine landscapes</a></div><div><b>Authors:</b> Eyal Marder, John R. Slosson, Isaac J. Larsen, Xianmei Huang, Darryl E. Granger, Matthew J. Winnick, Kenneth H. Williams, Alan J. Hidy</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Science Advances</div><div><b>Published:</b> 2026-10-16</div><div><b>Categories:</b> Science Advances</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1126/sciadv.aei9275'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72071'>Sb 2 Se 3 ‐Integrated Silicon‐on‐Sapphire Photonics for Nonvolatile Spectral Trimming in the Mid‐Infrared</a></div><div><b>Authors:</b> Zezhao Ju, Kai Xu, Yiting Yun, Zequn Chen, Shuo Lin, Kai Xia, Yalan Si, Jingyu Chang, Shouyan Zhang, Mengxue Qi, Seyyed Moinalden Mostaan, Qijie Wang, Yan Cai, Lan Li, Peilong Yang, Hongtao Lin</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-15</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72071'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/josab.609561'>Integrated beam-steering optical sensor based on a self-rolled-up microtube resonator</a></div><div><b>Authors:</b> Ehsan Zahedi, Atefeh Ghafari, Abbas Madani, Leila Yousefi</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Journal of the Optical Society of America B</div><div><b>Published:</b> 2026-10-16</div><div><b>Categories:</b> Journal of the Optical Society of America B</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/josab.609561'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72067'>Near‐Infrared Soliton Crystal Generation in Silicon Resonators</a></div><div><b>Authors:</b> Yue Qin, Keyi Zhong, Yaojing Zhang, Hon Ki Tsang</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-16</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72067'>Abstract page</a></div></article></section></div>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
+
+</body></html>
