@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Weekly reading notes</title>
+
+<style>
+  body { font-family: Georgia, serif; max-width: 1180px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; background: #f7f7f5; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.15rem; margin-top: 1.8rem; }
+  h3 { font-family: Helvetica, Arial, sans-serif; font-size: 0.95rem; margin: 0 0 0.8rem; color: #333; }
+  h3 span { color: #777; font-weight: 400; }
+  a { color: #245c7a; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  .digest-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin-top: 1rem; }
+  .source-column { min-width: 0; }
+  .paper-card { margin: 0 0 0.85rem; padding: 0.8rem; border: 1px solid #d8d8d2; border-radius: 8px; background: #fff; line-height: 1.45; overflow-wrap: anywhere; }
+  .paper-title { font-size: 1rem; line-height: 1.35; margin-bottom: 0.25rem; }
+  .source-published .paper-card { border-left: 4px solid #4a8e9f; }
+  .source-arxiv .paper-card { border-left: 4px solid #8b8f73; }
+  @media (max-width: 860px) {
+    body { margin-top: 1rem; }
+    .digest-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+
+</head>
+<body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
+
+<h1>Personalized Research Digest</h1>
+<h2>config_physics.yaml</h2><div><i>Showing papers published from 2026-10-19 through 2026-10-25 UTC. Base threshold = 7.</i></div><div class='digest-grid'><section class='source-column source-arxiv'><h3>arXiv preprints <span>5</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.30079.pdf'>Electrically Pumped Quadratic-Soliton Mode-Locked Laser in Lithium Niobate Nanophotonics</a></div><div><b>Authors:</b> Benjamin K. Gutierrez, Nicolas Englebert, Yingchu Xu, Selina Zhou, Maximilian Shen, Mahmood Bagheri, Alireza Marandi</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-21</div><div><b>Categories:</b> physics.optics</div><div><b>Relevance:</b> 10/10</div><div><b>Why:</b> The paper presents a mode-locked laser based on lithium niobate nanophotonics, directly aligning with the user&#x27;s research on integrated photonics and ultrafast systems.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.30079'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.26674.pdf'>Terabit-scale wavelength-multiplexed transmitter enabled by thin-film lithium tantalate</a></div><div><b>Authors:</b> Shivaprasad U. Hulyal, Dengyang Fang, Jiachen Cai, Xinru Ji, Alexander Kotz, Jiale Sun, Christian Koos, Tobias J. Kippenberg</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-19</div><div><b>Categories:</b> physics.app-ph, physics.optics</div><div><b>Relevance:</b> 10/10</div><div><b>Why:</b> This work presents a wavelength-multiplexed transmitter using thin-film lithium tantalate, closely related to the user&#x27;s focus on integrated photonics.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.26674'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.29417.pdf'>Quasi-Phase-Matched Second Harmonic Generation in Poling-Free Lithium Niobate Microrings with Surface Molecular Pattern</a></div><div><b>Authors:</b> Jinsong Cheng, Simin Yu, Jiahe Wang, Yilun Zhang, Juanjuan Lu, Xiaoqin Shen</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-21</div><div><b>Categories:</b> physics.optics</div><div><b>Relevance:</b> 9/10</div><div><b>Why:</b> This work demonstrates a poling-free approach for second-harmonic generation in lithium niobate microrings, which is directly relevant to the user&#x27;s focus on nonlinear optics.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.29417'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.31757.pdf'>Multiport photonic routing with a single cavity-based electro-optic phase shifter per port</a></div><div><b>Authors:</b> Alessandro Buzzi, Bjarke A. Frederiksen, Dashiell L. P. Vitullo, Mikkel Heuck, Dirk R. Englund</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-22</div><div><b>Categories:</b> physics.optics</div><div><b>Relevance:</b> 8/10</div><div><b>Why:</b> This paper presents a programmable photonic circuit architecture using lithium niobate, which is relevant to the user&#x27;s work on integrated photonics.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.31757'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.32154.pdf'>Photon-Number Discrimination from Increasing Time-of-Arrival Separation in Wide Superconducting Microstrip Single-Photon Detectors</a></div><div><b>Authors:</b> Hsin-Yeh Wu, Shu-Xiao Liu, Boris Tuchming, Xavier-François Navick, Pu-Kai Wang, Yi-Ren Wu, Jia-Wern Chen, Marc Besançon, Jean-François Glicenstein, Pisin Chen, Yu-Jung Lu, Stathes Paganis</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-23</div><div><b>Categories:</b> quant-ph, hep-ex, physics.app-ph</div><div><b>Relevance:</b> 7/10</div><div><b>Why:</b> This paper discusses photon-number discrimination in superconducting detectors, which is somewhat relevant to the user&#x27;s work in quantum optics.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.32154'>Abstract page</a></div></article></section>
+<section class='source-column source-published'><h3>Published papers <span>9</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.611340'>Triple-frequency signal generation based on a thin-film lithium niobate chip</a></div><div><b>Authors:</b> Jiaqi Shen, Changlong Du, Mengya Zong, Ming Li, Yu Zhang, Shifeng Liu, Zhenzhou Tang, Jijun He, Simin Li, Shilong Pan</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-10-22</div><div><b>Categories:</b> Optics Letters</div><div><b>Relevance:</b> 10/10</div><div><b>Why:</b> This paper directly involves generating signals using a thin-film lithium niobate chip, which is central to the user&#x27;s experimental work in integrated photonics.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.611340'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.615284'>All-Euler-bend lithium niobate microresonators with intrinsic Q-factors exceeding 10 million</a></div><div><b>Authors:</b> Haoxuan Zhang, Tuo Liu, Biyan Zhan, Xinyan Chi, Xianwen Liu</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-10-20</div><div><b>Categories:</b> Optics Letters</div><div><b>Relevance:</b> 10/10</div><div><b>Why:</b> The paper reports on high-Q thin-film lithium niobate microresonators, which are crucial for the user&#x27;s work in integrated photonics and resonator applications.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.615284'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1038/s41377-026-02506-z'>Uncooled low-noise optomechanical sensors on thin-film lithium niobate</a></div><div><b>Authors:</b> Yue Yu, Ran Yin, Ian Anderson, Yinan Wang, Jack Kramer, Ian Christen, Chun-Ho Lee, Xinyi Ren, Zaijun Chen, Michelle L. Povinelli, Daniel Wasserman, Ruochen Lu, Mengjie Yu</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Light: Science &amp;amp; Applications</div><div><b>Published:</b> 2026-10-20</div><div><b>Categories:</b> Light: Science &amp;amp; Applications</div><div><b>Relevance:</b> 10/10</div><div><b>Why:</b> The paper discusses optomechanical sensors on thin-film lithium niobate, which is directly relevant to the user&#x27;s research in integrated photonics.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1038/s41377-026-02506-z'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/optica.608940'>Compact scalable phase modulator with zero static power consumption for visible integrated photonics</a></div><div><b>Authors:</b> Neil MacFarlane, Firooz Aflatouni</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optica</div><div><b>Published:</b> 2026-10-23</div><div><b>Categories:</b> Optica</div><div><b>Relevance:</b> 10/10</div><div><b>Why:</b> This paper presents a compact phase modulator for visible integrated photonics, which is highly relevant to the user&#x27;s research.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/optica.608940'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72113'>Optically Stabilized Reference for Ultralow‐Noise Microwave Generation by Optical Frequency Division</a></div><div><b>Authors:</b> Runlin Miao, Chao Zhou, Pan Han, Mingxin Yang, Xing Zou, Ke Wei, Ke Yin, Tian Jiang</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-23</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Relevance:</b> 10/10</div><div><b>Why:</b> The paper discusses ultralow-noise microwave generation using optical frequency division, which is directly relevant to the user&#x27;s work in integrated photonics.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72113'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1038/s41566-026-02040-9'>Narrow-linewidth, piezoelectrically tunable photonic integrated blue laser</a></div><div><b>Authors:</b> Anat Siddharth, Asger B. Gardner, Xinru Ji, Shivaprasad U. Hulyal, Mikael S. Reichler, Alaina Attanasio, Johann Riemensberger, Sunil A. Bhave, Nicolas Volet, Simone Bianconi, Tobias J. Kippenberg</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Nature Photonics</div><div><b>Published:</b> 2026-10-22</div><div><b>Categories:</b> Nature Photonics</div><div><b>Relevance:</b> 10/10</div><div><b>Why:</b> The paper discusses a photonic integrated blue laser based on lithium niobate, which is directly relevant to the user&#x27;s research.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1038/s41566-026-02040-9'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/optica.592517'>Coherent quadratic supercontinuum generation from UV to mid-IR in lithium niobate nanophotonics</a></div><div><b>Authors:</b> Selina Zhou, Maximilian Shen, Ryoto Sekine, Nicolas Englebert, Thomas Zacharias, Benjamin Gutierrez, Robert M. Gray, Justin Widjaja, Alireza Marandi</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optica</div><div><b>Published:</b> 2026-10-22</div><div><b>Categories:</b> Optica</div><div><b>Relevance:</b> 9/10</div><div><b>Why:</b> The paper discusses quadratic supercontinuum generation in lithium niobate nanowaveguides, which is highly relevant to the user&#x27;s focus on nonlinear photonics and integrated platforms.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/optica.592517'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/optica.608245'>Stimulated parametric down-conversion at the single-photon level</a></div><div><b>Authors:</b> Yishai Klein, Alessio D’Errico, Roohollah Ghobadi, Dilip Paneru, Nazanin Dehghan, Eliahu Cohen, Ebrahim Karimi</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optica</div><div><b>Published:</b> 2026-10-22</div><div><b>Categories:</b> Optica</div><div><b>Relevance:</b> 9/10</div><div><b>Why:</b> This paper discusses stimulated parametric down-conversion at the single-photon level, which is relevant to the user&#x27;s work in quantum optics.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/optica.608245'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72106'>Photonic Neuromorphic Processing With Coupled Spiking Silicon Microrings</a></div><div><b>Authors:</b> Giovanni Donati, Stefano Biasi, Lorenzo Pavesi, Antonio Hurtado</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-24</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Relevance:</b> 8/10</div><div><b>Why:</b> The paper discusses neuromorphic processing with silicon microrings, which is relevant to the user&#x27;s interests in integrated photonics.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72106'>Abstract page</a></div></article></section></div>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
+
+</body></html>
