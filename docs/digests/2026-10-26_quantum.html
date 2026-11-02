@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Weekly reading notes</title>
+
+<style>
+  body { font-family: Georgia, serif; max-width: 1180px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; background: #f7f7f5; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.15rem; margin-top: 1.8rem; }
+  h3 { font-family: Helvetica, Arial, sans-serif; font-size: 0.95rem; margin: 0 0 0.8rem; color: #333; }
+  h3 span { color: #777; font-weight: 400; }
+  a { color: #245c7a; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  .digest-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin-top: 1rem; }
+  .source-column { min-width: 0; }
+  .paper-card { margin: 0 0 0.85rem; padding: 0.8rem; border: 1px solid #d8d8d2; border-radius: 8px; background: #fff; line-height: 1.45; overflow-wrap: anywhere; }
+  .paper-title { font-size: 1rem; line-height: 1.35; margin-bottom: 0.25rem; }
+  .source-published .paper-card { border-left: 4px solid #4a8e9f; }
+  .source-arxiv .paper-card { border-left: 4px solid #8b8f73; }
+  @media (max-width: 860px) {
+    body { margin-top: 1rem; }
+    .digest-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+
+</head>
+<body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
+
+<h1>Personalized Research Digest</h1>
+<h2>config_quantum.yaml</h2><div><i>Showing papers published from 2026-10-26 through 2026-11-01 UTC. Base threshold = 7.</i></div><div style='margin-top:6px; color:#a00;'><b>No papers exceeded the relevance threshold (7) for this run. Showing 15 keyword-ranked papers instead.</b></div><div class='digest-grid'><section class='source-column source-arxiv'><h3>arXiv preprints <span>4</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.40593.pdf'>Probing fluctuations in photon emission statistics of spin injected quantum dots with time dependent electronic excitation</a></div><div><b>Authors:</b> Chiran Wijesundara, Vincent Iglesias-Cardinale, Yuan Lu, Herbert Fotso, Bo Xu, Tim Thomay</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-29</div><div><b>Categories:</b> quant-ph, cond-mat.mes-hall</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.40593'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.41709.pdf'>A Highly Nondegenerate Photon-Pair Source for Detector-Matched Quantum Key Distribution</a></div><div><b>Authors:</b> Sander van Haagen, Bora Ulu, Alper Ozulker, Wardah Mahmood, Michal Krelina, Utku Tefek, Kadir Durak</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-30</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.41709'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.39577.pdf'>Adiabatic training of VQAs for entanglement detection</a></div><div><b>Authors:</b> E. Acosta, C. Cano, D. Manzano, G. Botella</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-29</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.39577'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2610.41542.pdf'>Symmetries and model reduction in a $\cos 2\varphi$ transmon qubit</a></div><div><b>Authors:</b> Erwan Roverc&#x27;h, Kyrylo Gerashchenko, Alvise Borgognoni, Benoit Douçot, Alexandru Petrescu, Rémi Robin, Zaki Leghtas</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-10-30</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2610.41542'>Abstract page</a></div></article></section>
+<section class='source-column source-published'><h3>Published papers <span>11</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/prj.608850'>Tens-of-million intrinsic- Q , single-spatial-mode photonic-crystal Fabry–Perot micro-resonator on thin-film lithium niobate</a></div><div><b>Authors:</b> Hyeon Hwang, Seokjoo Go, Guhwan Kim, Hong-Seok Kim, Kiwon Moon, Jung Jin Ju, Hansuek Lee, Min-Kyo Seo</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Photonics Research</div><div><b>Published:</b> 2026-10-30</div><div><b>Categories:</b> Photonics Research</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/prj.608850'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.616191'>RF-referenced and phase-tracking-based precise measurement of optical resonator free spectral range across a broad wavelength range</a></div><div><b>Authors:</b> Yuqi Yu, Junkang Guo, Weijin Meng, Hu Peng, Zhenkun Huang, Zhigang Liu</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-10-30</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.616191'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72145'>Widely Tunable Optical Parametric Oscillation and Visible Light Generation in 4H‐SiC Microresonators</a></div><div><b>Authors:</b> Yongsheng Wang, Shuangyou Zhang, Yurong Ren, Paolo Leonelli, Mingjun Chi, Haiyan Ou</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-29</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72145'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72148'>Widely‐Tunable Current‐Stable External Cavity Lasers Enabled by Sampled Multi‐Mode Waveguide Gratings</a></div><div><b>Authors:</b> Yueyang Zhang, Chenlei Li, Tao Shu, Wei Chen, Fei Huang, Cunyu Shi, Zhile Wu, Zejie Yu, Hon‐Ki Tsang, Daoxin Dai</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-30</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72148'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.611555'>Etchless resist-loaded microring resonators on thin-film lithium tantalate</a></div><div><b>Authors:</b> David Trop, Boris Desiatov</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-10-30</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.611555'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/oe.616542'>Broadband and low-power passive non-reciprocal photonic devices based on the mechanical Kerr effect</a></div><div><b>Authors:</b> Linhao Ren, Zhizhen Qiu, Linting Xu</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Express</div><div><b>Published:</b> 2026-10-29</div><div><b>Categories:</b> Optics Express</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/oe.616542'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/optica.601049'>Bell inequality violation with vacuum–one-photon number superposition states</a></div><div><b>Authors:</b> Zi-Qi Zeng, Jian Wang, Xiu-Bin Liu, Xu-Jie Wang, Li Liu, Hanqing Liu, Haiqiao Ni, Zhichuan Niu, Carlos Antón-Solanas, Bang Wu, Zhiliang Yuan</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optica</div><div><b>Published:</b> 2026-10-28</div><div><b>Categories:</b> Optica</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/optica.601049'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/optica.607038'>Quantum networks using color defects in diamond: principles, progress, and perspectives</a></div><div><b>Authors:</b> Ayan Majumder, Cem Güney Torun, Tim Schröder, Gregor Pieplow, Prem Kumar, Kasturi Saha</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optica</div><div><b>Published:</b> 2026-10-30</div><div><b>Categories:</b> Optica</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/optica.607038'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/oe.616047'>OptiLookUp: a microring-based photonic read-only memory lookup table engine for photonic accelerators</a></div><div><b>Authors:</b> Ankur Singh, Akhilesh Jaiswal</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Express</div><div><b>Published:</b> 2026-10-30</div><div><b>Categories:</b> Optics Express</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/oe.616047'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72044'>Broadband Chromatic Dispersion of Thermo‐Refractive Coefficients and Its Impact in Silicon Nitride Nonlinear Photonics</a></div><div><b>Authors:</b> Shao‐Chien Ou, Grégory Moille, Kartik Srinivasan</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-10-29</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72044'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/prj.607598'>Highly flexible multi-beam phased array enabled by optical parallelism</a></div><div><b>Authors:</b> Xue Lan, Shilong Chen, Xinpeng Wang, Zihang Wang, Feifei Yin, Kun Xu, Ming Li, Yitang Dai</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Photonics Research</div><div><b>Published:</b> 2026-10-28</div><div><b>Categories:</b> Photonics Research</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/prj.607598'>Abstract page</a></div></article></section></div>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
+
+</body></html>
