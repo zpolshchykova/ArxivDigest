@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Weekly reading notes</title>
+
+<style>
+  body { font-family: Georgia, serif; max-width: 1180px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; background: #f7f7f5; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.15rem; margin-top: 1.8rem; }
+  h3 { font-family: Helvetica, Arial, sans-serif; font-size: 0.95rem; margin: 0 0 0.8rem; color: #333; }
+  h3 span { color: #777; font-weight: 400; }
+  a { color: #245c7a; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  .digest-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin-top: 1rem; }
+  .source-column { min-width: 0; }
+  .paper-card { margin: 0 0 0.85rem; padding: 0.8rem; border: 1px solid #d8d8d2; border-radius: 8px; background: #fff; line-height: 1.45; overflow-wrap: anywhere; }
+  .paper-title { font-size: 1rem; line-height: 1.35; margin-bottom: 0.25rem; }
+  .source-published .paper-card { border-left: 4px solid #4a8e9f; }
+  .source-arxiv .paper-card { border-left: 4px solid #8b8f73; }
+  @media (max-width: 860px) {
+    body { margin-top: 1rem; }
+    .digest-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+
+</head>
+<body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
+
+<h1>Personalized Research Digest</h1>
+<h2>config_physics.yaml</h2><div><i>Showing papers published from 2026-11-09 through 2026-11-15 UTC. Base threshold = 7.</i></div><div style='margin-top:6px; color:#a00;'><b>No papers exceeded the relevance threshold (7) for this run. Showing 15 keyword-ranked papers instead.</b></div><div class='digest-grid'><section class='source-column source-arxiv'><h3>arXiv preprints <span>5</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.12292.pdf'>Optical frequency combs on thin-film lithium niobate: from principles to applications</a></div><div><b>Authors:</b> Xiangzhi Xie, Tianqi Lei, Zeyu Luo, Binbin Nie, Yanyun Xue, Yikun Chen, Qi-Fan Yang, Yaowen Hu, Cheng Wang</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-09</div><div><b>Categories:</b> physics.optics</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.12292'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.16469.pdf'>TARANG: an open-source, cost-controlled design workflow for silicon nitride microcomb chips</a></div><div><b>Authors:</b> Divyanshu Tiwari, Esraaj Sarkar Gupta, Anshuman Kumar</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> physics.optics, physics.comp-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.16469'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.18426.pdf'>Tunable Hybridization of Whispering Gallery Modes in High-Index Photonic Molecules</a></div><div><b>Authors:</b> Ayusmin Panda, Birabar Ranjit Kumar Nanda</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-13</div><div><b>Categories:</b> physics.optics, physics.app-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.18426'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.14474.pdf'>Thin-film lithium niobate integrated photonics at 493 nm</a></div><div><b>Authors:</b> Nicholas Achuthan, Letícia Magalhães, Xudong Li, Hugo Voncken, Hana Warner, Sophie Ding, Andrea Cordaro, Xinrui Zhu, Keith Powell, Anna Shelton, Dylan Renaud, Daniel Assumpcao, Xiangying Zuo, Michael Pushkarsky, Amirhassan Shams-Ansari, Marko Lončar</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-10</div><div><b>Categories:</b> physics.optics</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.14474'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.16522.pdf'>PISim: A Unified Photonic Inference Simulator for Hardware-Aware Cross-Layer Design-Space Exploration</a></div><div><b>Authors:</b> Andreas Falkenberg</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> physics.optics, cs.AI</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.16522'>Abstract page</a></div></article></section>
+<section class='source-column source-published'><h3>Published papers <span>10</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/oe.613133'>Gouy-phase-mediated propagation evolution of the second harmonic of composite vortex beams</a></div><div><b>Authors:</b> Xin Yan, Shirui Zhang, Minghao Guo, Zixuan Zhao, Peng Li, Zhansheng Gao</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Express</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> Optics Express</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/oe.613133'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.612524'>Low-loss O-band waveguide crossing on lithium niobate on insulator</a></div><div><b>Authors:</b> Xiaoyan Liu, Jiajun Zhou, Zhaojie Zheng, Tao Chu</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-11-10</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.612524'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1038/s42254-026-01003-x'>Thin-film lithium niobate photonics for quantum technologies</a></div><div><b>Authors:</b> Andreas Maeder, Robert J. Chapman, Rachel Grange</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Nature Reviews Physics</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> Nature Reviews Physics</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1038/s42254-026-01003-x'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/optica.604389'>Macroscopic photon counting beating the Poisson noise limit</a></div><div><b>Authors:</b> Timon Schapeler, Fabian Schlue, Isabell Mischke, Michael Stefszky, Benjamin Brecht, Christine Silberhorn, Tim J. Bartley</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optica</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> Optica</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/optica.604389'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/oe.616034'>Direct generation of a watt-level single-frequency vortex laser beam via annular pumping in a compact standing-wave cavity</a></div><div><b>Authors:</b> Zixuan Zhao, Minghao Guo, Xin Yan, Junhe Han, Peng Li, Xiaomin Guo, Yanqiang Guo, Zhansheng Gao</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Express</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> Optics Express</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/oe.616034'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.612896'>Robust non-Hermitian nanoparticle sensing based on higher-order scattering zeros</a></div><div><b>Authors:</b> Yuhang Wang, Yifeng Qiu, Haixiao Meng, Jiancheng Lai, Ye Tian, Zhenhua Li, Tao Li</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.612896'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.612479'>Hessian-sparsity untrained neural network for near-infrared single-photon, single-pixel imaging</a></div><div><b>Authors:</b> Yao Wang, Muchen Zhu, Linjun Zhai, Huiyuan Zhang, Junnan Chen, Yiming Yu, Dajing Wang, Zhaohua Yang, Baolei Liu, Fan Wang</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.612479'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.616403'>Frequency-swept Brillouin spectroscopy</a></div><div><b>Authors:</b> Lin Kang, Shahrin Jahan Jaima, Jitao Zhang</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-11-11</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.616403'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.616150'>Demonstration of a monolithic V-shaped path ultraviolet laser based on a single LBO crystal</a></div><div><b>Authors:</b> Jinheng Du, Chuanlei Jia, Weihua Wang, Liwei Shi</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-11-10</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.616150'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.611565'>High spatial-resolution and fading-free DAS enabled by multi-band pulses and adaptive matched filtering for large bandwidth</a></div><div><b>Authors:</b> Yanyang Lei, Yuchen Zhou, Meng Xia, Shuaiqi Liu, Yongkang Dong</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-11-10</div><div><b>Categories:</b> Optics Letters</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.611565'>Abstract page</a></div></article></section></div>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
+
+</body></html>

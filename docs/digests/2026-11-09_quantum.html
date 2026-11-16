@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Weekly reading notes</title>
+
+<style>
+  body { font-family: Georgia, serif; max-width: 1180px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; background: #f7f7f5; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.15rem; margin-top: 1.8rem; }
+  h3 { font-family: Helvetica, Arial, sans-serif; font-size: 0.95rem; margin: 0 0 0.8rem; color: #333; }
+  h3 span { color: #777; font-weight: 400; }
+  a { color: #245c7a; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  .digest-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin-top: 1rem; }
+  .source-column { min-width: 0; }
+  .paper-card { margin: 0 0 0.85rem; padding: 0.8rem; border: 1px solid #d8d8d2; border-radius: 8px; background: #fff; line-height: 1.45; overflow-wrap: anywhere; }
+  .paper-title { font-size: 1rem; line-height: 1.35; margin-bottom: 0.25rem; }
+  .source-published .paper-card { border-left: 4px solid #4a8e9f; }
+  .source-arxiv .paper-card { border-left: 4px solid #8b8f73; }
+  @media (max-width: 860px) {
+    body { margin-top: 1rem; }
+    .digest-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+
+</head>
+<body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
+
+<h1>Personalized Research Digest</h1>
+<h2>config_quantum.yaml</h2><div><i>Showing papers published from 2026-11-09 through 2026-11-15 UTC. Base threshold = 7.</i></div><div class='digest-grid'><section class='source-column source-arxiv'><h3>arXiv preprints <span>1</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.15516.pdf'>Feedback Control and Neural-Network-Based Prediction of Quantum Entanglement in Fano-mirror cavity optomechanics</a></div><div><b>Authors:</b> Ya-Feng Jiao, Ze-Yu Zhu, Jie Wang, Qing-Shou Tan, Wen-Qiang Fang, Le-Man Kuang, Hui Jing</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-11</div><div><b>Categories:</b> quant-ph</div><div><b>Relevance:</b> 9/10</div><div><b>Why:</b> The paper on quantum entanglement in optomechanics presents a theoretical scheme with potential experimental pathways, aligning closely with the user&#x27;s interests.</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.15516'>Abstract page</a></div></article></section>
+<section class='source-column source-published'><h3>Published papers <span>8</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.612524'>Low-loss O-band waveguide crossing on lithium niobate on insulator</a></div><div><b>Authors:</b> Xiaoyan Liu, Jiajun Zhou, Zhaojie Zheng, Tao Chu</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-11-10</div><div><b>Categories:</b> Optics Letters</div><div><b>Relevance:</b> 9/10</div><div><b>Why:</b> This paper presents low-loss waveguide crossings on the LNOI platform, which is directly relevant to the user&#x27;s research on integrated photonics and device implementations.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.612524'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/oe.615161'>Watt-level 100-fs-class pulses from a compact diode-pumped GHz femtosecond Tm-based bulk laser oscillator</a></div><div><b>Authors:</b> Firas Trawi, Marin Hamrouni, Zekican Ertürk, Lukas W. Perner, Alexandre Parriaux, Valentin J. Wittwer, Thomas Südmeyer</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Express</div><div><b>Published:</b> 2026-11-13</div><div><b>Categories:</b> Optics Express</div><div><b>Relevance:</b> 9/10</div><div><b>Why:</b> The compact diode-pumped GHz femtosecond laser oscillator represents significant advancements in laser technology relevant to the user&#x27;s experimental work.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/oe.615161'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/josab.611850'>Quantum scattering model of dual-parallel Mach–Zehnder electro-optic modulators: general formalism, impairments, and applications to frequency-bin photonic quantum states</a></div><div><b>Authors:</b> Mar Yuste, Carlos R. Fernández-Pousa, Javier Fraile-Peláez, José Capmany</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Journal of the Optical Society of America B</div><div><b>Published:</b> 2026-11-09</div><div><b>Categories:</b> Journal of the Optical Society of America B</div><div><b>Relevance:</b> 8/10</div><div><b>Why:</b> The quantum scattering model for dual-parallel Mach–Zehnder modulators has direct relevance to the user&#x27;s research on electro-optic devices and quantum state generation.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/josab.611850'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/oe.610953'>Heterogeneous integrated Pb(Zr, Ti)O 3 thin-film electro-optic modulators via micro-transfer printing at visible and near-infrared wavelengths</a></div><div><b>Authors:</b> Jiayi Liu, Kobe De Geest, Ewout Picavet, Andreas Laemont, Margot Niels, Maximilien Billet, Bart Kuyken, Klaartje De Buysser, Dries Van Thourhout, Jeroen Beeckman</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Express</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> Optics Express</div><div><b>Relevance:</b> 8/10</div><div><b>Why:</b> The demonstration of heterogeneous integrated electro-optic modulators on silicon nitride is highly relevant to the user&#x27;s research on integrated photonics.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/oe.610953'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/oe.618386'>Fast single-shot readout of tin-vacancy spins with an overcoupled diamond nanocavity on thin-film lithium niobate</a></div><div><b>Authors:</b> Tanvir M. Mahim, M. Mosaddequr Rahman, Abu S. M. Mohsin</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Express</div><div><b>Published:</b> 2026-11-13</div><div><b>Categories:</b> Optics Express</div><div><b>Relevance:</b> 8/10</div><div><b>Why:</b> The paper on fast single-shot readout of tin-vacancy spins on thin-film lithium niobate directly relates to the user&#x27;s interests in integrated photonics.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/oe.618386'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1038/s42254-026-01003-x'>Thin-film lithium niobate photonics for quantum technologies</a></div><div><b>Authors:</b> Andreas Maeder, Robert J. Chapman, Rachel Grange</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Nature Reviews Physics</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> Nature Reviews Physics</div><div><b>Relevance:</b> 7/10</div><div><b>Why:</b> The review discusses thin-film lithium niobate photonics, which is relevant to the user&#x27;s interest in LNOI/TFLN platforms, though it may not provide direct experimental insights.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1038/s42254-026-01003-x'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/ol.606441'>Iterative linear optical hyperentanglement concentration protocol for polarization-spatial hyperentangled three-photon W states with time delay</a></div><div><b>Authors:</b> Xiao-Ming Xiu, Ming Cong, Zi-Lin Zhao, Shi-Yi Li, Fei-Yu Su, Chuan-Si Bing, Tian-Xu Wu, Li Dong</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Letters</div><div><b>Published:</b> 2026-11-12</div><div><b>Categories:</b> Optics Letters</div><div><b>Relevance:</b> 7/10</div><div><b>Why:</b> The hyperentanglement concentration protocol employs linear optics, which is relevant to the user&#x27;s interests in quantum optics, though not central.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/ol.606441'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72194'>Microcomb‐Enabled Spectral Multiplexing for Frequency‐Modulated LiDAR</a></div><div><b>Authors:</b> Yurun Zhai, Fumin Zhang, Xinghua Qu</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-11-15</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Relevance:</b> 7/10</div><div><b>Why:</b> The microcomb-enabled spectral multiplexing for FMCW LiDAR is relevant to the user&#x27;s interests in photonic systems, though not central.</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72194'>Abstract page</a></div></article></section></div>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
+
+</body></html>
