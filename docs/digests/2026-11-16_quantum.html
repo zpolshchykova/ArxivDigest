@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Weekly reading notes</title>
+
+<style>
+  body { font-family: Georgia, serif; max-width: 1180px; margin: 2rem auto; padding: 0 1rem; color: #1c1c1c; background: #f7f7f5; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+  h2 { font-size: 1.15rem; margin-top: 1.8rem; }
+  h3 { font-family: Helvetica, Arial, sans-serif; font-size: 0.95rem; margin: 0 0 0.8rem; color: #333; }
+  h3 span { color: #777; font-weight: 400; }
+  a { color: #245c7a; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  .digest-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; margin-top: 1rem; }
+  .source-column { min-width: 0; }
+  .paper-card { margin: 0 0 0.85rem; padding: 0.8rem; border: 1px solid #d8d8d2; border-radius: 8px; background: #fff; line-height: 1.45; overflow-wrap: anywhere; }
+  .paper-title { font-size: 1rem; line-height: 1.35; margin-bottom: 0.25rem; }
+  .source-published .paper-card { border-left: 4px solid #4a8e9f; }
+  .source-arxiv .paper-card { border-left: 4px solid #8b8f73; }
+  @media (max-width: 860px) {
+    body { margin-top: 1rem; }
+    .digest-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+
+<style>
+  #password-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    background: #f7f7f4;
+    color: #1c1c1c;
+    padding: 1rem;
+  }
+  #password-gate form {
+    width: min(100%, 22rem);
+    border: 1px solid #d8d8d2;
+    background: #fff;
+    padding: 1rem;
+  }
+  #password-gate label {
+    display: block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #555;
+  }
+  #password-gate input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.55rem;
+    border: 1px solid #bbb;
+    font: inherit;
+  }
+  #password-gate button {
+    margin-top: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+  #password-error {
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+    color: #9b1c1c;
+    font-size: 0.9rem;
+  }
+</style>
+<script>
+  window.READING_NOTES_PASSWORD_HASH = "51c4a2fa06c7e102dcdf4b2726e06eec11155a02dcbbf45adcc2bae4b5dc3c71";
+</script>
+
+</head>
+<body>
+
+<div id="password-gate">
+  <form id="password-form">
+    <label for="site-password">Password</label>
+    <input id="site-password" type="password" autocomplete="current-password" autofocus>
+    <button type="submit">Enter</button>
+    <p id="password-error" aria-live="polite"></p>
+  </form>
+</div>
+<main id="protected-content" hidden>
+
+<h1>Personalized Research Digest</h1>
+<h2>config_quantum.yaml</h2><div><i>Showing papers published from 2026-11-16 through 2026-11-22 UTC. Base threshold = 7.</i></div><div style='margin-top:6px; color:#a00;'><b>No papers exceeded the relevance threshold (7) for this run. Showing 15 keyword-ranked papers instead.</b></div><div class='digest-grid'><section class='source-column source-arxiv'><h3>arXiv preprints <span>5</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.24369.pdf'>Doppler effect on dual-downlink time-bin quantum key distribution and a proposed ephemeris-assisted witness-field correction</a></div><div><b>Authors:</b> Sacha Gressani, Luca Furfaro, Erik Kerstel, Jean-Marc Merolla</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-18</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.24369'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.25572.pdf'>Algorithmic Quantum Sensing</a></div><div><b>Authors:</b> Ishaan Kannan, Aditi Venkatesh, Jordan Cotler</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-19</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.25572'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.25431.pdf'>Interfacing Silicon Nitride Nanophotonics with Cuprous Oxide Rydberg Excitons</a></div><div><b>Authors:</b> Artem Kryvobok, Hamza Ather, Julio Herreros García, Ziqi Niu, Abhishek Bharatbhai Solanki, Vahagn Mkhitaryan, Benjamin Cerjan, Alexandra Boltasseva, Vladimir M. Shalaev, Hadiseh Alaeian</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-19</div><div><b>Categories:</b> quant-ph, physics.optics</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.25431'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.24605.pdf'>Number-correlated photon entanglement with a quantum memory interferometer</a></div><div><b>Authors:</b> Imogen Forbes, Vincent Boyer, Louis Edwards-Pratt, Mahirul Khan, Sougato Bose, Thomas M Hird</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-18</div><div><b>Categories:</b> quant-ph</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.24605'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://arxiv.org/pdf/2611.26251.pdf'>Efficient calculation of the full Laguerre-Gaussian spectrum of entangled biphotons</a></div><div><b>Authors:</b> Jiabao Peng, Richard Bernecker, Stephan Fritzsche</div><div><b>Source:</b> arXiv preprint</div><div><b>Published:</b> 2026-11-19</div><div><b>Categories:</b> quant-ph, physics.optics</div><div style='margin-top: 6px;'><a href='https://arxiv.org/abs/2611.26251'>Abstract page</a></div></article></section>
+<section class='source-column source-published'><h3>Published papers <span>10</span></h3><article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72183'>Precise Tailoring of Terahertz Short Pulse Semiconductor Sources With Gires–Tournois Interferometers and Active Mode‐Locking</a></div><div><b>Authors:</b> Valentino Pistore, Michael Schreiber, Anna De Vetter, Lukas Seitner, Hanond Nong, Juliette Mangeney, Jerome Tignon, Lianhe Li, Alexander Giles Davies, Edmund Harold Linfield, Christian Jirauschek, Sukhdeep Dhillon</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-11-17</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72183'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72243'>An 8 × 224 Gbps Thermally Stabilized Quantum‐Dot Mode‐Locked Laser Driven DWDM Microring Transmitter for Co‐Packaged Optics and Optical I/O Applications</a></div><div><b>Authors:</b> Xianglin Bu, Shujie Pan, Jintao Xue, Shenlei Bao, Chao Cheng, Junjie Yang, Wenfu Zhang, Siming Chen, Binhao Wang</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-11-16</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72243'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1126/sciadv.aeh3804'>Interfacing ultrafast single-photon-level fields with an atomic ensemble</a></div><div><b>Authors:</b> Kai Shinbrough, Tegan Loveridge, Benjamin D. Hunt, Sehyun Park, Kathleen Oolman, Thomas O. Reboli, J. Gary Eden, Virginia O. Lorenz</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Science Advances</div><div><b>Published:</b> 2026-11-20</div><div><b>Categories:</b> Science Advances</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1126/sciadv.aeh3804'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1117/1.ap.9.1.016006'>All-optical programmable liquid crystal photonic circuits</a></div><div><b>Authors:</b> Peter Ropač</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Advanced Photonics</div><div><b>Published:</b> 2026-11-17</div><div><b>Categories:</b> Advanced Photonics</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1117/1.ap.9.1.016006'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1117/1.ap.9.1.016007'>Vectorial field reconstruction without detecting the field</a></div><div><b>Authors:</b> </div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Advanced Photonics</div><div><b>Published:</b> 2026-11-17</div><div><b>Categories:</b> Advanced Photonics</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1117/1.ap.9.1.016007'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/optica.606247'>Twin-field quantum key distribution with dual-band integrated photonic chips</a></div><div><b>Authors:</b> Huihong Yuan, Jinping Lin, Wenda Shi, Lai Zhou, Zhichuan Liao, Zhengyu Yan, Tingting Shi, Yuanbin Fan, Hai Xu, Zhiliang Yuan</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optica</div><div><b>Published:</b> 2026-11-16</div><div><b>Categories:</b> Optica</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/optica.606247'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1002/lpor.72220'>High‐Q Photonic Crystal Nanobeam Cavities for Resonantly Enhanced Mid‐IR Photothermal Spectroscopy in Microfluidic Environments</a></div><div><b>Authors:</b> Jesus Hernan Mendoza‐Castro, Daniela Tomasetig, Artem S. Vorobev, Simone Iadanza, Savda Sam, Frédéric Sovannara Prum, Laurent Markey, Giovanni Magno, Liam O&#x27;Faolain, Bernhard Lendl, Marco Grande</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Laser &amp;amp; Photonics Reviews</div><div><b>Published:</b> 2026-11-16</div><div><b>Categories:</b> Laser &amp;amp; Photonics Reviews</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1002/lpor.72220'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1126/sciadv.aei1245'>Predictive model for nanoparticle incorporation into crystals reveals essential role of interfacial solution structure</a></div><div><b>Authors:</b> Mingyi Zhang, Kuan-Ting Liu, Dong June Jang, Victorien J. B. Bernat, Ying Xia, Dongsheng Li, Hsin-Mei Kao, Zihua Zhu, Jaehun Chun, Ulrich B. Wiesner, Lara A. Estroff, Elias Nakouzi</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Science Advances</div><div><b>Published:</b> 2026-11-20</div><div><b>Categories:</b> Science Advances</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1126/sciadv.aei1245'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/oe.619881'>Multi-synthetic-wavelength fusion-enhanced multi-heterodyne interferometry for high-precision absolute distance measurement</a></div><div><b>Authors:</b> Jiandong Xie, Xinyang Zhao, Jian Wang, Liping Yan, Benyong Chen</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Express</div><div><b>Published:</b> 2026-11-20</div><div><b>Categories:</b> Optics Express</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/oe.619881'>Abstract page</a></div></article>
+<article class='paper-card'><div class='paper-title'><b>Title:</b> <a href='https://doi.org/10.1364/oe.616637'>Fiber-optic flow rate sensor using Vernier effect in cascaded Fabry–Perot interferometers</a></div><div><b>Authors:</b> Zhuochen Wang, Zhe Wang, Ginu Rajan, Yiming Shena, Anand Vadakkedathu Raveendran, Rayhan Habib Jibon, Anuradha Rout, Rodion Dobretsov, Yuliya Semenova</div><div><b>Source:</b> Published article</div><div><b>Venue:</b> Optics Express</div><div><b>Published:</b> 2026-11-20</div><div><b>Categories:</b> Optics Express</div><div style='margin-top: 6px;'><a href='https://doi.org/10.1364/oe.616637'>Abstract page</a></div></article></section></div>
+
+</main>
+<script>
+  (function () {
+    const expectedHash = window.READING_NOTES_PASSWORD_HASH || "";
+    const gate = document.getElementById("password-gate");
+    const content = document.getElementById("protected-content");
+    const form = document.getElementById("password-form");
+    const input = document.getElementById("site-password");
+    const error = document.getElementById("password-error");
+
+    async function sha256(value) {
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return Array.from(new Uint8Array(digest))
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    function unlock() {
+      gate.remove();
+      content.hidden = false;
+    }
+
+    if (localStorage.getItem("reading-notes-unlocked") === expectedHash) {
+      unlock();
+      return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const enteredHash = await sha256(input.value);
+      if (enteredHash === expectedHash) {
+        localStorage.setItem("reading-notes-unlocked", expectedHash);
+        unlock();
+      } else {
+        error.textContent = "Wrong password.";
+        input.select();
+      }
+    });
+  }());
+</script>
+
+</body></html>
